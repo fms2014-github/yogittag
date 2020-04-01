@@ -1,17 +1,36 @@
-import { set, toggle } from "@/utils/vuex";
+// import { set, toggle } from "@/utils/vuex";
 
 const state = {
-  drawer: null
-};
+	menuOpenCheck: false,
+}
+
+//getters
+const getters = {
+	menuOpenState: (state) => {
+		return state.menuOpenCheck
+	},
+}
+
+// action
+const action = {}
 
 // mutations
 const mutations = {
-  setDrawer: set("drawer"),
-  toggleDrawer: toggle("drawer")
-};
+	menuOpenClose(state) {
+		if (state.menuOpenCheck) {
+			state.menuOpenCheck = !state.menuOpenCheck
+			document.getElementById('menu-list').classList.toggle('menu-close')
+		} else {
+			state.menuOpenCheck = !state.menuOpenCheck
+			document.getElementById('menu-list').classList.toggle('menu-close')
+		}
+	},
+}
 
 export default {
-  namespaced: true,
-  state,
-  mutations
-};
+	namespaced: true,
+	state,
+	mutations,
+	action,
+	getters,
+}

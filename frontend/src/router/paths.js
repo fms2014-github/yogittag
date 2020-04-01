@@ -1,12 +1,12 @@
 export default [
-  {
-    path: "",
-    view: "Home",
-    name: "home"
-  },
-  {
-    path: "/search",
-    view: "Search",
-    name: "search"
-  }
-];
+	{
+		path: '/',
+		view: 'KakaoMap',
+		name: 'KakaoMap',
+	},
+	{
+		path: '/spinnerTest',
+		view: 'LoadingSpinner',
+		name: 'LoadingSpinner',
+	},
+]

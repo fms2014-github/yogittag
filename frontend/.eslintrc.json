@@ -1,0 +1,32 @@
+{
+    "root": true,
+    "env": {
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:vue/essential",
+        "plugin:import/errors",
+		"plugin:import/warnings",
+        "prettier",
+        "plugin:prettier/recommended"
+    ],
+    "globals": {
+        "$": true,
+        "kakao": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "parser": "babel-eslint"
+    },
+    "noInlineConfig": false,
+    "plugins": [
+        "vue",
+        "prettier"
+    ],
+    "rules": {
+        "prettier/prettier": 1
+    }
+}

@@ -6,12 +6,21 @@ const state = {
     isLogin: false,
     isProfile: false,
     isRegistrate: false,
+    selecterFilter: 'filter 1',
+    isFilter: false,
 }
 
 //getters
 const getters = {
     menuOpenState: (state) => {
         return state.menuOpenCheck
+    },
+    useFilter: (state) => {
+        if (state.selecterFilter === 'filter 1') {
+            return false
+        } else {
+            return true
+        }
     },
 }
 
@@ -55,6 +64,9 @@ const mutations = {
     registrateFinish(state) {
         state.isRegistrate = !state.isRegistrate
         state.isLogin = !state.isLogin
+    },
+    setSelecterFilter(state, value) {
+        state.selecterFilter = value
     },
 }
 

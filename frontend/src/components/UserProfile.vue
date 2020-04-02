@@ -3,13 +3,15 @@
         <div id="user-profile-wrap">
             <img id="profile-image" src="https://via.placeholder.com/200" />
             <div id="user-infomation">
-                <label for="user-name">이름 </label>: <input id="user-name" type="text" /><br />
-                <label for="user-email">이메일 </label>:
+                <label for="user-name">이름 </label
+                ><input id="user-name" type="text" readonly /><br />
+                <label for="user-email">이메일 </label>
                 <input id="user-email" type="text" readonly /><br />
-                <label for="user-birth">생일 </label>: <input id="user-birth" type="text" /><br />
-                <label for="user-gender">성별 </label>:
+                <label for="user-birth">생일 </label>
+                <input id="user-birth" type="text" readonly /><br />
+                <label for="user-gender">성별 </label>
                 <input id="user-gender" type="text" readonly /><br />
-                <label for="user-reg-day">가입일 </label>:
+                <label for="user-reg-day">가입일 </label>
                 <input id="user-reg-day" type="text" readonly /><br />
             </div>
             <div id="user-favorites">
@@ -43,9 +45,9 @@
         display: flex;
         flex-wrap: wrap;
         background-color: rgb(255, 255, 255);
-        min-width: 300px;
+        min-width: 450px;
         width: 40vw;
-        max-width: 680px;
+        max-width: 720px;
         padding: 16px;
         border-radius: 10px;
         box-shadow: 0 0 4px 2px rgba(128, 128, 128, 0.7);
@@ -58,9 +60,9 @@
         #user-infomation {
             width: calc(100% - 220px);
             margin-bottom: 30px;
-            font-size: 1.3rem;
             label {
                 display: inline-block;
+                min-width: 68px;
                 width: 18%;
                 height: 32px;
                 margin: 4px;

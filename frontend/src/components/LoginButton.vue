@@ -6,6 +6,15 @@
     </div>
 </template>
 
+<script>
+import { mapMutations } from 'vuex'
+export default {
+    methods: {
+        ...mapMutations('app', ['openLoginPage']),
+    },
+}
+</script>
+
 <style lang="scss" scoped>
 #login-button {
     position: absolute;
@@ -18,12 +27,3 @@
     }
 }
 </style>
-
-<script>
-import { mapMutations } from 'vuex'
-export default {
-    methods: {
-        ...mapMutations('app', ['openLoginPage']),
-    },
-}
-</script>

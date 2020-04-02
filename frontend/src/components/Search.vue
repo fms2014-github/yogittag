@@ -7,7 +7,7 @@
                 placeholder="음식점 이름을 입력하세요"
                 type="text"
             />
-            <button id="search-button">
+            <button id="search-button" @click="findData">
                 <span class="material-icons">
                     search
                 </span>
@@ -22,6 +22,38 @@
         </div>
     </div>
 </template>
+
+<script>
+import filterList from '../components/FilterList.vue'
+import axiosApi from '../api/axiosScript.js'
+import { mapMutations } from 'vuex'
+export default {
+    components: {
+        filterList,
+    },
+    methods: {
+        ...mapMutations('app', ['loadingSpinner', 'initState']),
+        openFilter() {
+            document.getElementById('search-bar').classList.toggle('open-filter')
+        },
+        findData() {
+            this.initState()
+            this.loadingSpinner()
+            axiosApi.searchAxios(
+                '',
+                (res) => {
+                    this.loadingSpinner()
+                    console.log(res.data)
+                },
+                (err) => {
+                    this.loadingSpinner()
+                    console.log(err.data)
+                },
+            )
+        },
+    },
+}
+</script>
 
 <style lang="scss" scoped>
 #search {
@@ -70,34 +102,3 @@
     }
 }
 </style>
-
-<script>
-import filterList from '../components/FilterList.vue'
-import axiosApi from '../api/axiosScript.js'
-import { mapMutations } from 'vuex'
-export default {
-    components: {
-        filterList,
-    },
-    methods: {
-        ...mapMutations('app', ['loadingSpinner']),
-        openFilter() {
-            document.getElementById('search-bar').classList.toggle('open-filter')
-        },
-        findData() {
-            this.loadingSpinner()
-            axiosApi.searchAxios(
-                '',
-                (res) => {
-                    this.loadingSpinner()
-                    console.log(res.data)
-                },
-                (err) => {
-                    this.loadingSpinner()
-                    console.log(err.data)
-                },
-            )
-        },
-    },
-}
-</script>

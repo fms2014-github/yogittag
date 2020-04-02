@@ -26,6 +26,16 @@
     </div>
 </template>
 
+<script>
+export default {
+    data() {
+        return {
+            selecterFilter: '',
+        }
+    },
+}
+</script>
+
 <style lang="scss" scoped>
 #filter-list {
     margin: 18px 0;
@@ -41,13 +51,3 @@
     }
 }
 </style>
-
-<script>
-export default {
-    data() {
-        return {
-            selecterFilter: '',
-        }
-    },
-}
-</script>

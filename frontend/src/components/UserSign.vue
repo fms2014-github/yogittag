@@ -9,7 +9,7 @@
                 <label for="email">Email</label><input id="email" type="email" />
             </div>
             <div id="password-input">
-                <label for="password">password</label><input id="password" type="password" />
+                <label for="password">Password</label><input id="password" type="password" />
             </div>
             <button id="login-button">로그인</button>
             <hr />
@@ -17,11 +17,23 @@
                 <span id="forget-account">이메일이나 비밀번호가 기억나지 않으신가요?</span>
                 <button id="find-account-button">계정 찾기</button>
                 <span id="not-registered">새로오신 분인가요?</span>
-                <button id="not-registered-button">회원 가입</button>
+                <button id="not-registered-button" @click="openUserRegistratePage">
+                    회원 가입
+                </button>
             </div>
         </div>
     </div>
 </template>
+
+<script>
+import { mapMutations } from 'vuex'
+import '../assets/css/button.scss'
+export default {
+    methods: {
+        ...mapMutations('app', ['openUserRegistratePage']),
+    },
+}
+</script>
 
 <style lang="scss" scoped>
 #user-sign {

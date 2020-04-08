@@ -31,7 +31,7 @@ export default {
     top: 0px;
     height: 100%;
     background-color: rgb(250, 250, 250);
-    padding: 6px 0 0 10px;
+    padding: 6px 0 0 30px;
     font-size: 2rem;
     box-shadow: 0px 0px 4px 2px rgba(128, 128, 128, 0.7);
     z-index: 11;

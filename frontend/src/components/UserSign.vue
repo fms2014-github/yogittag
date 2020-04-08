@@ -5,13 +5,18 @@
                 로그인을 하시면 <br />
                 더 많은 기능을 사용할 수 있어요
             </h2>
+            <div id="error-wrap" v-if="error.isError">
+                <span id="error-text">{{ error.text }}</span>
+            </div>
             <div id="email-input">
-                <label for="email">Email</label><input id="email" type="email" />
+                <label for="email">Email</label
+                ><input v-model="user.email" id="email" type="email" />
             </div>
             <div id="password-input">
-                <label for="password">Password</label><input id="password" type="password" />
+                <label for="password">Password</label
+                ><input v-model="user.password" id="password" type="password" />
             </div>
-            <button id="login-button">로그인</button>
+            <button id="login-button" @click="login">로그인</button>
             <hr />
             <div id="login-prablem">
                 <span id="forget-account">이메일이나 비밀번호가 기억나지 않으신가요?</span>
@@ -27,10 +32,39 @@
 
 <script>
 import { mapMutations } from 'vuex'
+import axiosApi from '../api/axiosScript.js'
 import '../assets/css/button.scss'
 export default {
+    data() {
+        return {
+            user: {
+                email: '',
+                password: '',
+            },
+            error: {
+                text: '',
+                isError: false,
+            },
+        }
+    },
     methods: {
-        ...mapMutations('app', ['openUserRegistratePage']),
+        ...mapMutations('app', ['openUserRegistratePage', 'loadingSpinner']),
+        login() {
+            this.loadingSpinner()
+            axiosApi.loginAxios(
+                this.user,
+                (res) => {
+                    this.loadingSpinner()
+                    console.log(res.data)
+                },
+                (err) => {
+                    this.loadingSpinner()
+                    this.error.isError = true
+                    this.error.text = '이메일이 없거나 패스워드가 잘못됐습니다.'
+                    console.log(err.data)
+                },
+            )
+        },
     },
 }
 </script>
@@ -58,6 +92,16 @@ export default {
         #login-title {
             text-align: center;
             margin-bottom: 26px;
+        }
+        #error-wrap {
+            display: inline-block;
+            width: 100%;
+            padding: 8px;
+            background-color: rgba(255, 167, 95, 0.486);
+            #error-text {
+                color: rgb(255, 72, 0);
+                font-size: 0.8rem;
+            }
         }
         #email-input,
         #password-input {

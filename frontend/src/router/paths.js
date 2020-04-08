@@ -6,7 +6,7 @@ export default [
     },
     {
         path: '/test',
-        view: 'UserProfile',
+        view: 'UserSignNewForm',
         name: 'test',
     },
 ]

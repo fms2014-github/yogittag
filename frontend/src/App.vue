@@ -1,13 +1,13 @@
 <template>
     <div id="app">
-        <loading-spinner v-show="this.isLoading" />
+        <loading-spinner v-if="this.isLoading" />
         <menu-button />
         <menu-list @closeCheckChange="menuOpenClose" />
         <login-button />
-        <login-page v-show="this.isLogin" />
-        <user-registrate v-show="isRegistrate" />
+        <login-page v-if="this.isLogin" />
+        <user-registrate v-if="isRegistrate" />
         <profile-button />
-        <userProfile v-show="this.isProfile"></userProfile>
+        <userProfile v-if="this.isProfile"></userProfile>
         <FAQnQNAButton />
         <main-view />
     </div>
@@ -21,9 +21,9 @@ import MenuList from './components/MenuList.vue'
 import FAQnQNAButton from './components/FAQnQNAButton.vue'
 import loadingSpinner from './components/LoadingSpinner.vue'
 import loginButton from './components/LoginButton.vue'
-import loginPage from './components/UserSign.vue'
+import loginPage from './components/UserSignNewForm.vue'
 import userProfile from './components/UserProfile.vue'
-import userRegistrate from './components/UserRegistrate.vue'
+// import userRegistrate from './components/UserRegistrate.vue'
 import { mapState, mapMutations, mapGetters } from 'vuex'
 
 export default {
@@ -37,7 +37,6 @@ export default {
         loginButton,
         loginPage,
         userProfile,
-        userRegistrate,
     },
     computed: {
         ...mapState('app', ['menuOpenCheck', 'isLoading', 'isLogin', 'isProfile', 'isRegistrate']),

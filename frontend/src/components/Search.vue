@@ -29,6 +29,11 @@ import filterList from '../components/FilterList.vue'
 import axiosApi from '../api/axiosScript.js'
 import { mapMutations, mapState, mapGetters } from 'vuex'
 export default {
+    data() {
+        return {
+            test: {},
+        }
+    },
     components: {
         filterList,
     },
@@ -40,20 +45,22 @@ export default {
         openFilter() {
             document.getElementById('search-bar').classList.toggle('open-filter')
         },
-        findData() {
+        async findData() {
             this.initState()
             this.loadingSpinner()
-            axiosApi.searchAxios(
+            await axiosApi.searchAxios(
                 '',
                 (res) => {
                     this.loadingSpinner()
                     console.log(res.data)
+                    this.test = res.data
                 },
                 (err) => {
                     this.loadingSpinner()
                     console.log(err.data)
                 },
             )
+            console.log(this.test)
         },
     },
 }

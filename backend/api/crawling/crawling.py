@@ -12,7 +12,7 @@ def scroll_to_end(webdriver):
 DIR = "picture/"
 query = input("query : ")
 url = "https://www.google.co.in/search?q=음식점+"+query+"&source=lnms&tbm=isch"
-browser = webdriver.Chrome('./chromedriver')
+browser = webdriver.Chrome('./api/crawling/chromedriver.exe')
 browser.get(url)
 scroll_to_end(browser)
 thumbnail_results = browser.find_elements_by_css_selector("img.rg_i")

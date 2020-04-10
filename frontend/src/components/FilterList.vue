@@ -4,34 +4,39 @@
             검색 조건 설정
         </h2>
         <label for="filter-1"
-            ><input v-model="selecterFilter" id="filter-1" type="radio" value="filter 1" />filter
-            1</label
+            ><input v-model="filter" id="filter-1" type="radio" value="filter 1" />filter 1</label
         >
         <label for="filter-2"
-            ><input v-model="selecterFilter" id="filter-2" type="radio" value="filter 2" />filter
-            2</label
+            ><input v-model="filter" id="filter-2" type="radio" value="filter 2" />filter 2</label
         >
         <label for="filter-3"
-            ><input v-model="selecterFilter" id="filter-3" type="radio" value="filter 3" />filter
-            3</label
+            ><input v-model="filter" id="filter-3" type="radio" value="filter 3" />filter 3</label
         >
         <label for="filter-4"
-            ><input v-model="selecterFilter" id="filter-4" type="radio" value="filter 4" />filter
-            4</label
+            ><input v-model="filter" id="filter-4" type="radio" value="filter 4" />filter 4</label
         >
         <label for="filter-5"
-            ><input v-model="selecterFilter" id="filter-5" type="radio" value="filter 5" />filter
-            5</label
+            ><input v-model="filter" id="filter-5" type="radio" value="filter 5" />filter 5</label
         >
     </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 export default {
     data() {
         return {
-            selecterFilter: '',
+            filter: 'filter 1',
         }
+    },
+    watch: {
+        filter: function (v) {
+            console.log(v)
+            this.setSelecterFilter(v)
+        },
+    },
+    methods: {
+        ...mapMutations('app', ['setSelecterFilter']),
     },
 }
 </script>

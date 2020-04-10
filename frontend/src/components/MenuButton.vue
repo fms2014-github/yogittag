@@ -22,7 +22,7 @@ export default {
 #menu {
     position: absolute;
     top: 18px;
-    left: 18px;
+    left: 36px;
     z-index: 10;
 }
 </style>

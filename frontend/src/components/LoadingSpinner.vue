@@ -22,7 +22,7 @@
     width: 100vw;
     height: 100vh;
     background-color: rgba(255, 255, 255, 0.4);
-    z-index: 8;
+    z-index: 9999;
     .sk-chase {
         width: 60px;
         height: 60px;

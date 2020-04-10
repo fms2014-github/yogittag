@@ -16,6 +16,7 @@
                 <span class="material-icons" @click="openFilter">
                     filter_list
                 </span>
+                <span id="is-filter" v-show="useFilter">필터 사용</span>
             </button>
             <hr />
             <filter-list />
@@ -26,30 +27,40 @@
 <script>
 import filterList from '../components/FilterList.vue'
 import axiosApi from '../api/axiosScript.js'
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState, mapGetters } from 'vuex'
 export default {
+    data() {
+        return {
+            test: {},
+        }
+    },
     components: {
         filterList,
+    },
+    computed: {
+        ...mapGetters('app', ['useFilter']),
     },
     methods: {
         ...mapMutations('app', ['loadingSpinner', 'initState']),
         openFilter() {
             document.getElementById('search-bar').classList.toggle('open-filter')
         },
-        findData() {
+        async findData() {
             this.initState()
             this.loadingSpinner()
-            axiosApi.searchAxios(
+            await axiosApi.searchAxios(
                 '',
                 (res) => {
                     this.loadingSpinner()
                     console.log(res.data)
+                    this.test = res.data
                 },
                 (err) => {
                     this.loadingSpinner()
                     console.log(err.data)
                 },
             )
+            console.log(this.test)
         },
     },
 }
@@ -90,6 +101,17 @@ export default {
                 style: dots;
                 color: rgba(128, 128, 128, 0.4);
             }
+        }
+        #is-filter {
+            position: absolute;
+            top: 2px;
+            right: 14px;
+            font-size: 0.5rem;
+            padding: 3px;
+            background-color: rgb(235, 133, 0);
+            border-radius: 4px;
+            box-shadow: inset 0 0 4px 2px rgba(255, 255, 255, 0.5);
+            color: rgb(255, 255, 255);
         }
         .material-icons {
             margin-left: 8px;

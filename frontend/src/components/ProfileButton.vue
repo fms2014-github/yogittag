@@ -6,6 +6,16 @@
     </div>
 </template>
 
+<script>
+import { mapMutations } from 'vuex'
+import '../assets/css/button.scss'
+export default {
+    methods: {
+        ...mapMutations('app', ['openUserProfilePage']),
+    },
+}
+</script>
+
 <style lang="scss" scoped>
 #profile-button {
     position: absolute;
@@ -18,13 +28,3 @@
     }
 }
 </style>
-
-<script>
-import { mapMutations } from 'vuex'
-import '../assets/css/button.scss'
-export default {
-    methods: {
-        ...mapMutations('app', ['openUserProfilePage']),
-    },
-}
-</script>

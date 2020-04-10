@@ -5,6 +5,7 @@
         <menu-list @closeCheckChange="menuOpenClose" />
         <login-button />
         <login-page v-show="this.isLogin" />
+        <user-registrate v-show="isRegistrate" />
         <profile-button />
         <userProfile v-show="this.isProfile"></userProfile>
         <FAQnQNAButton />
@@ -22,6 +23,7 @@ import loadingSpinner from './components/LoadingSpinner.vue'
 import loginButton from './components/LoginButton.vue'
 import loginPage from './components/UserSign.vue'
 import userProfile from './components/UserProfile.vue'
+import userRegistrate from './components/UserRegistrate.vue'
 import { mapState, mapMutations, mapGetters } from 'vuex'
 
 export default {
@@ -35,9 +37,10 @@ export default {
         loginButton,
         loginPage,
         userProfile,
+        userRegistrate,
     },
     computed: {
-        ...mapState('app', ['menuOpenCheck', 'isLoading', 'isLogin', 'isProfile']),
+        ...mapState('app', ['menuOpenCheck', 'isLoading', 'isLogin', 'isProfile', 'isRegistrate']),
         ...mapGetters('app', ['menuOpenState']),
     },
     methods: {

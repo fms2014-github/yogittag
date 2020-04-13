@@ -1,21 +1,38 @@
-# Front-End Vue Project
-## Nodejs¼³Ä¡ÇÏ±â
+### ğŸ”¸Run
 
-### Windows
-1. [https://nodejs.org/ko/](https://nodejs.org/ko/)¿¡ Á¢¼ÓÇÑ´Ù.
-2. LTS ¹öÀüÀ» ´Ù¿î·Îµå ÇÑ´Ù. 
-3. ´Ù¿î·Îµå ¹ŞÀº ÆÄÀÏÀ» ½ÇÇàÇÏ¿© ¼³Ä¡¸¦ ÇÑ´Ù.
-4. ¸í·É ÇÁ·ÒÇÁÆ®¸¦ ½ÇÇàÇÑ µÚ node¸¦ ½ÇÇàÇÏ¿© ¹öÀüÈ®ÀÎ
-## Vue.js¼³Ä¡ÇÏ±â
-### CLI¸¦ »ç¿ëÇÏ¿© Vue.js »ç¿ëÇÏ±â
-Vue CLI¸¦ ¼³Ä¡ÇÏ±â À§ÇØ¼± NPM ¸ğµâÀÌ ÇÊ¿äÇÏ´Ù. NPMÀº Node Package ManagerÀÇ ¾àÀÚ·Î Node.js ³»ºÎ¿¡ µé¾îÀÖ´Â ÆĞÅ°Áö ¸ğµâÀÌ´Ù. ±×·¸±â ¶§¹®¿¡ Node.js ¼³Ä¡ ÀÛ¾÷ÀÌ ÇÊ¿äÇÏ´Ù.
-1. npm ¸ğµâ·Î vue¸¦ ¼³Ä¡ÇÑ´Ù.
-        npm install vue
-2. vue/cli¸¦ ¼³Ä¡ÇÑ´Ù.
-        npm install -g @vue/cli
-## ÇÁ·ÎÁ§Æ® ½ÇÇàÇÏ±â
-### Windows
-1. ¸í·É ÇÁ·ÒÇÁÆ®·Î cloneÇÑ ÇÁ·ÎÁ§Æ® È¨ µğ·ºÅÍ¸®·Î ÀÌµ¿
-2. npm install ÀÔ·Â ÈÄ ¿£ÅÍ
-3. npm serve run ÀÔ·Â ÈÄ ¿£ÅÍ
-4. http://localhost:8080/ ÁÖ¼Ò·Î Á¢¼Ó
+##### PIP
+
+```bash
+$ pip install --upgrade pip
+$ pip install -r requirements.txt
+```
+
+##### Docker-Compose
+
+Run maria db image by container in the background environment.
+
+```bash
+$ docker-compose up -d
+```
+
+#### Server
+
+```bash
+cd backend
+```
+
+##### 		Migrate
+
+```bash
+$ python manage.py makemigrations
+$ python manage.py migrate
+$ python manage.py initialize
+```
+
+##### 		Crawling
+
+```bash
+$ python ./api/crawling/crawling.py
+query : {search branch name}
+```
+

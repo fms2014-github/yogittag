@@ -1,14 +1,13 @@
 import Vue from 'vue'
 import App from './App.vue'
 import vuetify from './plugins/vuetify'
+import './plugins/bootStrapVue'
 // import infiniteScroll from "vue-infinite-scroll";
 import router from './router'
 import store from './store'
-import BootstrapVue from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import LoadScript from 'vue-plugin-load-script'
 
-Vue.use(BootstrapVue)
+Vue.use(LoadScript)
 Vue.config.productionTip = false
 // Vue.use(infiniteScroll);
 

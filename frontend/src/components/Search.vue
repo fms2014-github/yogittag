@@ -1,21 +1,12 @@
 <template>
     <div id="search">
         <div id="search-bar" class="search-bar">
-            <input
-                id="search-bar-input"
-                @keyup.enter="findData"
-                placeholder="음식점 이름을 입력하세요"
-                type="text"
-            />
+            <input id="search-bar-input" @keyup.enter="findData" placeholder="입력하세요" type="text" />
             <button id="search-button" @click="findData">
-                <span class="material-icons">
-                    search
-                </span>
+                <span class="material-icons">search</span>
             </button>
             <button id="filter-button">
-                <span class="material-icons" @click="openFilter">
-                    filter_list
-                </span>
+                <span class="material-icons" @click="openFilter">filter_list</span>
                 <span id="is-filter" v-show="useFilter">필터 사용</span>
             </button>
             <hr />
@@ -54,6 +45,7 @@ export default {
                     this.loadingSpinner()
                     console.log(res.data)
                     this.test = res.data
+                    
                 },
                 (err) => {
                     this.loadingSpinner()

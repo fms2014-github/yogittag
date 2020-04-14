@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "api",
     'corsheaders',  # 이 부분 추가
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [

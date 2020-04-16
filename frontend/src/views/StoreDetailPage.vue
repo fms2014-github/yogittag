@@ -64,8 +64,8 @@
                     <b-tab title="Menu">
                         <SortingTable :fields="testMenuKeyData" :items="testMenuData" />
                     </b-tab>
-                    <b-tab title="Reviews"
-                        ><div class="row">
+                    <b-tab title="Reviews">
+                        <div class="row">
                             <small-card
                                 v-for="item in testCardDate"
                                 :key="item.id"
@@ -76,11 +76,17 @@
                                 :reg_time="item.reg_time"
                                 :content="item.content"
                                 :score="item.score"
-                            /></div
-                    ></b-tab>
+                            />
+                        </div>
+                        <button v-b-modal.modal>
+                            <img id="registerButton" :src="registerRiviewImg" />
+                        </button>
+                        <b-modal :no-close-on-backdrop="true" @ok="modalCilck()" id="modal" size="lg" title="Review"><ReviewForm /></b-modal>
+                    </b-tab>
                 </b-tabs>
             </div>
         </div>
+        <UpFocusButton />
     </div>
 </template>
 
@@ -90,6 +96,9 @@ import Carousel from '@/components/showPictures/Carousel'
 import SortingTable from '@/components/tables/SortingTable'
 import StackedTable from '@/components/tables/StackedTable'
 import dateFilter from '@/components/filters/dateFilter.js'
+import UpFocusButton from '@/components/buttons/UpFocusButton'
+import infiniteScroll from 'vue-infinite-scroll'
+import ReviewForm from '@/components/forms/ReviewForm.vue'
 
 export default {
     filters: {
@@ -157,6 +166,56 @@ export default {
                     content:
                         'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
                 },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
             ],
             testMenuKeyData: [
                 { key: 'Food', sortable: true },
@@ -180,6 +239,7 @@ export default {
             latitude: 37.556862,
             longitude: 126.926666,
             categorys: ['Category 1', 'Category 2', 'Category 3'],
+            registerRiviewImg: require('@/assets/icons/registerReview.png'),
         }
     },
     components: {
@@ -187,6 +247,9 @@ export default {
         Carousel,
         SortingTable,
         StackedTable,
+        UpFocusButton,
+        infiniteScroll,
+        ReviewForm,
     },
     mounted() {
         this.createKakaoMap(this.storeName, this.latitude, this.longitude)
@@ -224,8 +287,22 @@ export default {
             // 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
             infowindow.open(map, marker)
         },
+        modalCilck(bvModalEvt){
+            console.log('modal ok click');
+        }
     },
 }
 </script>
 
-<style></style>
+<style>
+#registerButton {
+    position: fixed;
+    bottom: 100px;
+    right: 50px;
+    height: 40px;
+    width: 40px;
+    z-index: 10;
+    border: 1px solid #ddd;
+    border-radius: 100%;
+}
+</style>

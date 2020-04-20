@@ -6,22 +6,31 @@
             <v-btn large color="blue lighten-1 white--text ma-5" rounded to="/search"
                 >검색하기</v-btn
             >-->
-            <Slider />
+            <banner />
+            <v-btn
+                class="display-1 font-italic font-weight-bold"
+                large
+                style="font-family: 'Inconsolata';"
+                >Right Now!</v-btn
+            >
+            <slider />
+            <slider />
         </v-card-text>
     </v-container>
 </template>
 
 <script>
+import Banner from '../components/Banner'
 import Slider from '../components/Slider'
 export default {
     components: {
+        Banner,
         Slider,
     },
     data() {
         return {}
     },
-    mount() {
-        console.log(this.$http)
-    },
+    methods: {},
+    mount() {},
 }
 </script>

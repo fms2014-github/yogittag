@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="swiper-button-prev" slot="button-prev"></div>
+        <p class="display-2 font-weight-thin text--secondary text-left">&nbsp;Recommandation</p>
         <swiper class="swiper" :options="swiperOption">
             <swiper-slide>Slide 01</swiper-slide>
             <swiper-slide>Slide 02</swiper-slide>
@@ -14,8 +14,9 @@
             <swiper-slide>Slide 10</swiper-slide>
             <swiper-slide>Slide 11</swiper-slide>
             <swiper-slide>Slide 12</swiper-slide>
+            <div class="swiper-button-prev" slot="button-prev"></div>
+            <div class="swiper-button-next" slot="button-next"></div>
         </swiper>
-        <div class="swiper-button-next" slot="button-next"></div>
     </div>
 </template>
 
@@ -31,32 +32,56 @@ export default {
     data() {
         return {
             swiperOption: {
-                slidesPerView: 5,
-                spaceBetween: 30,
-                slidesPerGroup: 5,
                 loop: true,
                 loopFillGroupWithBlank: true,
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
+                },
+                breakpoints: {
+                    1264: {
+                        slidesPerGroup: 5,
+                        slidesPerView: 5,
+                        spaceBetween: 30,
+                    },
+                    960: {
+                        slidesPerGroup: 4,
+                        slidesPerView: 4,
+                        spaceBetween: 30,
+                    },
+                    768: {
+                        slidesPerGroup: 3,
+                        slidesPerView: 3,
+                        spaceBetween: 30,
+                    },
+                    500: {
+                        slidesPerGroup: 2,
+                        slidesPerView: 2,
+                        spaceBetween: 30,
+                    },
+                    0: {
+                        slidesPerGroup: 1,
+                        slidesPerView: 1,
+                        spaceBetween: 30,
+                    },
                 },
             },
         }
     },
     methods: {
-        test(e) {
-            console.log(e)
-            console.log(e.target.offsetHeight)
-            console.log(e.target.offsetWidth)
-            document.getElementById(e.target.id).style.width = e.target.offsetWidth * 2 + 'px'
-        },
-        test1(e) {
-            document.getElementById(e.target.id).style.width = e.target.offsetWidth / 2
-        },
+    },
+    mounted() {
+        document.querySelectorAll('.swiper-slide').forEach((ss) => {
+            ss.addEventListener('mouseover', (e) => {
+                console.log(e, 'over')
+            })
+        })
+
+        document.querySelectorAll('.swiper-slide').forEach((ss) => {
+            ss.addEventListener('mouseout', (e) => {
+                console.log(e, 'out')
+            })
+        })
     },
 }
 </script>
@@ -74,7 +99,7 @@ export default {
         text-align: center;
         font-weight: bold;
         font-size: 20px;
-        background-color: blue;
+        background-color: red;
 
         -webkit-transition: transform 0.35s ease-in-out;
         -moz-transition: transform 0.35s ease-in-out;
@@ -83,9 +108,9 @@ export default {
     }
 
     .swiper-slide:hover {
-        -webkit-transform: scale(1.1); /*  크롬 */
-        -moz-transform: scale(1.1); /* FireFox */
-        -o-transform: scale(1.1); /* Opera */
+        -webkit-transform: scale(1.1);
+        -moz-transform: scale(1.1);
+        -o-transform: scale(1.1);
         transform: scale(1.1);
         -webkit-transition: transform 0.35s ease-in-out;
         -moz-transition: transform 0.35s ease-in-out;
@@ -95,6 +120,6 @@ export default {
 }
 .swiper-button-prev,
 .swiper-button-next {
-    z-index: 0;
+    z-index: 1;
 }
 </style>

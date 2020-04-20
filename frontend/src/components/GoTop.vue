@@ -10,7 +10,7 @@
         color="blue --lighten1"
         @click="toTop"
     >
-        <v-icon>mdi-chevron-up</v-icon>
+        <v-icon>keyboard_arrow_up</v-icon>
     </v-btn>
 </template>
 

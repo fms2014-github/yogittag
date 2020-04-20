@@ -13,6 +13,7 @@
                 style="font-family: 'Inconsolata';"
                 >Right Now!</v-btn
             >
+            <food-friend />
             <slider />
             <slider />
         </v-card-text>
@@ -21,10 +22,12 @@
 
 <script>
 import Banner from '../components/Banner'
+import FoodFriend from '../components/FoodFriend'
 import Slider from '../components/Slider'
 export default {
     components: {
         Banner,
+        FoodFriend,
         Slider,
     },
     data() {

@@ -26,9 +26,6 @@ export default {
         toggle() {
             this.isHidden = !this.isHidden
         },
-        ttest() {
-            this.test = !this.test
-        }
     },
 }
 </script>

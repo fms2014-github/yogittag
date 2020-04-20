@@ -28,9 +28,13 @@
                     style="padding-bottom: 10px;"
                 >
                     <b-tab title="Home" active>
-                        <StackedTable :items="testStoreData" />
-                        <div id="map" style="width: 100%; height: 350px;"></div>
-                        <div>
+                        <StoreInfoTable class="store-detail-component" :items="testStoreData" />
+                        <div
+                            class="store-detail-component"
+                            id="map"
+                            style="width: 100%; height: 350px;"
+                        ></div>
+                        <div class="store-detail-component">
                             <b-badge pill variant="secondary">{{
                                 testBHour.week_type | weekType
                             }}</b-badge>
@@ -78,10 +82,17 @@
                                 :score="item.score"
                             />
                         </div>
-                        <button v-b-modal.modal>
-                            <img id="registerButton" :src="registerRiviewImg" />
+                        <button v-b-modal.modal id="registerButton">
+                            <img id="registerButtonImg" :src="registerRiviewImg" />
                         </button>
-                        <b-modal :no-close-on-backdrop="true" @ok="modalCilck()" id="modal" size="lg" title="Review"><ReviewForm /></b-modal>
+                        <b-modal
+                            :no-close-on-backdrop="true"
+                            @ok="modalCilck()"
+                            id="modal"
+                            size="lg"
+                            title="Review"
+                            ><ReviewForm
+                        /></b-modal>
                     </b-tab>
                 </b-tabs>
             </div>
@@ -94,12 +105,11 @@
 import SmallCard from '@/components/cards/SmallCard'
 import Carousel from '@/components/showPictures/Carousel'
 import SortingTable from '@/components/tables/SortingTable'
-import StackedTable from '@/components/tables/StackedTable'
+import StoreInfoTable from '@/components/tables/StoreInfoTable'
 import dateFilter from '@/components/filters/dateFilter.js'
 import UpFocusButton from '@/components/buttons/UpFocusButton'
 import infiniteScroll from 'vue-infinite-scroll'
 import ReviewForm from '@/components/forms/ReviewForm.vue'
-
 export default {
     filters: {
         dateFilter: dateFilter,
@@ -142,7 +152,6 @@ export default {
             },
             testCardDate: [
                 {
-                    routing: '/',
                     img: 'https://loremflickr.com/700/400',
                     gender: '남',
                     title: 'Reivew Title',
@@ -152,7 +161,6 @@ export default {
                     score: 4,
                 },
                 {
-                    routing: '#',
                     img: 'https://picsum.photos/700/400',
                     gender: '여',
                     title: 'Reivew Title2',
@@ -240,21 +248,84 @@ export default {
             longitude: 126.926666,
             categorys: ['Category 1', 'Category 2', 'Category 3'],
             registerRiviewImg: require('@/assets/icons/registerReview.png'),
+            pMap: null,
+            scrollY: 0,
+            timer: null,
+            ux:{
+                rBtnFlag : false,
+            }
         }
     },
     components: {
         SmallCard,
         Carousel,
         SortingTable,
-        StackedTable,
+        StoreInfoTable,
         UpFocusButton,
         infiniteScroll,
         ReviewForm,
     },
     mounted() {
         this.createKakaoMap(this.storeName, this.latitude, this.longitude)
+        setTimeout(() => {
+            this.relayout()
+        }, 5000)
+    },
+    created: function () {
+        window.addEventListener('scroll', this.handleScroll)
+    },
+    beforeDestroy: function () {
+        window.removeEventListener('scroll', this.handleScroll)
     },
     methods: {
+        handleScroll() {
+            if (this.timer === null) {
+                this.timer = setTimeout(
+                    function () {
+                        this.scrollY = window.scrollY || document.documentElement.scrollTop
+                        this.registerButtonUX(this.scrollY)
+                        clearTimeout(this.timer)
+                        this.timer = null
+                    }.bind(this),
+                    200,
+                )
+            }
+        },
+        registerButtonUX(scrollPosition) {
+            
+            var rb = document.getElementById('registerButtonImg')
+            if (scrollPosition > 200 && !this.ux.rBtnFlag) {
+                var player = rb.animate(
+                    [{ transform: 'translate(0)' }, { transform: 'translate(0,-50px)' }],
+                    150,
+                )
+                player.addEventListener('finish', function () {
+                    rb.style.transform = 'translate(0,-50px)'
+                })
+                this.ux.rBtnFlag = true
+            } else if(scrollPosition <= 200 && this.ux.rBtnFlag) {
+                var player = rb.animate(
+                    [{ transform: 'translate(0,-50px)' }, { transform: 'translate(0)' }],
+                    150,
+                )
+                player.addEventListener('finish', function () {
+                    rb.style.transform = 'translate(0)'
+                })
+                this.ux.rBtnFlag = false
+            }
+        },
+        relayout() {
+            // 지도를 표시하는 div 크기를 변경한 이후 지도가 정상적으로 표출되지 않을 수도 있습니다
+            // 크기를 변경한 이후에는 반드시  map.relayout 함수를 호출해야 합니다
+            // window의 resize 이벤트에 의한 크기변경은 map.relayout 함수가 자동으로 호출됩니다
+            this.pMap.relayout()
+            // 이동할 위도 경도 위치를 생성합니다
+            var moveLatLon = new kakao.maps.LatLng(this.latitude, this.longitude)
+
+            // 지도 중심을 이동 시킵니다
+            this.pMap.setCenter(moveLatLon)
+            // this.pMap.panTo(moveLatLon)
+        },
         createKakaoMap(storeName, lat, lng) {
             var container = document.getElementById('map')
             var options = {
@@ -286,23 +357,43 @@ export default {
 
             // 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
             infowindow.open(map, marker)
+            this.pMap = map
         },
-        modalCilck(bvModalEvt){
-            console.log('modal ok click');
-        }
+        modalCilck(bvModalEvt) {
+            console.log('modal ok click')
+        },
     },
 }
 </script>
 
 <style>
-#registerButton {
+.store-detail-component {
+    margin: 5px;
+}
+#registerButtonImg {
+    animation: fadein 1s;
     position: fixed;
-    bottom: 100px;
+    bottom: 50px;
     right: 50px;
     height: 40px;
     width: 40px;
     z-index: 10;
     border: 1px solid #ddd;
     border-radius: 100%;
+}
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+#scroll {
+    position: fixed;
+    bottom: 150px;
+    right: 50px;
+    height: 40px;
+    z-index: 10;
 }
 </style>

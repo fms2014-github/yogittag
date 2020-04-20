@@ -10,6 +10,7 @@
         <userProfile v-if="this.isProfile"></userProfile>
         <FAQnQNAButton />
         <main-view />
+        <weather />
     </div>
 </template>
 
@@ -23,6 +24,7 @@ import loadingSpinner from './components/LoadingSpinner.vue'
 import loginButton from './components/LoginButton.vue'
 import loginPage from './components/UserSignNewForm.vue'
 import userProfile from './components/UserProfile.vue'
+import weather from './components/TodayWeather.vue'
 // import userRegistrate from './components/UserRegistrate.vue'
 import { mapState, mapMutations, mapGetters } from 'vuex'
 
@@ -37,6 +39,7 @@ export default {
         loginButton,
         loginPage,
         userProfile,
+        weather,
     },
     computed: {
         ...mapState('app', ['menuOpenCheck', 'isLoading', 'isLogin', 'isProfile', 'isRegistrate']),

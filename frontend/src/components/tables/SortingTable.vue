@@ -6,6 +6,7 @@
             table-variant="light"
             head-variant="light"
             responsive="sm"
+            style="text-align:center"
         ></b-table>
     </div>
 </template>

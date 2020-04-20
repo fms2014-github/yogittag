@@ -23,6 +23,7 @@ import loadingSpinner from './components/LoadingSpinner.vue'
 import loginButton from './components/LoginButton.vue'
 import loginPage from './components/UserSignNewForm.vue'
 import userProfile from './components/UserProfile.vue'
+import minigame from './components/Minigame.vue'
 // import userRegistrate from './components/UserRegistrate.vue'
 import { mapState, mapMutations, mapGetters } from 'vuex'
 

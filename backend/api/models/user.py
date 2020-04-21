@@ -5,12 +5,12 @@ from datetime import datetime
 
 class User(models.Model):
     # id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=50, null=True)
-    nick_name = models.CharField(max_length=50, null=True)
-    gender = models.CharField(max_length=50, null=True)
-    birthday = models.CharField(max_length=50, null=True)
-    address = models.TextField(null=True)
-    profile_picture = models.TextField(null=True)
-    cover_picture = models.TextField(null=True)
-    born_year = models.IntegerField(null=True)
+    name = models.CharField(max_length=10, null=True)
+    nick_name = models.CharField(max_length=16, null=True)
+    gender = models.CharField(max_length=5, null=True)
+    birthday = models.CharField(max_length=5, null=True)
+    profile_picture = models.CharField(max_length=50, null=True)
+    cover_picture = models.CharField(max_length=50, null=True)
+    born_year = models.CharField(max_length=5, null=True)
     followers = models.ManyToManyField("self")
+

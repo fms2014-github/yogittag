@@ -1,12 +1,15 @@
 import Vue from 'vue'
 import App from './App.vue'
 import vuetify from './plugins/vuetify'
-// import infiniteScroll from "vue-infinite-scroll";
 import router from './router'
 import store from './store'
 
+import infiniteScroll from 'vue-infinite-scroll'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+
 Vue.config.productionTip = false
-// Vue.use(infiniteScroll);
+Vue.use(infiniteScroll)
+Vue.use(VueAwesomeSwiper)
 
 new Vue({
     vuetify,

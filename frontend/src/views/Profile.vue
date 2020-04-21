@@ -169,7 +169,7 @@ Accessibility
     text-decoration: none;
     top: 5px;
     width: auto;
-    z-index: 100000; /* Above WP toolbar */
+    z-index: 100000;
 }
 
 /*--------------------------------------------------------------
@@ -273,12 +273,12 @@ img {
 
 .twin {
     padding: 2em;
-    background: #2185c5;
-    color: white;
+    background: #f0e0c6;
+    color: black;
 }
 
 .twin:last-of-type {
-    background: #ff7f66;
+    background: #f8f5f0;
 }
 
 .content-title {

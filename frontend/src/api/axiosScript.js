@@ -2,10 +2,14 @@ import axios from 'axios'
 
 const searchAxios = async (data, success, error) => {
     await axios({
-        url: 'http://122.199.87.81:11223/apiTest/3sec-return',
-        method: 'post',
-        data: '',
-    })
+            url: 'http://127.0.0.1:8000/api/store-name',
+            method: 'post',
+            data: {
+                name: data.keyword,
+                latitude: data.latitude,
+                longitude: data.longitude
+            },
+        })
         .then((res) => {
             success(res)
         })
@@ -16,9 +20,9 @@ const searchAxios = async (data, success, error) => {
 
 const loginAxios = async (data, success, error) => {
     await axios({
-        url: 'http://192.168.0.46:8080/apiTest/3sec-return',
-        method: 'post',
-    })
+            url: 'http://192.168.0.46:8080/apiTest/3sec-return',
+            method: 'post',
+        })
         .then((res) => {
             success(res)
         })

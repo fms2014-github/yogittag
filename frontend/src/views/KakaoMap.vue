@@ -1,6 +1,15 @@
 <template>
     <div>
-        <search-bar />
+        <search-bar :latitude="latitude" :longitude="longitude" />
+        <!-- <div id="search-result-wrap" class="search-result-wrap">
+            <div id="search-result" v-for="(item, index) in test" v-bind:key="index">
+                <strong>{{ item.store_name }}</strong>
+                <br />
+                <span>{{item.category}}</span>
+                <br />
+                <small>{{item.address}}</small>
+            </div>
+        </div>-->
         <div id="gps-button" class="radius-button">
             <button @click="gpsFocus">
                 <img src="@/assets/icons/gps.png" style="width:2.3em;" />
@@ -23,6 +32,21 @@
     right: 2%;
     z-index: 10;
 }
+
+/* #search {
+    position: absolute;
+    top: 5em;
+    left: 20vw;
+    transform: translateX(-50%);
+    background-color: white;
+    width: 35vw;
+    max-width: 35vw;
+    z-index: 10;
+} */
+
+#search-result-wrap {
+    position: absolute;
+}
 </style>
 
 <script>
@@ -33,7 +57,17 @@ export default {
         return {
             latitude : 0,
             longitude : 0,
-            map: {}
+            map: {},
+            test: [
+                {
+                    'store_name' : '국수이야기',
+                    'address' : "경기도 시흥시 월곶동 1006-3",
+                    'category': "국수|고기국수",
+                    'latitude' : 37.3887,
+                    'longitude' : 126.74,
+                    'review_cnt' : 0
+                }
+            ]
         }
     },
     components: {
@@ -62,11 +96,11 @@ export default {
                 this.latitude = pos.coords.latitude;
                 this.longitude = pos.coords.longitude;
 
-                console.log("dd");
+                // console.log("dd");
 
                 var imageSrc = require('@/assets/icons/rec.png'),
-                imageSize = new kakao.maps.Size(34, 39), // 마커이미지의 크기입니다
-                imageOption = {offset: new kakao.maps.Point(17, 39)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                imageSize = new kakao.maps.Size(25, 25), // 마커이미지의 크기입니다
+                imageOption = {offset: new kakao.maps.Point(9, 9)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
       
                 // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
                 var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),

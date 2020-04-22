@@ -7,11 +7,16 @@ from rest_framework.response import Response
 
 import requests
 
-from .models import bhour, menu, review, store, user
+from .models import bhour, menu, review, Store as store, user
 
 from .serializers import BhourSerializer, UserSerializer, StoreSerializer, ReviewSerializer, MenuSerializer
 
-import time, json, hashlib, base64
+import time
+import json
+import hashlib
+import base64
+
+import math
 
 
 # user start
@@ -21,7 +26,8 @@ def user_login(request):
     input_password = request.data.get('password')
     try:
         # 계정 확인
-        email = user.objects.all().get(email__exact=input_email, password__exact=input_password)
+        email = user.objects.all().get(email__exact=input_email,
+                                       password__exact=input_password)
 
         # JWT 객체
         header = {"typ": "jwt", "alg": "HS256"}
@@ -33,8 +39,8 @@ def user_login(request):
 
         # jwt 토큰 생성
         jwt = base64.b64encode(repr(header).encode()).decode("UTF-8") + '.' + \
-              base64.b64encode(repr(payload).encode()).decode("UTF-8") + '.' + \
-              base64.b64encode(signature.hexdigest().encode()).decode()
+            base64.b64encode(repr(payload).encode()).decode("UTF-8") + '.' + \
+            base64.b64encode(signature.hexdigest().encode()).decode()
 
     except:
         return Response('Not Found Account', status=status.HTTP_400_BAD_REQUEST)
@@ -53,14 +59,16 @@ def session_refresh(request):
                       get_jwt[1].encode() +
                       SECRET_KEY.encode()).hexdigest() == base64.b64decode(get_jwt[2]).decode():
         # 토큰이 정상이면 payload 해석
-        payload = json.loads(base64.b64decode(get_jwt[1]).decode().replace("'", "\""))
+        payload = json.loads(base64.b64decode(
+            get_jwt[1]).decode().replace("'", "\""))
         print(payload['exp'], int(time.time().__int__()))
         # 토큰 유효기간 검증
         if int(payload['exp']) >= int(time.time().__int__()):
             # 토큰 유효기간이 지나지 않았을 경우 유효기간 갱신
             payload['iat'] = time.time().__int__()
             payload['exp'] = time.time().__int__() + 50
-            get_jwt[1] = base64.b64encode(repr(payload).encode()).decode("UTF-8")
+            get_jwt[1] = base64.b64encode(
+                repr(payload).encode()).decode("UTF-8")
             get_jwt[2] = base64.b64encode(hashlib.sha256(
                 get_jwt[0].encode() + get_jwt[1].encode() + SECRET_KEY.encode()).hexdigest().encode()).decode("UTF-8")
 
@@ -95,7 +103,8 @@ def user_delete(request):
                       get_jwt[1].encode() +
                       SECRET_KEY.encode()).hexdigest() == base64.b64decode(get_jwt[2]).decode():
         # 토큰이 정상이면 payload 해석
-        payload = json.loads(base64.b64decode(get_jwt[1]).decode().replace("'", "\""))
+        payload = json.loads(base64.b64decode(
+            get_jwt[1]).decode().replace("'", "\""))
         print(payload['exp'], int(time.time().__int__()))
         # 토큰 유효기간 검증
         if int(payload['exp']) >= int(time.time().__int__()):
@@ -218,9 +227,49 @@ def review_find_by_user(request):
 # store start
 @api_view(['POST'])
 def store_find_by_name(request):
+    print('dd')
     # 검색 요청 정보 가져오기
-    get_name = request.data.get('name');
+    get_name = request.data.get('name')
+    get_latitude = request.data.get('latitude')
+    get_longitude = request.data.get('longitude')
+    # get_name = request.data
+    # print(get_name)
     result_search = store.objects.filter(store_name__contains=get_name)
+
+    print(result_search[0].longitude)
+
+    for res in result_search:
+        # distance = math.acos(math.sin(dLat1)*math.sin(dLat2) + math.cos(dLat1)
+        distance = Distance(get_latitude, get_longitude,
+                            res.latitude, res.longitude)
+        #                       * math.cos(dLat2)*math.cos(dLon1 - dLon2))
+
+        print(distance)
+
     return Response({"result": result_search.values()}, status=status.HTTP_200_OK)
+
+
+def Distance(lat1, lon1, lat2, lon2):
+    theta = lon1 - lon2
+    dist = math.sin(deg2rad(lat1)) * math.sin(deg2rad(lat2))
+    + math.cos(deg2rad(lat1)) * math.cos(deg2rad(lat2)) * \
+        math.cos(deg2rad(theta))
+
+    dist = math.acos(dist)
+    dist = rad2deg(dist)
+    dist = dist * 60 * 1.1515
+    # dist = dist * 1.609344
+
+    return dist
+
+
+def deg2rad(deg):
+
+    return (deg * math.pi / 180.0)
+
+
+def rad2deg(rad):
+
+    return (rad * 180.0 / math.pi)
 
 # store end

@@ -1,16 +1,40 @@
 <template>
     <div id="search">
         <div id="search-bar" class="search-bar">
-            <input id="search-bar-input" @keyup.enter="findData" placeholder="입력하세요" type="text" />
-            <button id="search-button" @click="findData">
+            <input
+                id="search-bar-input"
+                v-model="keyword"
+                @keyup.enter="findData"
+                placeholder="입력하세요"
+                type="text"
+            />
+
+            <button id="search-button" @click="findData" style="float:left;">
                 <span class="material-icons">search</span>
             </button>
-            <button id="filter-button">
+            <!-- <button id="filter-button">
                 <span class="material-icons" @click="openFilter">filter_list</span>
                 <span id="is-filter" v-show="useFilter">필터 사용</span>
-            </button>
+            </button>-->
             <hr />
-            <filter-list />
+            <!-- <filter-list />
+            <hr />-->
+            <v-chip-group multiple active-class="primary--text">
+                <v-chip v-for="tag in tags" :key="tag" @click="tagClick">{{ tag }}</v-chip>
+            </v-chip-group>
+            <div
+                v-show="isshow"
+                style="display:block; width:100%;opacity: 0.65;background: white; max-height:30em;overflow-y:scroll;"
+            >
+                <div id="search-result" v-for="item in result" v-bind:key="item.id">
+                    <strong>{{item.store_name}}</strong>
+                    <br />
+                    <small>{{item.category}}</small>
+                    <br />
+                    <small>{{item.address}}</small>
+                    <hr />
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -20,16 +44,36 @@ import filterList from '../components/FilterList.vue'
 import axiosApi from '../api/axiosScript.js'
 import { mapMutations, mapState, mapGetters } from 'vuex'
 export default {
+    props:{
+        latitude : {
+            type : Number,
+            require : true
+        },
+        longitude : {
+            type : Number,
+            require : true
+        }
+    },
     data() {
         return {
-            test: {},
+            keyword:'',
+            result: [],
+            isshow: false,
+            tags: [
+                '음식점',
+                '카페',
+                '술집',
+                '300m',
+                '500m',
+                '1km'
+            ],
         }
     },
     components: {
         filterList,
     },
     computed: {
-        ...mapGetters('app', ['useFilter']),
+        //...mapGetters('app', ['useFilter']),
     },
     methods: {
         ...mapMutations('app', ['loadingSpinner', 'initState']),
@@ -37,23 +81,35 @@ export default {
             document.getElementById('search-bar').classList.toggle('open-filter')
         },
         async findData() {
+            let data = {
+                keyword : this.keyword,
+                latitude : this.latitude,
+                longitude : this.longitude
+            }
             this.initState()
             this.loadingSpinner()
             await axiosApi.searchAxios(
-                '',
+                data,
                 (res) => {
                     this.loadingSpinner()
-                    console.log(res.data)
-                    this.test = res.data
-                    
+                    //console.log(res.data)
+                    this.result = res.data.result
+                    this.isshow = true
+            
+
                 },
                 (err) => {
                     this.loadingSpinner()
                     console.log(err.data)
                 },
             )
-            console.log(this.test)
+            //console.log(this.test)
         },
+
+        tagClick(event){
+            //console.log(event)
+            console.log(event.target.innerText)
+        }
     },
 }
 </script>
@@ -66,7 +122,7 @@ export default {
     transform: translateX(-50%);
     background-color: white;
     width: 50vw;
-    max-width: 700px;
+    max-width: 500px;
     z-index: 10;
     .search-bar {
         display: flex;
@@ -75,15 +131,15 @@ export default {
         flex-wrap: wrap;
         padding: 0 1vw;
         width: 100%;
-        height: 68px;
+        height: 48px;
         border-radius: 7px;
-        overflow: hidden;
+        //overflow: hidden;
         box-shadow: 0px 0px 4px 2px rgba(128, 128, 128, 0.7);
         #search-bar-input {
             width: calc(100% - 112px);
-            margin-top: 10px;
+            //margin-top: 10px;
             height: 48px;
-            font-size: 18pt;
+            font-size: 15pt;
         }
         hr {
             margin-top: 8px;
@@ -106,13 +162,14 @@ export default {
             color: rgb(255, 255, 255);
         }
         .material-icons {
-            margin-left: 8px;
-            margin-top: 10px;
-            font-size: 48px;
+            margin-left: 18px;
+            margin-top: 8px;
+            font-size: 38px;
         }
     }
-    .open-filter {
-        height: auto;
-    }
+}
+
+#search-result {
+    z-index: 10;
 }
 </style>

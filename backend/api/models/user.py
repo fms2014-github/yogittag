@@ -12,5 +12,4 @@ class User(models.Model):
     profile_picture = models.CharField(max_length=50, null=True)
     cover_picture = models.CharField(max_length=50, null=True)
     born_year = models.CharField(max_length=5, null=True)
-    followers = models.ManyToManyField("self")
-
+    followers = models.ManyToManyField("self", symmetrical=False)

@@ -7,6 +7,10 @@ from . import views
 
 # 주소 뒤에 book를 붙이면 getRequest 함수의 리턴값이 호출된다.
 urlpatterns = [
+    path('users', views.user_list),
+    path('users/<int:pk>', views.user_detail),
+    path('users/<int:fromID>/followers', views.followers_list),
+    path('users/<int:fromID>/followers/<int:toID>', views.followers_detail),
     path('login', views.user_login),
     path('session-check', views.session_refresh),
     path('sign-up', views.sign_up),

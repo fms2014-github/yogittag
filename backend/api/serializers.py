@@ -1,4 +1,4 @@
-from .models import BHour, Menu, Review, Store, User
+from .models import BHour, Menu, Review, Store, User, FavoriteList, FavoriteStore
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 
@@ -36,6 +36,16 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'nick_name', 'gender', 'birthday',
                   'profile_picture', 'cover_picture', 'born_year')
 
+
+class FavoriteListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FavoriteList
+        fields = '__all__'
+
+class FavoriteStoreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FavoriteStore
+        fields = '__all__'
 
 class BhourSerializer(serializers.ModelSerializer):
     class Meta:

@@ -7,9 +7,9 @@ from rest_framework.response import Response
 
 import requests
 
-from .models import BHour, Menu, Review, Store, User
+from .models import BHour, Menu, Review, Store, User, FavoriteList, FavoriteStore
 
-from .serializers import BhourSerializer, UserSerializer, StoreSerializer, ReviewSerializer, MenuSerializer, FollowSerializer
+from .serializers import BhourSerializer, UserSerializer, StoreSerializer, ReviewSerializer, MenuSerializer, FollowSerializer, FavoriteListSerializer, FavoriteStoreSerializer
 
 import time
 import json
@@ -103,6 +103,170 @@ def followers_detail(request, fromID, toID):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+from django.http import HttpResponse, JsonResponse
+from rest_framework.parsers import JSONParser
+
+# user models
+@api_view(['GET', 'POST'])
+def user_list(request):
+    """
+    List all code users, or create a new user.
+    """
+    if request.method == 'GET':
+        user = User.objects.all()
+        serializer = UserSerializer(user, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = UserSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def user_detail(request, pk):
+    """
+    Retrieve, update or delete a code user.
+    """
+    try:
+        user = User.objects.get(pk=pk)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = UserSerializer(user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+# followers
+@api_view(['GET'])
+def followers_list(request, fromID):
+    """
+    Retrieve, update or delete a code user.followers.
+    """
+    try:
+        user = User.objects.get(pk=fromID)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = FollowSerializer(user)
+        return Response(serializer.data)
+
+
+@api_view(['POST', 'DELETE'])
+def followers_detail(request, fromID, toID):
+    """
+    Retrieve, update or delete a code user.followers.
+    """
+    try:
+        user = User.objects.get(pk=fromID)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'POST':
+        # 언팔로우 -> 팔로우
+        if not user.followers.filter(id=toID).count():
+            user.followers.add(toID)
+            return Response(toID, status=status.HTTP_200_OK)
+        return Response("Already follow", status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'DELETE':
+        # 팔로우 -> 언팔로우
+        if user.followers.filter(id=toID).count():
+            user.followers.remove(toID)
+            return Response(toID, status=status.HTTP_200_OK)
+        return Response("Do not follow", status=status.HTTP_400_BAD_REQUEST)
+
+# favorite
+@api_view(['GET'])
+def favorite_list_all(request):
+    """
+    List all code favorite_all_list
+    """
+    if request.method == 'GET':
+        favorite_list = FavoriteList.objects.all()
+        serializer = FavoriteListSerializer(favorite_list, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+
+@api_view(['GET', 'POST'])
+def favorite_list_list(request, pk):
+    """
+    Retrieve, create a new favorite.
+    """
+
+    try:
+        user = User.objects.get(pk=pk)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        favorite_list = FavoriteList.objects.filter(user=pk)
+        serializer = FavoriteListSerializer(favorite_list, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        data["user"] = pk
+        serializer = FavoriteListSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+
+
+@api_view(['GET'])
+def favorite_store_list_all(request, pk):
+    if request.method == 'GET':
+        favorite_store = FavoriteStore.objects.filter(user=pk)
+        serializer = FavoriteStoreSerializer(favorite_store, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+
+@api_view(['GET', 'POST'])
+def favorite_list_detail(request, pk, pk2):
+    if request.method == 'GET':
+        favorite_store = FavoriteStore.objects.filter(
+            user=pk, favorite_list_id=pk2)
+        serializer = FavoriteStoreSerializer(favorite_store, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        data["user"] = pk
+        data["favorite_list_id"] = pk2
+        serializer = FavoriteStoreSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+
+
+@api_view(['DELETE'])
+def favorite_store_list(request, pk, pk2, pk3):
+    try:
+        favorite_store = FavoriteStore.objects.get(
+            user=pk, favorite_list_id=pk2, store=pk3)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'DELETE':
+        favorite_store.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 # user start
 @api_view(['POST'])

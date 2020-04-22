@@ -1,24 +1,21 @@
 <template>
     <div class="site">
         <a class="skip-link screen-reader-text" href="#content">Skip to content</a>
-
         <header class="masthead">
             <div class="logo">우리 로고</div>
             <h2 class="site-title">내 입맛, 네 입맛</h2>
         </header>
         <!-- .masthead -->
-
         <main id="content" class="main-area">
             <section class="splash">
                 <div class="splash-content">
-                    <!-- <div class="profile block"> -->
                     <!-- PROFILE (MIDDLE-CONTAINER) -->
                     <div class="content-profile-page">
-                        <div class="profile-user-page card">
+                        <div class="profile-user-page profile-card">
                             <div class="img-user-profile">
                                 <img
                                     class="profile-bgHome"
-                                    src="https://lh3.googleusercontent.com/proxy/EjLX-fvxl_ijM5VYHFrvev77C1_WjHeNES6KoWAO87LFqWfhDgmFcz65v8XITrqOgvn0MqHYQuL7MiIeb0wotnuy9NeSB5pppkqWK8Hc8HamyI6h0V6iJ4zo4QRmJS7nrMuv5pochJya060bLaTGxQ"
+                                    src="https://blog.hmgjournal.com/images_n/contents/180404_food01.jpg"
                                 />
                                 <img
                                     class="avatar"
@@ -29,9 +26,8 @@
                             <button>Follow</button>
                             <div class="user-profile-data">
                                 <h1>Seohyun</h1>
-                                <p>github.com/hyunny0463</p>
+                                <p style="margin: 10px;">한식 | 중식 | 양식</p>
                             </div>
-                            <div class="description-profile">한식 | 중식 | 양식</div>
                             <ul class="data-user">
                                 <li>
                                     <a>
@@ -54,8 +50,6 @@
                             </ul>
                         </div>
                     </div>
-
-                    <!-- </div> -->
                 </div>
                 <!-- .splash-content -->
             </section>
@@ -92,7 +86,31 @@
             <section class="more">
                 <div class="more-content">
                     <h2 class="content-title">리뷰 정보 추가하기</h2>
-                    <p>리뷰 정보를 추가하세요.</p>
+                    <div class="row">
+                        <small-card
+                            v-for="item in testCardDate"
+                            :key="item.id"
+                            :routing="item.routing"
+                            :img="item.img"
+                            :gender="item.gender"
+                            :title="item.title"
+                            :reg_time="item.reg_time"
+                            :content="item.content"
+                            :score="item.score"
+                        />
+                    </div>
+                    <button v-b-modal.modal id="registerButton">
+                        <img id="registerButtonImg" :src="registerRiviewImg" />
+                    </button>
+                    <b-modal
+                        :no-close-on-backdrop="true"
+                        @ok="modalCilck()"
+                        id="modal"
+                        size="lg"
+                        title="Review"
+                    >
+                        <ReviewForm />
+                    </b-modal>
                 </div>
                 <!-- .more-content -->
             </section>
@@ -138,6 +156,146 @@
     </div>
     <!-- .site -->
 </template>
+<script>
+import SmallCard from '@/components/cards/SmallCard'
+import UpFocusButton from '@/components/buttons/UpFocusButton'
+import infiniteScroll from 'vue-infinite-scroll'
+import ReviewForm from '@/components/forms/ReviewForm.vue'
+export default {
+    data() {
+        return {
+            testCardDate: [
+                {
+                    img: 'https://loremflickr.com/700/400',
+                    gender: '남',
+                    title: 'Reivew Title',
+                    reg_time: '2020-04-09 03:48:40.799058',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                    score: 4,
+                },
+                {
+                    img: 'https://picsum.photos/700/400',
+                    gender: '여',
+                    title: 'Reivew Title2',
+                    reg_time: '2020-04-09 03:48',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                    score: 1,
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+                {
+                    title: 'Reivew Title3',
+                    content:
+                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
+                },
+            ],
+        }
+    },
+    components: {
+        SmallCard,
+        UpFocusButton,
+        infiniteScroll,
+        ReviewForm,
+    },
+    created: function () {
+        window.addEventListener('scroll', this.handleScroll)
+    },
+    beforeDestroy: function () {
+        window.removeEventListener('scroll', this.handleScroll)
+    },
+    methods: {
+        handleScroll() {
+            if (this.timer === null) {
+                this.timer = setTimeout(
+                    function () {
+                        this.scrollY = window.scrollY || document.documentElement.scrollTop
+                        this.registerButtonUX(this.scrollY)
+                        clearTimeout(this.timer)
+                        this.timer = null
+                    }.bind(this),
+                    200,
+                )
+            }
+        },
+        registerButtonUX(scrollPosition) {
+            
+            var rb = document.getElementById('registerButtonImg')
+            if (scrollPosition > 200 && !this.ux.rBtnFlag) {
+                var player = rb.animate(
+                    [{ transform: 'translate(0)' }, { transform: 'translate(0,-50px)' }],
+                    150,
+                )
+                player.addEventListener('finish', function () {
+                    rb.style.transform = 'translate(0,-50px)'
+                })
+                this.ux.rBtnFlag = true
+            } else if(scrollPosition <= 200 && this.ux.rBtnFlag) {
+                var player = rb.animate(
+                    [{ transform: 'translate(0,-50px)' }, { transform: 'translate(0)' }],
+                    150,
+                )
+                player.addEventListener('finish', function () {
+                    rb.style.transform = 'translate(0)'
+                })
+                this.ux.rBtnFlag = false
+            }
+        },
+        modalCilck(bvModalEvt) {
+            console.log('modal ok click')
+        },
+    },
+}
+</script>
 <style>
 /*--------------------------------------------------------------
 Accessibility
@@ -496,7 +654,7 @@ a {
     width: 44.23em;
 }
 
-.card {
+.profile-card {
     background: #fff;
     border-radius: 0.3rem;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
@@ -522,6 +680,7 @@ a {
     border-radius: 0.4em;
     margin-top: -10em;
     box-shadow: 0 0 0.1em rgba(0, 0, 0, 0.35);
+    transform: translateY(65%);
 }
 .profile-user-page button {
     position: absolute;
@@ -545,7 +704,7 @@ a {
 .profile-user-page .user-profile-data,
 .profile-user-page .description-profile {
     text-align: center;
-    padding: 0 1.5em;
+    padding: 4em 1.5em 0;
 }
 .profile-user-page .user-profile-data h1 {
     font-family: 'Lato', sans-serif;

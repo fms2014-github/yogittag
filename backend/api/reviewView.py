@@ -13,7 +13,7 @@ def detail(request, id=None, ):
 
 
 @api_view(['GET'])
-def review_list(request, score=None, user=None):
+def review_list(request, score=None, id=None):
     if score is not None:
         condition = request.GET.get('condition')
         if condition is not None and condition.lower() == 'down':
@@ -21,7 +21,7 @@ def review_list(request, score=None, user=None):
             return Response({"result": result.values()}, status=status.HTTP_200_OK)
         result = queryset.filter(score__gte=score)
         return Response({"result": result.values()}, status=status.HTTP_200_OK)
-    elif user != 0:
-        result = queryset.filter(user_id__exact=user)
+    elif id != 0:
+        result = queryset.filter(user_id__exact=id)
         return Response({'result': result.values()}, status=status.HTTP_200_OK)
     return Response(status=status.HTTP_400_BAD_REQUEST)

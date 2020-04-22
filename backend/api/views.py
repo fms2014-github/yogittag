@@ -66,12 +66,12 @@ def user_detail(request, pk):
 
 
 @api_view(['GET'])
-def followers_list(request, fromID):
+def followers_list(request, fId):
     """
     Retrieve, update or delete a code user.followers.
     """
     try:
-        user = User.objects.get(pk=fromID)
+        user = User.objects.get(pk=fId)
     except User.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -81,19 +81,19 @@ def followers_list(request, fromID):
 
 
 @api_view(['POST', 'DELETE'])
-def followers_detail(request, fromID, toID):
+def followers_detail(request, fId, tId):
     """
     Retrieve, update or delete a code user.followers.
     """
     try:
-        user = User.objects.get(pk=fromID)
+        user = User.objects.get(pk=fId)
     except User.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'POST':
         # print(request.data)
-        user.followers.add(toID)
-        serializer = FollowSerializer(fromID, data=user)
+        user.followers.add(tId)
+        serializer = FollowSerializer(fId, data=user)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -103,8 +103,6 @@ def followers_detail(request, fromID, toID):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-from django.http import HttpResponse, JsonResponse
-from rest_framework.parsers import JSONParser
 
 # user models
 @api_view(['GET', 'POST'])
@@ -153,12 +151,12 @@ def user_detail(request, pk):
 
 # followers
 @api_view(['GET'])
-def followers_list(request, fromID):
+def followers_list(request, fId):
     """
     Retrieve, update or delete a code user.followers.
     """
     try:
-        user = User.objects.get(pk=fromID)
+        user = User.objects.get(pk=fId)
     except User.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -168,27 +166,27 @@ def followers_list(request, fromID):
 
 
 @api_view(['POST', 'DELETE'])
-def followers_detail(request, fromID, toID):
+def followers_detail(request, fId, tId):
     """
     Retrieve, update or delete a code user.followers.
     """
     try:
-        user = User.objects.get(pk=fromID)
+        user = User.objects.get(pk=fId)
     except User.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'POST':
         # 언팔로우 -> 팔로우
-        if not user.followers.filter(id=toID).count():
-            user.followers.add(toID)
-            return Response(toID, status=status.HTTP_200_OK)
+        if not user.followers.filter(id=tId).count():
+            user.followers.add(tId)
+            return Response(tId, status=status.HTTP_200_OK)
         return Response("Already follow", status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == 'DELETE':
         # 팔로우 -> 언팔로우
-        if user.followers.filter(id=toID).count():
-            user.followers.remove(toID)
-            return Response(toID, status=status.HTTP_200_OK)
+        if user.followers.filter(id=tId).count():
+            user.followers.remove(tId)
+            return Response(tId, status=status.HTTP_200_OK)
         return Response("Do not follow", status=status.HTTP_400_BAD_REQUEST)
 
 # favorite
@@ -257,7 +255,7 @@ def favorite_list_detail(request, pk, pk2):
 
 
 @api_view(['DELETE'])
-def favorite_store_list(request, pk, pk2, pk3):
+def favorite_store_detail(request, pk, pk2, pk3):
     try:
         favorite_store = FavoriteStore.objects.get(
             user=pk, favorite_list_id=pk2, store=pk3)
@@ -267,6 +265,7 @@ def favorite_store_list(request, pk, pk2, pk3):
     if request.method == 'DELETE':
         favorite_store.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 # user start
 @api_view(['POST'])
@@ -329,17 +328,6 @@ def session_refresh(request):
     return Response({"jwt": ''}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
-def sign_up(request):
-    data = request.data
-    serializer = UserSerializer(data=data)
-
-    # 데이터 유효성 검사
-    if serializer.is_valid():
-        user = User(**data)
-        user.save()
-        return Response({"success": "sign up"}, status=status.HTTP_200_OK)
-    return Response({"error": "Bad_Request"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['DELETE'])

@@ -7,11 +7,101 @@ from rest_framework.response import Response
 
 import requests
 
-from .models import bhour, menu, review, store, user
+from .models import BHour, Menu, Review, Store, User
 
-from .serializers import BhourSerializer, UserSerializer, StoreSerializer, ReviewSerializer, MenuSerializer
+from .serializers import BhourSerializer, UserSerializer, StoreSerializer, ReviewSerializer, MenuSerializer, FollowSerializer
 
-import time, json, hashlib, base64
+import time
+import json
+import hashlib
+import base64
+
+from django.http import HttpResponse, JsonResponse
+from rest_framework.parsers import JSONParser
+
+# user models
+@api_view(['GET', 'POST'])
+def user_list(request):
+    """
+    List all code users, or create a new user.
+    """
+    if request.method == 'GET':
+        user = User.objects.all()
+        serializer = UserSerializer(user, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = UserSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def user_detail(request, pk):
+    """
+    Retrieve, update or delete a code user.
+    """
+    try:
+        user = User.objects.get(pk=pk)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = UserSerializer(user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+def followers_list(request, fromID):
+    """
+    Retrieve, update or delete a code user.followers.
+    """
+    try:
+        user = User.objects.get(pk=fromID)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = FollowSerializer(user)
+        return Response(serializer.data)
+
+
+@api_view(['POST', 'DELETE'])
+def followers_detail(request, fromID, toID):
+    """
+    Retrieve, update or delete a code user.followers.
+    """
+    try:
+        user = User.objects.get(pk=fromID)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'POST':
+        # print(request.data)
+        user.followers.add(toID)
+        serializer = FollowSerializer(fromID, data=user)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # user start
@@ -21,7 +111,8 @@ def user_login(request):
     input_password = request.data.get('password')
     try:
         # 계정 확인
-        email = user.objects.all().get(email__exact=input_email, password__exact=input_password)
+        email = User.objects.all().get(email__exact=input_email,
+                                       password__exact=input_password)
 
         # JWT 객체
         header = {"typ": "jwt", "alg": "HS256"}
@@ -33,8 +124,8 @@ def user_login(request):
 
         # jwt 토큰 생성
         jwt = base64.b64encode(repr(header).encode()).decode("UTF-8") + '.' + \
-              base64.b64encode(repr(payload).encode()).decode("UTF-8") + '.' + \
-              base64.b64encode(signature.hexdigest().encode()).decode()
+            base64.b64encode(repr(payload).encode()).decode("UTF-8") + '.' + \
+            base64.b64encode(signature.hexdigest().encode()).decode()
 
     except:
         return Response('Not Found Account', status=status.HTTP_400_BAD_REQUEST)
@@ -53,14 +144,16 @@ def session_refresh(request):
                       get_jwt[1].encode() +
                       SECRET_KEY.encode()).hexdigest() == base64.b64decode(get_jwt[2]).decode():
         # 토큰이 정상이면 payload 해석
-        payload = json.loads(base64.b64decode(get_jwt[1]).decode().replace("'", "\""))
+        payload = json.loads(base64.b64decode(
+            get_jwt[1]).decode().replace("'", "\""))
         print(payload['exp'], int(time.time().__int__()))
         # 토큰 유효기간 검증
         if int(payload['exp']) >= int(time.time().__int__()):
             # 토큰 유효기간이 지나지 않았을 경우 유효기간 갱신
             payload['iat'] = time.time().__int__()
             payload['exp'] = time.time().__int__() + 50
-            get_jwt[1] = base64.b64encode(repr(payload).encode()).decode("UTF-8")
+            get_jwt[1] = base64.b64encode(
+                repr(payload).encode()).decode("UTF-8")
             get_jwt[2] = base64.b64encode(hashlib.sha256(
                 get_jwt[0].encode() + get_jwt[1].encode() + SECRET_KEY.encode()).hexdigest().encode()).decode("UTF-8")
 
@@ -95,7 +188,8 @@ def user_delete(request):
                       get_jwt[1].encode() +
                       SECRET_KEY.encode()).hexdigest() == base64.b64decode(get_jwt[2]).decode():
         # 토큰이 정상이면 payload 해석
-        payload = json.loads(base64.b64decode(get_jwt[1]).decode().replace("'", "\""))
+        payload = json.loads(base64.b64decode(
+            get_jwt[1]).decode().replace("'", "\""))
         print(payload['exp'], int(time.time().__int__()))
         # 토큰 유효기간 검증
         if int(payload['exp']) >= int(time.time().__int__()):
@@ -109,11 +203,6 @@ def user_delete(request):
             return Response({"success": "delete user"}, status=status.HTTP_400_BAD_REQUEST)
     # 토큰 정보가 없거나 검증에 실패했을 경우 세션 삭제
     return Response({"jwt": ''}, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET'])
-def user_list(request):
-    raise None
 
 
 @api_view(['POST'])
@@ -180,7 +269,7 @@ def oauth_code_naver(request):
 def bhour_find_by_store(request):
     get_store = request.data.get('store')
 
-    result_menu = bhour.objects.filter(store__exact=get_store)
+    result_menu = BHour.objects.filter(store__exact=get_store)
     return Response({"result": result_menu}, status.HTTP_200_OK)
 
 
@@ -191,7 +280,7 @@ def bhour_find_by_store(request):
 def menu_find_by_store(request):
     get_store = request.data.get('store')
 
-    result_menu = menu.objects.filter(store__exact=get_store)
+    result_menu = Menu.objects.filter(store__exact=get_store)
     return Response({"result": result_menu}, status=status.HTTP_200_OK)
 
 
@@ -202,14 +291,14 @@ def menu_find_by_store(request):
 def review_find_by_store(request):
     get_store = request.data.get('store')
 
-    find_review = review.objects.filter(store__exact=get_store)
+    find_review = Review.objects.filter(store__exact=get_store)
     return Response({"result": find_review}, status=status.HTTP_200_OK)
 
 
 def review_find_by_user(request):
     get_user = request.data.get('user')
 
-    find_review = review.objects.filter(user__exact=get_user)
+    find_review = Review.objects.filter(user__exact=get_user)
     return Response({"result": find_review}, status=status.HTTP_200_OK)
 
 
@@ -219,8 +308,8 @@ def review_find_by_user(request):
 @api_view(['POST'])
 def store_find_by_name(request):
     # 검색 요청 정보 가져오기
-    get_name = request.data.get('name');
-    result_search = store.objects.filter(store_name__contains=get_name)
+    get_name = request.data.get('name')
+    result_search = Store.objects.filter(store_name__contains=get_name)
     return Response({"result": result_search.values()}, status=status.HTTP_200_OK)
 
 # store end

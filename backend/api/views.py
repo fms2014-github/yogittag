@@ -172,7 +172,7 @@ def sign_up(request):
 
     # 데이터 유효성 검사
     if serializer.is_valid():
-        user = user(**data)
+        user = User(**data)
         user.save()
         return Response({"success": "sign up"}, status=status.HTTP_200_OK)
     return Response({"error": "Bad_Request"}, status=status.HTTP_400_BAD_REQUEST)
@@ -195,7 +195,7 @@ def user_delete(request):
         if int(payload['exp']) >= int(time.time().__int__()):
             # 토큰 유효기간이 지나지 않았을 경우 회원 이메일 추출
             get_email = payload['aud']
-            user = user.objects.get(email__exact=get_email)
+            user = User.objects.get(email__exact=get_email)
             user.delete()
             return Response({"jwt": '.'.join(get_jwt)}, status=status.HTTP_200_OK)
         else:
@@ -263,53 +263,3 @@ def oauth_code_naver(request):
 
 
 # user end
-
-# bhour start
-@api_view(['POST'])
-def bhour_find_by_store(request):
-    get_store = request.data.get('store')
-
-    result_menu = BHour.objects.filter(store__exact=get_store)
-    return Response({"result": result_menu}, status.HTTP_200_OK)
-
-
-# bhour end
-
-# menu start
-@api_view(['POST'])
-def menu_find_by_store(request):
-    get_store = request.data.get('store')
-
-    result_menu = Menu.objects.filter(store__exact=get_store)
-    return Response({"result": result_menu}, status=status.HTTP_200_OK)
-
-
-# menu end
-
-# review start
-@api_view(["POST"])
-def review_find_by_store(request):
-    get_store = request.data.get('store')
-
-    find_review = Review.objects.filter(store__exact=get_store)
-    return Response({"result": find_review}, status=status.HTTP_200_OK)
-
-
-def review_find_by_user(request):
-    get_user = request.data.get('user')
-
-    find_review = Review.objects.filter(user__exact=get_user)
-    return Response({"result": find_review}, status=status.HTTP_200_OK)
-
-
-# review end
-
-# store start
-@api_view(['POST'])
-def store_find_by_name(request):
-    # 검색 요청 정보 가져오기
-    get_name = request.data.get('name')
-    result_search = Store.objects.filter(store_name__contains=get_name)
-    return Response({"result": result_search.values()}, status=status.HTTP_200_OK)
-
-# store end

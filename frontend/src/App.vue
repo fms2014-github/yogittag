@@ -18,7 +18,6 @@
         <main-view />
         <minigame />
         <weather />
-    </div>
     </div> -->
 </template>
 

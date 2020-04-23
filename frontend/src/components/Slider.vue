@@ -68,8 +68,7 @@ export default {
             },
         }
     },
-    methods: {
-    },
+    methods: {},
     mounted() {
         document.querySelectorAll('.swiper-slide').forEach((ss) => {
             ss.addEventListener('mouseover', (e) => {

@@ -1,5 +1,11 @@
 <template>
-    <div id="app">
+    <v-app>
+        <toolbar />
+        <drawer />
+        <router-view />
+        <go-top />
+    </v-app>
+    <!-- <div id="app">
         <loading-spinner v-if="this.isLoading" />
         <menu-button />
         <menu-list @closeCheckChange="menuOpenClose" />
@@ -12,10 +18,15 @@
         <main-view />
         <minigame />
         <weather />
-    </div>
+    </div> -->
 </template>
 
 <script>
+import Drawer from './components/Drawer'
+import Toolbar from './components/Toolbar'
+import RouteView from './components/RouteView'
+import GoTop from './components/GoTop'
+
 import mainView from './components/View.vue'
 import menuButton from './components/MenuButton.vue'
 import profileButton from './components/ProfileButton.vue'
@@ -32,6 +43,11 @@ import { mapState, mapMutations, mapGetters } from 'vuex'
 
 export default {
     components: {
+        Drawer,
+        Toolbar,
+        RouteView,
+        GoTop,
+
         mainView,
         menuButton,
         MenuList,
@@ -53,3 +69,9 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+.v-application--wrap {
+    min-height: 15vh important!;
+}
+</style>

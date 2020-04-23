@@ -18,7 +18,6 @@ class Store(models.Model):
     delivery = models.IntegerField(null=True)
     take_away = models.IntegerField(null=True)
     parking = models.IntegerField(null=True)
-    
 
     @property
     def category_list(self):

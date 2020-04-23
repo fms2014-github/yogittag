@@ -27,9 +27,39 @@ const loginAxios = async (data, success, error) => {
         })
 }
 
+const googleOauthAxios = (data, success, error) => {
+    axios({
+        url: 'http://localhost:9999/api/check',
+        method: 'post',
+        data: data,
+    })
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
+
+const naverOauthAxios = (data, success, error) => {
+    axios({
+        url: 'http://localhost:9999/api/check2',
+        method: 'post',
+        data: data,
+    })
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
+
 const axiosFunction = {
     searchAxios: (data, success, error) => searchAxios(data, success, error),
     loginAxios: (data, success, error) => loginAxios(data, success, error),
+    googleOauthAxios: (data, success, error) => googleOauthAxios(data, success, error),
+    naverOauthAxios: (data, success, error) => naverOauthAxios(data, success, error),
 }
 
 export default axiosFunction

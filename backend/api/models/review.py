@@ -11,3 +11,6 @@ class Review(models.Model):
     score = models.IntegerField(null=True)
     content = models.TextField(null=True)
     reg_time = models.DateTimeField(auto_now_add=True, null=True)
+
+    class Meta:
+        ordering = ['reg_time']

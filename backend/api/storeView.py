@@ -3,7 +3,9 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 
 from .models import Store, BHour, Menu, Review
+
 from .serializers import StoreSerializer
+import math
 
 queryset = Store.objects.all()
 
@@ -18,8 +20,43 @@ def detail(requset, id=None):
 @api_view(['GET'])
 def store_find_by_name(request, name=None):
     # 검색 요청 정보 가져오기
-    result_search = Store.objects.filter(store_name__contains=name)
-    return Response({"result": result_search.values()}, status=status.HTTP_200_OK)
+    params = request.GET
+    print(params.dict())
+    result = Store.objects.filter(store_name__contains=name)
+    if params.dict() != {}:
+        print('params Check')
+        lat = float(params.get('latitude'))
+        lng = float(params.get('longitude'))
+        category = params.getlist('category')
+        distance = params.get('distance')
+        filter_data1 = []
+        filter_data2 = []
+        print(lat, lng, category)
+        R = 6378.137
+        if distance is not None:
+            for data in result.values():
+                store_lat = float(data.get('latitude'))
+                store_lng = float(data.get('longitude'))
+                dLat = abs(store_lat * math.pi / 180.0 - lat * math.pi / 180.0)
+                dLng = abs(store_lng * math.pi / 180.0 - lng * math.pi / 180.0)
+                a = math.sin(dLat / 2) * math.sin(dLat / 2) + math.cos(lat * math.pi / 180) * math.cos(store_lat * math.pi / 180) * math.sin(dLng / 2) * math.sin(dLng / 2)
+                c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+                d = R * c
+                if d * 1000 < int(distance):
+                    filter_data1.append(data)
+        result = filter_data1
+        if category is not None:
+            for data in result:
+                for cat in category:
+                    print(cat)
+                    print(data.get('category'))
+                    print(data.get('category').find(cat))
+                    if data.get('category').find(cat) > -1:
+                        filter_data2.append(data)
+                        break
+        result = filter_data2
+        return Response({'result': result}, status=status.HTTP_200_OK)
+    return Response({"result": result.values()}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])

@@ -73,6 +73,7 @@ export default {
     transform: translate(-50%, -50%);
     list-style-type: none;
     li {
+        text-shadow: 2px 2px 5px red;
         position: absolute;
         transition: all 1s;
     }

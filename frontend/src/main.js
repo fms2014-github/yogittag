@@ -7,9 +7,13 @@ import router from './router'
 import store from './store'
 import LoadScript from 'vue-plugin-load-script'
 
+import infiniteScroll from 'vue-infinite-scroll'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+
 Vue.use(LoadScript)
 Vue.config.productionTip = false
-// Vue.use(infiniteScroll);
+Vue.use(infiniteScroll)
+Vue.use(VueAwesomeSwiper)
 
 Vue.use(vuetify)
 

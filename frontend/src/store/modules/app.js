@@ -1,6 +1,8 @@
-// import { set, toggle } from "@/utils/vuex";
+import { set, toggle } from '@/utils/vuex'
 
 const state = {
+    drawer: null,
+
     menuOpenCheck: false,
     isLoading: false,
     isLogin: false,
@@ -29,6 +31,9 @@ const action = {}
 
 // mutations
 const mutations = {
+    setDrawer: set('drawer'),
+    toggleDrawer: toggle('drawer'),
+
     initState(state) {
         state.menuOpenCheck = false
         state.isLogin = false

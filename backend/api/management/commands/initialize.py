@@ -40,7 +40,6 @@ class Command(BaseCommand):
                     address=store.address,
                     latitude=store.latitude,
                     longitude=store.longitude,
-                    review_cnt=store.review_cnt,
                     category=store.category,
                 )
                 for store in stores.itertuples()

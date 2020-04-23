@@ -1,5 +1,4 @@
-export default [
-    {
+export default [{
         path: '/',
         view: 'Home',
         name: 'home',
@@ -18,5 +17,10 @@ export default [
         path: '/test',
         view: 'UserSignNewForm',
         name: 'test',
+    },
+    {
+        path: '/profile',
+        view: 'Profile',
+        name: 'profile',
     },
 ]

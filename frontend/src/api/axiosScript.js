@@ -44,6 +44,8 @@ const getForecastGrib = (data) => {
                 reject(err)
             })
     })
+}
+
 const googleOauthAxios = (data, success, error) => {
     axios({
         url: 'http://localhost:9999/api/check',

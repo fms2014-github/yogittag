@@ -328,8 +328,6 @@ def session_refresh(request):
     return Response({"jwt": ''}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
 @api_view(['DELETE'])
 def user_delete(request):
     # JWT 토큰 획득

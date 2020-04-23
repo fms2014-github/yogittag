@@ -12,21 +12,22 @@
             <button id="search-button" @click="findData" style="float:left;">
                 <span class="material-icons">search</span>
             </button>
-            <!-- <button id="filter-button">
-                <span class="material-icons" @click="openFilter">filter_list</span>
-                <span id="is-filter" v-show="useFilter">필터 사용</span>
-            </button>-->
             <hr />
-            <!-- <filter-list />
-            <hr />-->
+
             <v-chip-group multiple active-class="primary--text">
                 <v-chip v-for="tag in tags" :key="tag" @click="tagClick">{{ tag }}</v-chip>
             </v-chip-group>
             <div
                 v-show="isshow"
-                style="display:block; width:100%;opacity: 0.65;background: white; max-height:30em;overflow-y:scroll;"
+                style="display:block;margin-top: 10px; width:100%;opacity: 0.7;background: white; max-height:25em;overflow-y:scroll;"
             >
-                <div id="search-result" v-for="item in result" v-bind:key="item.id">
+                <div
+                    id="search-result"
+                    v-for="item in result"
+                    v-bind:key="item.id"
+                    v-on:mouseover="mouseOver(item.id)"
+                    v-on:mouseout="mouseOut(item.id)"
+                >
                     <strong>{{item.store_name}}</strong>
                     <br />
                     <small>{{item.category}}</small>
@@ -67,6 +68,7 @@ export default {
                 '500m',
                 '1km'
             ],
+            selectedTags : []
         }
     },
     components: {
@@ -81,10 +83,25 @@ export default {
             document.getElementById('search-bar').classList.toggle('open-filter')
         },
         async findData() {
+
+            let tag = 300;
+            for(let i=0; i<this.selectedTags.length; i++){
+                if(this.selectedTags[i].equals('300m') && tag <= 300){
+                    tag = 300
+                }
+                else if(this.selectedTags[i].equals('500m') && tag <= 500){
+                    tag = 500
+                }
+                else if(this.selectedTags[i].equals('1km') && tag <= 1000) {  // 1km 선택
+                    tag = 1000
+                }
+            }
+
             let data = {
                 keyword : this.keyword,
                 latitude : this.latitude,
-                longitude : this.longitude
+                longitude : this.longitude,
+                tags : tag
             }
             this.initState()
             this.loadingSpinner()
@@ -92,10 +109,10 @@ export default {
                 data,
                 (res) => {
                     this.loadingSpinner()
-                    //console.log(res.data)
                     this.result = res.data.result
                     this.isshow = true
             
+                    this.$emit("update:result", this.result)
 
                 },
                 (err) => {
@@ -103,12 +120,30 @@ export default {
                     console.log(err.data)
                 },
             )
-            //console.log(this.test)
         },
 
         tagClick(event){
             //console.log(event)
-            console.log(event.target.innerText)
+            let t = event.target.innerText;
+            //console.log(t)
+
+            let idx = this.selectedTags.indexOf(t)
+            if(idx>-1){
+                this.selectedTags.splice(idx,1)
+                console.log(this.selectedTags)
+            }
+            else{
+                this.selectedTags.push(t)
+            }
+
+            this.findData()  //이거 넣어야함. 통신없어서 주석 처리 해놓음
+        },
+
+        mouseOver(id){
+            this.$emit("mouseoverid", id);
+        },
+        mouseOut(id){
+            this.$emit("mouseoverid", -1);
         }
     },
 }
@@ -123,6 +158,7 @@ export default {
     background-color: white;
     width: 50vw;
     max-width: 500px;
+    min-height: 15vh;
     z-index: 10;
     .search-bar {
         display: flex;

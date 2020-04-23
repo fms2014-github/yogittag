@@ -1,6 +1,11 @@
 <template>
-    <div>
-        <search-bar :latitude="latitude" :longitude="longitude" />
+    <v-app>
+        <search-bar
+            :latitude="latitude"
+            :longitude="longitude"
+            :result.sync="result"
+            v-on:mouseoverid="getMouseoverId"
+        />
         <!-- <div id="search-result-wrap" class="search-result-wrap">
             <div id="search-result" v-for="(item, index) in test" v-bind:key="index">
                 <strong>{{ item.store_name }}</strong>
@@ -16,7 +21,12 @@
             </button>
         </div>
         <div id="map" />
-    </div>
+
+        <div id="menu_wrap" class="bg_white">
+            <ul id="placesList"></ul>
+            <div id="pagination"></div>
+        </div>
+    </v-app>
 </template>
 <style lang="scss" scoped>
 #map {
@@ -58,16 +68,10 @@ export default {
             latitude : 0,
             longitude : 0,
             map: {},
-            test: [
-                {
-                    'store_name' : '국수이야기',
-                    'address' : "경기도 시흥시 월곶동 1006-3",
-                    'category': "국수|고기국수",
-                    'latitude' : 37.3887,
-                    'longitude' : 126.74,
-                    'review_cnt' : 0
-                }
-            ]
+            result: [],
+            markers: [],
+            infowindows:[],
+            preid:-1
         }
     },
     components: {
@@ -86,6 +90,14 @@ export default {
 
         this.gpsFocus();
         
+    },
+    watch:{
+        result: function(v) {
+            console.log('dd');
+            //make marker
+            //this.displayPlaces()
+            this.addBasicMarker()
+        }
     },
     methods:{
         gpsFocus(){
@@ -112,13 +124,87 @@ export default {
                     image: markerImage // 마커이미지 설정 
                 });
 
+                
+
                 // 마커가 지도 위에 표시되도록 설정합니다
                 marker.setMap(this.map);
                 this.map.setCenter(markerPosition);      
             });
 
+            }
+        },
+
+        // 가장 기본형태로 해보자
+        addBasicMarker(){
+            for ( var i = 0; i < this.markers.length; i++ ) {
+                this.markers[i].setMap(null);
+            }
+            this.markers = [];
+            this.infowindows = [];
+
+            for(let i=0; i<this.result.length; i++){
+                // 마커가 표시될 위치입니다 
+                var markerPosition  = new kakao.maps.LatLng(this.result[i].latitude, this.result[i].longitude); 
+
+                // 마커를 생성합니다
+                var marker = new kakao.maps.Marker({
+                    position: markerPosition,
+                    title : this.result[i].id
+                });
+                this.markers.push(marker);
+
+                // 마커가 지도 위에 표시되도록 설정합니다
+                marker.setMap(this.map);
+
+                var iwContent = '<div style="padding:5px;">'+this.result[i].store_name+'</div>'
+                    //iwPosition = new kakao.maps.LatLng(this.result[i].latitude, this.result[i].longitude)
+
+                // 인포윈도우를 생성합니다
+                var infowindow = new kakao.maps.InfoWindow({
+                    //position : iwPosition, 
+                    content : iwContent,
+
+                });
+                this.infowindows.push(infowindow);
+
+                kakao.maps.event.addListener(marker, 'mouseover', this.makeOverListener(this.map, marker, infowindow));
+                kakao.maps.event.addListener(marker, 'mouseout', this.makeOutListener(infowindow));
+            }
+        },
+
+        makeOverListener(map, marker, infowindow) {
+            return function() {
+                infowindow.open(map, marker);
+            };
+        },
+
+        // 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+        makeOutListener(infowindow) {
+            return function() {
+                infowindow.close();
+            };
+        },
+
+        getMouseoverId(value){
+            //console.log(value);
+            if(value == -1){
+                for(let i=0; i<this.markers.length; i++){
+                    //console.log('this is mc : '+ this.markers[i].mc)
+                    if(this.markers[i].mc == this.preid){
+                        this.infowindows[i].close();
+                    }
+                }
+            }else {
+                for(let i=0; i<this.markers.length; i++){
+                    //console.log('this is mc : '+ this.markers[i].mc)
+                    if(this.markers[i].mc == value){
+                         this.infowindows[i].open(this.map, this.markers[i]);
+                    }
+                }
+                this.preid = value
+            }
         }
-        }
+
     }
 }
 </script>

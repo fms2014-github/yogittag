@@ -47,3 +47,9 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+.v-application--wrap {
+    min-height: 15vh important!;
+}
+</style>

@@ -8,6 +8,8 @@ import store from './store'
 Vue.config.productionTip = false
 // Vue.use(infiniteScroll);
 
+Vue.use(vuetify)
+
 new Vue({
     vuetify,
     router,

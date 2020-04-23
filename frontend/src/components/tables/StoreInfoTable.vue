@@ -53,7 +53,7 @@ table {
     margin: auto;
     width: 100%;
 }
-th{
+th {
     text-align: center;
     width: 70px;
 }

@@ -84,16 +84,20 @@ export default {
         },
         async findData() {
 
-            let tag = 300;
+            let distance = 300;
+            let category = [];
             for(let i=0; i<this.selectedTags.length; i++){
-                if(this.selectedTags[i].equals('300m') && tag <= 300){
-                    tag = 300
+                if(this.selectedTags[i] == '300m' && distance <= 300){
+                    distance = 300
                 }
-                else if(this.selectedTags[i].equals('500m') && tag <= 500){
-                    tag = 500
+                else if(this.selectedTags[i]=='500m' && distance <= 500){
+                    distance = 500
                 }
-                else if(this.selectedTags[i].equals('1km') && tag <= 1000) {  // 1km 선택
-                    tag = 1000
+                else if(this.selectedTags[i]=='1km' && distance <= 1000) {  // 1km 선택
+                    distance = 1000
+                }
+                else { // 카테고리
+                    category.push(this.selectedTags[i]);
                 }
             }
 
@@ -101,11 +105,13 @@ export default {
                 keyword : this.keyword,
                 latitude : this.latitude,
                 longitude : this.longitude,
-                tags : tag
+                category : category,
+                diatance : distance
             }
+            console.log(data)
             this.initState()
             this.loadingSpinner()
-            await axiosApi.searchAxios(
+            await axiosApi.searchStore(
                 data,
                 (res) => {
                     this.loadingSpinner()
@@ -136,7 +142,7 @@ export default {
                 this.selectedTags.push(t)
             }
 
-            this.findData()  //이거 넣어야함. 통신없어서 주석 처리 해놓음
+            //this.findData()  //이거 넣어야함. 통신없어서 주석 처리 해놓음
         },
 
         mouseOver(id){

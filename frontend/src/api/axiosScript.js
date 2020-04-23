@@ -1,18 +1,19 @@
-import axios from 'axios'
+import http from "../http-common";
+import axios from "axios";
 
 const weatherAxios = axios.create({
     baseURL: 'https://jsonp.afeld.me/'
 })
 
 const searchStore = async (data, success, error) => {
-    await axios({
-            url: 'http://127.0.0.1:8000/api/store-name',
-            method: 'post',
-            data: {
-                name: data.keyword,
+    http
+        .get('/api/store/' + data.keyword, {
+            params: {
                 latitude: data.latitude,
-                longitude: data.longitude
-            },
+                longitude: data.longitude,
+                category: data.category,
+                distance: data.distance
+            }
         })
         .then((res) => {
             success(res)
@@ -23,16 +24,17 @@ const searchStore = async (data, success, error) => {
 }
 
 const loginAxios = async (data, success, error) => {
-    await axios({
+    /* await axios({
             url: 'http://192.168.0.46:8080/apiTest/3sec-return',
             method: 'post',
-        })
-        .then((res) => {
+        }) 
+    
+    .then((res) => {
             success(res)
         })
         .catch((err) => {
             error(err)
-        })
+        })*/
 }
 
 const getForecastGrib = (data) => {
@@ -53,30 +55,41 @@ const getForecastGrib = (data) => {
 }
 
 const googleOauthAxios = (data, success, error) => {
-    axios({
+    /* axios({
             url: 'http://localhost:9999/api/check',
             method: 'post',
             data: data,
-        })
-        .then((res) => {
+        }) 
+    .then((res) => {
             success(res)
         })
         .catch((err) => {
             error(err)
-        })
+        })*/
 }
 
 const naverOauthAxios = (data, success, error) => {
-    axios({
+    /* axios({
             url: 'http://localhost:9999/api/check2',
             method: 'post',
             data: data,
-        })
-        .then((res) => {
+        }) 
+    .then((res) => {
             success(res)
         })
         .catch((err) => {
             error(err)
+        })*/
+}
+
+const getUserById = (data, success, error) => {
+    http
+        .get('/api/users/' + data)
+        .then(success => {
+            success(data);
+        })
+        .catch(error => {
+            error(data);
         })
 }
 
@@ -86,10 +99,7 @@ const axiosFunction = {
     getForecastGrib: (data) => getForecastGrib(data),
     googleOauthAxios: (data, success, error) => googleOauthAxios(data, success, error),
     naverOauthAxios: (data, success, error) => naverOauthAxios(data, success, error),
-    getStoreById: (data, success, error) => getStoreById(data, success, error),
-    getStoreBhourById: (data, success, error) => getStoreBhourById(data, success, error),
-    getStoreMenuById: (data, success, error) => getStoreMenuById(data, success, error),
-    getStoreReviewById: (data, success, error) => getStoreReviewById(data, success, error),
+    getUserById: (data, success, error) => getUserById(data, success, error)
 }
 
 export default axiosFunction

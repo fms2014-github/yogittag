@@ -1,11 +1,6 @@
 <template>
     <div id="banner">
-        <img
-            id="bannerImage"
-            src="https://i.ya-webdesign.com/images/long-banner-png-4.png"
-            height="100%"
-        />
-        <word-spinner :isRotate="isRotate" @toggleRotate="toggleRotate" />
+        <word-spinner />
     </div>
 </template>
 
@@ -41,7 +36,7 @@ export default {
     text-align: center;
     margin: 50px 0;
     width: 100%;
-    height: 300px;
+    height: 180px;
     border-radius: 10px;
     box-shadow: 0 8px 6px -6px black;
     background-color: lightgray;

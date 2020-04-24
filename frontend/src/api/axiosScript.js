@@ -1,20 +1,19 @@
-import http from "../http-common";
-import axios from "axios";
+import http from '../http-common'
+import axios from 'axios'
 
 const weatherAxios = axios.create({
-    baseURL: 'https://jsonp.afeld.me/'
+    baseURL: 'https://jsonp.afeld.me/',
 })
 
 const searchStore = async (data, success, error) => {
-    http
-        .get('/api/store/' + data.keyword, {
-            params: {
-                latitude: data.latitude,
-                longitude: data.longitude,
-                category: data.category,
-                distance: data.distance
-            }
-        })
+    http.get('/api/store/' + data.keyword, {
+        params: {
+            latitude: data.latitude,
+            longitude: data.longitude,
+            category: data.category,
+            distance: data.distance,
+        },
+    })
         .then((res) => {
             success(res)
         })
@@ -82,14 +81,176 @@ const naverOauthAxios = (data, success, error) => {
         })*/
 }
 
-const getUserById = (data, success, error) => {
-    http
-        .get('/api/users/' + data)
-        .then(success => {
-            success(data);
+//// users
+// get /users
+const getAllUser = (success, error) => {
+    http.get('/api/users')
+        .then((res) => {
+            success(res)
         })
-        .catch(error => {
-            error(data);
+        .catch((err) => {
+            error(err)
+        })
+}
+
+// post /users
+const createUser = (data, success, error) => {
+    http.post('/api/users', data)
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
+
+// get /users/{fId}/followers
+const getAllFollowers = (data, success, error) => {
+    http.get('/api/users/' + data.fId + '/followers')
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
+
+// post /users/{fId}/followers/{tId}
+const updateFollow = (data, success, error) => {
+    http.post('/api/users/' + data.fId + '/followers/' + data.tId, data)
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
+
+// delete /users/{fId}/followers/{tId}
+const deleteFollow = (data, success, error) => {
+    http.delete('api/users/' + data.fId + '/followers/' + data.tId)
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
+
+// get /users/{id}
+const getUser = (data, success, error) => {
+    http.get('/api/users/' + data.id)
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
+
+// put /users/{id}
+const updateUser = (data, success, error) => {
+    http.put('/api/users/' + data.id, data)
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
+
+// delete /users/{id}
+const deleteUser = (data, success, error) => {
+    http.delete('/api/users/' + data.id)
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
+
+// get /users/{id}/favorite-list
+const getAllFavoriteList = (data, success, error) => {
+    http.get('/api/users/' + data.id + '/favorite-list')
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
+
+// post /users/{id}/favorite-list
+const createFavoriteList = (data, success, error) => {
+    http.post('/api/users/' + data.id + '/favorite-list', data)
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
+
+// get /users/{id}/favorite-list/{list_id}
+const getFavoriteList = (data, success, error) => {
+    http.get('/api/users/' + data.id + '/favorite-list/' + data.list_id)
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
+
+// post /users/{id}/favorite-list/{list_id}
+const updateFavoriteListStore = (data, success, error) => {
+    http.post('/api/users/' + data.id + '/favorite-list/' + data.list_id, data)
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
+
+// delete /users/{id}/favorite-list/{list_id}/favorite-store/{store}
+const deleteFavoriteListStore = (data, success, error) => {
+    http.delete(
+        '/api/users/' +
+            data.id +
+            '/favorite-list/' +
+            data.list_id +
+            '/favorite-store/' +
+            data.store,
+    )
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
+
+// get /users/{id}/favorite-store
+const getAllFavoriteStore = (data, success, error) => {
+    http.get('/api/users/' + data.id + '/favorite-store')
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
+
+// get /users/{id}/review
+const getAllReview = (data, success, error) => {
+    http.get('/api/users/' + data.id + '/review')
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
         })
 }
 
@@ -99,7 +260,24 @@ const axiosFunction = {
     getForecastGrib: (data) => getForecastGrib(data),
     googleOauthAxios: (data, success, error) => googleOauthAxios(data, success, error),
     naverOauthAxios: (data, success, error) => naverOauthAxios(data, success, error),
-    getUserById: (data, success, error) => getUserById(data, success, error)
+
+    getAllUser: (success, error) => getAllUser(success, error),
+    createUser: (data, success, error) => createUser(data, success, error),
+    getAllFollowers: (data, success, error) => getAllFollowers(data, success, error),
+    updateFollow: (data, success, error) => updateFollow(data, success, error),
+    deleteFollow: (data, success, error) => deleteFollow(data, success, error),
+    getUser: (data, success, error) => getUser(data, success, error),
+    updateUser: (data, success, error) => updateUser(data, success, error),
+    deleteUser: (data, success, error) => deleteUser(data, success, error),
+    getAllFavoriteList: (data, success, error) => getAllFavoriteList(data, success, error),
+    createFavoriteList: (data, success, error) => createFavoriteList(data, success, error),
+    getFavoriteList: (data, success, error) => getFavoriteList(data, success, error),
+    updateFavoriteListStore: (data, success, error) =>
+        updateFavoriteListStore(data, success, error),
+    deleteFavoriteListStore: (data, success, error) =>
+        deleteFavoriteListStore(data, success, error),
+    getAllFavoriteStore: (data, success, error) => getAllFavoriteStore(data, success, error),
+    getAllReview: (data, success, error) => getAllReview(data, success, error),
 }
 
 export default axiosFunction

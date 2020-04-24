@@ -1,21 +1,30 @@
-export default [{
+export default [
+    {
         path: '/',
         view: 'Home',
-        name: 'home',
+        name: 'Home',
     },
     {
-        path: '/search',
-        view: 'Search',
-        name: 'search',
+        path: '/map',
+        view: 'Map',
+        name: 'Map',
+    },
+    {
+        path: '/test',
+        view: 'UserSignNewForm',
+        name: 'test',
     },
     {
         path: '/kakaomap',
         view: 'KakaoMap',
         name: 'KakaoMap',
+        path: '/store-detail-page',
+        view: 'StoreDetailPage',
+        name: 'StoreDetailPage',
     },
     {
         path: '/profile',
         view: 'Profile',
-        name: 'profile',
+        name: 'Profile',
     },
 ]

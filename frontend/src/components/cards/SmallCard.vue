@@ -11,8 +11,8 @@
                         {{ gender != null ? '(' + gender + ')' : '' }}
                     </router-link>
                 </h4>
-                <p class="card-text">{{ content }}</p>
-                <p style="float: right;">{{ reg_time | dateFilter }}</p>
+                <p class="card-text"  v-if="content">{{ content }}</p>
+                <p style="float: right;" v-if="reg_time">{{ reg_time | dateFilter }}</p>
             </div>
             <div class="card-footer">
                 <small v-for="item in score" :key="item.id">&#9733;</small>

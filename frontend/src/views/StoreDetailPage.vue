@@ -108,7 +108,6 @@ import SortingTable from '@/components/tables/SortingTable'
 import StoreInfoTable from '@/components/tables/StoreInfoTable'
 import dateFilter from '@/components/filters/dateFilter.js'
 import UpFocusButton from '@/components/buttons/UpFocusButton'
-import infiniteScroll from 'vue-infinite-scroll'
 import ReviewForm from '@/components/forms/ReviewForm.vue'
 export default {
     filters: {
@@ -251,9 +250,9 @@ export default {
             pMap: null,
             scrollY: 0,
             timer: null,
-            ux:{
-                rBtnFlag : false,
-            }
+            ux: {
+                rBtnFlag: false,
+            },
         }
     },
     components: {
@@ -262,14 +261,13 @@ export default {
         SortingTable,
         StoreInfoTable,
         UpFocusButton,
-        infiniteScroll,
         ReviewForm,
     },
     mounted() {
         this.createKakaoMap(this.storeName, this.latitude, this.longitude)
-        setTimeout(() => {
-            this.relayout()
-        }, 5000)
+        // setTimeout(() => {
+        //     this.relayout()
+        // }, 5000)
     },
     created: function () {
         window.addEventListener('scroll', this.handleScroll)
@@ -292,7 +290,6 @@ export default {
             }
         },
         registerButtonUX(scrollPosition) {
-            
             var rb = document.getElementById('registerButtonImg')
             if (scrollPosition > 200 && !this.ux.rBtnFlag) {
                 var player = rb.animate(
@@ -303,7 +300,7 @@ export default {
                     rb.style.transform = 'translate(0,-50px)'
                 })
                 this.ux.rBtnFlag = true
-            } else if(scrollPosition <= 200 && this.ux.rBtnFlag) {
+            } else if (scrollPosition <= 200 && this.ux.rBtnFlag) {
                 var player = rb.animate(
                     [{ transform: 'translate(0,-50px)' }, { transform: 'translate(0)' }],
                     150,

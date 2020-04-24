@@ -9,7 +9,7 @@
                 type="text"
             />
 
-            <button id="search-button" @click="findData" style="float:left;">
+            <button id="search-button" @click="findData" style="float: left;">
                 <span class="material-icons">search</span>
             </button>
             <hr />
@@ -19,7 +19,15 @@
             </v-chip-group>
             <div
                 v-show="isshow"
-                style="display:block;margin-top: 10px; width:100%;opacity: 0.7;background: white; max-height:25em;overflow-y:scroll;"
+                style="
+                    display: block;
+                    margin-top: 10px;
+                    width: 100%;
+                    opacity: 0.7;
+                    background: white;
+                    max-height: 25em;
+                    overflow-y: scroll;
+                "
             >
                 <div
                     id="search-result"
@@ -28,11 +36,11 @@
                     v-on:mouseover="mouseOver(item.id)"
                     v-on:mouseout="mouseOut(item.id)"
                 >
-                    <strong>{{item.store_name}}</strong>
+                    <strong>{{ item.store_name }}</strong>
                     <br />
-                    <small>{{item.category}}</small>
+                    <small>{{ item.category }}</small>
                     <br />
-                    <small>{{item.address}}</small>
+                    <small>{{ item.address }}</small>
                     <hr />
                 </div>
             </div>
@@ -41,34 +49,27 @@
 </template>
 
 <script>
-import filterList from '../components/FilterList.vue'
-import axiosApi from '../api/axiosScript.js'
+import filterList from '@/components/FilterList.vue'
+import axiosApi from '@/api/axiosScript.js'
 import { mapMutations, mapState, mapGetters } from 'vuex'
 export default {
-    props:{
-        latitude : {
-            type : Number,
-            require : true
+    props: {
+        latitude: {
+            type: Number,
+            require: true,
         },
-        longitude : {
-            type : Number,
-            require : true
-        }
+        longitude: {
+            type: Number,
+            require: true,
+        },
     },
     data() {
         return {
-            keyword:'',
+            keyword: '',
             result: [],
             isshow: false,
-            tags: [
-                '음식점',
-                '카페',
-                '술집',
-                '300m',
-                '500m',
-                '1km'
-            ],
-            selectedTags : []
+            tags: ['음식점', '카페', '술집', '300m', '500m', '1km'],
+            selectedTags: [],
         }
     },
     components: {
@@ -83,30 +84,28 @@ export default {
             document.getElementById('search-bar').classList.toggle('open-filter')
         },
         async findData() {
-
-            let distance = 300;
-            let category = [];
-            for(let i=0; i<this.selectedTags.length; i++){
-                if(this.selectedTags[i] == '300m' && distance <= 300){
+            let distance = 300
+            let category = []
+            for (let i = 0; i < this.selectedTags.length; i++) {
+                if (this.selectedTags[i] == '300m' && distance <= 300) {
                     distance = 300
-                }
-                else if(this.selectedTags[i]=='500m' && distance <= 500){
+                } else if (this.selectedTags[i] == '500m' && distance <= 500) {
                     distance = 500
-                }
-                else if(this.selectedTags[i]=='1km' && distance <= 1000) {  // 1km 선택
+                } else if (this.selectedTags[i] == '1km' && distance <= 1000) {
+                    // 1km 선택
                     distance = 1000
-                }
-                else { // 카테고리
-                    category.push(this.selectedTags[i]);
+                } else {
+                    // 카테고리
+                    category.push(this.selectedTags[i])
                 }
             }
 
             let data = {
-                keyword : this.keyword,
-                latitude : this.latitude,
-                longitude : this.longitude,
-                category : category,
-                diatance : distance
+                keyword: this.keyword,
+                latitude: this.latitude,
+                longitude: this.longitude,
+                category: category,
+                diatance: distance,
             }
             console.log(data)
             this.initState()
@@ -117,9 +116,8 @@ export default {
                     this.loadingSpinner()
                     this.result = res.data.result
                     this.isshow = true
-            
-                    this.$emit("update:result", this.result)
 
+                    this.$emit('update:result', this.result)
                 },
                 (err) => {
                     this.loadingSpinner()
@@ -128,29 +126,28 @@ export default {
             )
         },
 
-        tagClick(event){
+        tagClick(event) {
             //console.log(event)
-            let t = event.target.innerText;
+            let t = event.target.innerText
             //console.log(t)
 
             let idx = this.selectedTags.indexOf(t)
-            if(idx>-1){
-                this.selectedTags.splice(idx,1)
+            if (idx > -1) {
+                this.selectedTags.splice(idx, 1)
                 console.log(this.selectedTags)
-            }
-            else{
+            } else {
                 this.selectedTags.push(t)
             }
 
             //this.findData()  //이거 넣어야함. 통신없어서 주석 처리 해놓음
         },
 
-        mouseOver(id){
-            this.$emit("mouseoverid", id);
+        mouseOver(id) {
+            this.$emit('mouseoverid', id)
         },
-        mouseOut(id){
-            this.$emit("mouseoverid", -1);
-        }
+        mouseOut(id) {
+            this.$emit('mouseoverid', -1)
+        },
     },
 }
 </script>

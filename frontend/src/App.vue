@@ -1,11 +1,5 @@
 <template>
-    <v-app>
-        <toolbar />
-        <drawer />
-        <router-view />
-        <go-top />
-    </v-app>
-    <!-- <div id="app">
+    <div id="app">
         <loading-spinner v-if="this.isLoading" />
         <menu-button />
         <menu-list @closeCheckChange="menuOpenClose" />
@@ -18,7 +12,7 @@
         <main-view />
         <minigame />
         <weather />
-    </div> -->
+    </div>
 </template>
 
 <script>
@@ -28,9 +22,9 @@ import RouteView from './components/RouteView'
 import GoTop from './components/GoTop'
 
 import mainView from './components/View.vue'
-import menuButton from './components/MenuButton.vue'
+import menuButton from './components/sidebar_components/MenuButton'
+import MenuList from './components/sidebar_components/MenuList'
 import profileButton from './components/ProfileButton.vue'
-import MenuList from './components/MenuList.vue'
 import FAQnQNAButton from './components/FAQnQNAButton.vue'
 import loadingSpinner from './components/LoadingSpinner.vue'
 import loginButton from './components/LoginButton.vue'

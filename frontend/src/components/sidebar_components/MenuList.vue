@@ -1,15 +1,25 @@
 <template>
-    <div id="menu-list" class="menu-open menu-close">
-        <div id="close-button">
-            <span class="material-icons" @click="closeMenu">
-                arrow_back
-            </span>
-        </div>
-        <div class="list-button">Menu 1</div>
-        <div class="list-button">Menu 2</div>
-        <div class="list-button">Menu 3</div>
-        <div class="list-button">Menu 4</div>
-        <div class="list-button">Menu 5</div>
+    <div id="menu-list">
+        <b-sidebar id="sidebar-1" title="Sidebar" shadow>
+            <div class="px-3 py-2">
+                <div>
+                    <router-link class="list-button" :to="{ name: 'Home' }">Home</router-link>
+                </div>
+                <div>
+                    <router-link class="list-button" :to="{ name: 'Map' }"
+                        >Map</router-link
+                    >
+                </div>
+                <div>
+                    <router-link class="list-button" :to="{ name: 'StoreDetailPage' }"
+                        >StoreDetail</router-link
+                    >
+                </div>
+                <div>
+                    <router-link class="list-button" :to="{ name: 'Profile' }">Profile</router-link>
+                </div>
+            </div>
+        </b-sidebar>
     </div>
 </template>
 

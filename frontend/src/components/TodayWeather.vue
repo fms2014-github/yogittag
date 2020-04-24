@@ -1,7 +1,10 @@
 <template>
-    <div>
-        <div></div>
-    </div>
+    <span>
+        <template v-if="isTemp">{{ temperature }}</template>
+        <template v-if="isPrecip">{{ precipitationType }}</template>
+        <template v-if="isHumidity">{{ Humidity }}</template>
+        <template v-if="isWindSpeed">{{ windSpeed }}</template>
+    </span>
 </template>
 
 <script>
@@ -24,6 +27,24 @@ var olon = OLON * DEGRAD
 var olat = OLAT * DEGRAD
 
 export default {
+    props: {
+        isTemp: {
+            type: Boolean,
+            default: false,
+        },
+        isPrecip: {
+            type: Boolean,
+            default: false,
+        },
+        isHumidity: {
+            type: Boolean,
+            default: false,
+        },
+        isWindSpeed: {
+            type: Boolean,
+            default: false,
+        },
+    },
     data() {
         return {
             temperature: '',

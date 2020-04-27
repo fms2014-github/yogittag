@@ -1,19 +1,19 @@
 <template>
     <div>
-        <p class="display-2 font-weight-thin text--secondary text-left">&nbsp;Recommandation</p>
+        <p class="display-2 font-weight-thin text--secondary text-left">&nbsp;{{ title }}</p>
         <swiper class="swiper" :options="swiperOption">
-            <swiper-slide>Slide 01</swiper-slide>
-            <swiper-slide>Slide 02</swiper-slide>
-            <swiper-slide>Slide 03</swiper-slide>
-            <swiper-slide>Slide 04</swiper-slide>
-            <swiper-slide>Slide 05</swiper-slide>
-            <swiper-slide>Slide 06</swiper-slide>
-            <swiper-slide>Slide 07</swiper-slide>
-            <swiper-slide>Slide 08</swiper-slide>
-            <swiper-slide>Slide 09</swiper-slide>
-            <swiper-slide>Slide 10</swiper-slide>
-            <swiper-slide>Slide 11</swiper-slide>
-            <swiper-slide>Slide 12</swiper-slide>
+            <!-- <s-card class=""></s-card> -->
+            <!-- <s-card class="swiper-slide"></s-card> -->
+            <!-- <s-card class="swiper-slide"></s-card>
+            <s-card class="swiper-slide"></s-card> -->
+            <s-card
+                class="swiper-slide"
+                v-for="item in cardData"
+                :key="item.id"
+                :title="item.title"
+                :content="item.content"
+            >
+            </s-card>
             <div class="swiper-button-prev" slot="button-prev"></div>
             <div class="swiper-button-next" slot="button-next"></div>
         </swiper>
@@ -22,12 +22,22 @@
 
 <script>
 import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper'
+import sCard from '@/components/cards/SmallCard'
 import 'swiper/css/swiper.css'
 export default {
+    props: {
+        title: {
+            type: String,
+        },
+        cardData: {
+            type: Array,
+        },
+    },
     name: 'Slider',
     components: {
         Swiper,
         SwiperSlide,
+        sCard,
     },
     data() {
         return {
@@ -87,9 +97,9 @@ export default {
 
 <style lang="scss" scoped>
 .swiper {
-    height: 200px;
+    height: 100%;
     width: 100%;
-    padding: 10px;
+    padding: 100px;
 
     .swiper-slide {
         display: flex;
@@ -98,7 +108,6 @@ export default {
         text-align: center;
         font-weight: bold;
         font-size: 20px;
-        background-color: red;
 
         -webkit-transition: transform 0.35s ease-in-out;
         -moz-transition: transform 0.35s ease-in-out;

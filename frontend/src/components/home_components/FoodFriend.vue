@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import FoodFriendBtn from '../components/FoodFriendBtn'
-import FoodFriendTag from '../components/FoodFriendTag'
+import FoodFriendBtn from '../../components/FoodFriendBtn'
+import FoodFriendTag from '../../components/FoodFriendTag'
 export default {
     name: 'FoodFriend',
     components: {

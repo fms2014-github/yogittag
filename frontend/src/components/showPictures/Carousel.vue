@@ -20,10 +20,10 @@ export default {
             type: Array,
             default: function () {
                 return [
-                    'http://placehold.it/1024x480',
-                    // 'https://picsum.photos/1024/480/?image=10',
-                    // 'https://picsum.photos/1024/480/?image=12',
-                    // 'https://picsum.photos/1024/480/?image=22',
+                    // 'http://placehold.it/1024x480',
+                    'https://picsum.photos/1024/480/?image=10',
+                    'https://picsum.photos/1024/480/?image=12',
+                    'https://picsum.photos/1024/480/?image=22',
                 ]
             },
         },

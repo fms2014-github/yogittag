@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.urls import path
 
 # 현재 페이지에서 views.py를 읽어온다.
-from . import views, reviewView, menuView, storeView
+from . import views, reviewView, menuView, storeView, recommView
 
 # 주소 뒤에 book를 붙이면 getRequest 함수의 리턴값이 호출된다.
 urlpatterns = [
@@ -33,4 +33,5 @@ urlpatterns = [
     path('store/<int:id>/review', storeView.review_find_by_store),
     path('auth/google', views.oauth_code_google),
     path('auth/naver', views.oauth_code_naver),
+    path('recomm/<int:id>', recommView.recommand_based_user)
 ]

@@ -17,7 +17,7 @@
         </div>-->
         <div id="gps-button" class="radius-button">
             <button @click="gpsFocus">
-                <img src="@/assets/icons/gps.png" style="width:2.3em;" />
+                <img src="@/assets/icons/gps.png" style="width: 2.3em;" />
             </button>
         </div>
         <div id="map" />
@@ -65,13 +65,13 @@ import searchBar from '../components/Search.vue'
 export default {
     data() {
         return {
-            latitude : 0,
-            longitude : 0,
+            latitude: 0,
+            longitude: 0,
             map: {},
             result: [],
             markers: [],
-            infowindows:[],
-            preid:-1
+            infowindows: [],
+            preid: -1,
         }
     },
     components: {
@@ -79,132 +79,131 @@ export default {
     },
     mounted() {
         var container = document.getElementById('map') //지도를 담을 영역의 DOM 레퍼런스
-            var options = {
+        var options = {
             //지도를 생성할 때 필요한 기본 옵션
-                center: new kakao.maps.LatLng(this.latitude, this.longitude), //지도의 중심좌표. 33.450701, 126.570667
-                level: 3, //지도의 레벨(확대, 축소 정도)
-            }
+            center: new kakao.maps.LatLng(this.latitude, this.longitude), //지도의 중심좌표. 33.450701, 126.570667
+            level: 3, //지도의 레벨(확대, 축소 정도)
+        }
 
-            // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
         this.map = new kakao.maps.Map(container, options) //지도 생성 및 객체 리턴
 
-        this.gpsFocus();
-        
+        this.gpsFocus()
     },
-    watch:{
-        result: function(v) {
-            console.log('dd');
+    watch: {
+        result: function (v) {
+            console.log('dd')
             //make marker
             //this.displayPlaces()
             this.addBasicMarker()
-        }
+        },
     },
-    methods:{
-        gpsFocus(){
-            
-            if(navigator.geolocation){
+    methods: {
+        gpsFocus() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((pos) => {
+                    this.latitude = pos.coords.latitude
+                    this.longitude = pos.coords.longitude
 
-            navigator.geolocation.getCurrentPosition (pos => {
-                this.latitude = pos.coords.latitude;
-                this.longitude = pos.coords.longitude;
+                    // console.log("dd");
 
-                // console.log("dd");
+                    var imageSrc = require('@/assets/icons/rec.png'),
+                        imageSize = new kakao.maps.Size(25, 25), // 마커이미지의 크기입니다
+                        imageOption = { offset: new kakao.maps.Point(9, 9) } // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
-                var imageSrc = require('@/assets/icons/rec.png'),
-                imageSize = new kakao.maps.Size(25, 25), // 마커이미지의 크기입니다
-                imageOption = {offset: new kakao.maps.Point(9, 9)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-      
-                // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-                var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
-                    markerPosition = new kakao.maps.LatLng(this.latitude, this.longitude); // 마커가 표시될 위치입니다
+                    // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+                    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+                        markerPosition = new kakao.maps.LatLng(this.latitude, this.longitude) // 마커가 표시될 위치입니다
 
-                // 마커를 생성합니다
-                var marker = new kakao.maps.Marker({
-                    position: markerPosition, 
-                    image: markerImage // 마커이미지 설정 
-                });
+                    // 마커를 생성합니다
+                    var marker = new kakao.maps.Marker({
+                        position: markerPosition,
+                        image: markerImage, // 마커이미지 설정
+                    })
 
-                
-
-                // 마커가 지도 위에 표시되도록 설정합니다
-                marker.setMap(this.map);
-                this.map.setCenter(markerPosition);      
-            });
-
+                    // 마커가 지도 위에 표시되도록 설정합니다
+                    marker.setMap(this.map)
+                    this.map.setCenter(markerPosition)
+                })
             }
         },
 
         // 가장 기본형태로 해보자
-        addBasicMarker(){
-            for ( var i = 0; i < this.markers.length; i++ ) {
-                this.markers[i].setMap(null);
+        addBasicMarker() {
+            for (var i = 0; i < this.markers.length; i++) {
+                this.markers[i].setMap(null)
             }
-            this.markers = [];
-            this.infowindows = [];
+            this.markers = []
+            this.infowindows = []
 
-            for(let i=0; i<this.result.length; i++){
-                // 마커가 표시될 위치입니다 
-                var markerPosition  = new kakao.maps.LatLng(this.result[i].latitude, this.result[i].longitude); 
+            for (let i = 0; i < this.result.length; i++) {
+                // 마커가 표시될 위치입니다
+                var markerPosition = new kakao.maps.LatLng(
+                    this.result[i].latitude,
+                    this.result[i].longitude,
+                )
 
                 // 마커를 생성합니다
                 var marker = new kakao.maps.Marker({
                     position: markerPosition,
-                    title : this.result[i].id
-                });
-                this.markers.push(marker);
+                    title: this.result[i].id,
+                })
+                this.markers.push(marker)
 
                 // 마커가 지도 위에 표시되도록 설정합니다
-                marker.setMap(this.map);
+                marker.setMap(this.map)
 
-                var iwContent = '<div style="padding:5px;">'+this.result[i].store_name+'</div>'
-                    //iwPosition = new kakao.maps.LatLng(this.result[i].latitude, this.result[i].longitude)
+                var iwContent = '<div style="padding:5px;">' + this.result[i].store_name + '</div>'
+                //iwPosition = new kakao.maps.LatLng(this.result[i].latitude, this.result[i].longitude)
 
                 // 인포윈도우를 생성합니다
                 var infowindow = new kakao.maps.InfoWindow({
-                    //position : iwPosition, 
-                    content : iwContent,
+                    //position : iwPosition,
+                    content: iwContent,
+                })
+                this.infowindows.push(infowindow)
 
-                });
-                this.infowindows.push(infowindow);
-
-                kakao.maps.event.addListener(marker, 'mouseover', this.makeOverListener(this.map, marker, infowindow));
-                kakao.maps.event.addListener(marker, 'mouseout', this.makeOutListener(infowindow));
+                kakao.maps.event.addListener(
+                    marker,
+                    'mouseover',
+                    this.makeOverListener(this.map, marker, infowindow),
+                )
+                kakao.maps.event.addListener(marker, 'mouseout', this.makeOutListener(infowindow))
             }
         },
 
         makeOverListener(map, marker, infowindow) {
-            return function() {
-                infowindow.open(map, marker);
-            };
+            return function () {
+                infowindow.open(map, marker)
+            }
         },
 
-        // 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+        // 인포윈도우를 닫는 클로저를 만드는 함수입니다
         makeOutListener(infowindow) {
-            return function() {
-                infowindow.close();
-            };
+            return function () {
+                infowindow.close()
+            }
         },
 
-        getMouseoverId(value){
+        getMouseoverId(value) {
             //console.log(value);
-            if(value == -1){
-                for(let i=0; i<this.markers.length; i++){
+            if (value == -1) {
+                for (let i = 0; i < this.markers.length; i++) {
                     //console.log('this is mc : '+ this.markers[i].mc)
-                    if(this.markers[i].mc == this.preid){
-                        this.infowindows[i].close();
+                    if (this.markers[i].mc == this.preid) {
+                        this.infowindows[i].close()
                     }
                 }
-            }else {
-                for(let i=0; i<this.markers.length; i++){
+            } else {
+                for (let i = 0; i < this.markers.length; i++) {
                     //console.log('this is mc : '+ this.markers[i].mc)
-                    if(this.markers[i].mc == value){
-                         this.infowindows[i].open(this.map, this.markers[i]);
+                    if (this.markers[i].mc == value) {
+                        this.infowindows[i].open(this.map, this.markers[i])
                     }
                 }
                 this.preid = value
             }
-        }
-
-    }
+        },
+    },
 }
 </script>

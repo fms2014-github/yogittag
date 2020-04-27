@@ -6,6 +6,7 @@
 
 <script>
 import apiAxios from '../api/axiosScript'
+
 var RE = 6371.00877 // 지구 반경(km)
 var GRID = 5.0 // 격자 간격(km)
 var SLAT1 = 30.0 // 투영 위도1(degree)

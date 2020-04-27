@@ -254,6 +254,25 @@ const getAllReview = (data, success, error) => {
         })
 }
 
+const imageUpload = async (data, success, error) => {
+    return new Promise((resolve, reject) => {
+        axios({
+            url: 'https://api.imgur.com/3/image',
+            method: 'post',
+            headers: {
+                Authorization: 'Client-ID e4b1b507e84fdc3',
+            },
+            data: data,
+        })
+            .then((res) => {
+                resolve(res.data.data.link)
+            })
+            .catch((err) => {
+                reject(err)
+            })
+    })
+}
+
 const axiosFunction = {
     searchStore: (data, success, error) => searchStore(data, success, error),
     loginAxios: (data, success, error) => loginAxios(data, success, error),
@@ -278,6 +297,7 @@ const axiosFunction = {
         deleteFavoriteListStore(data, success, error),
     getAllFavoriteStore: (data, success, error) => getAllFavoriteStore(data, success, error),
     getAllReview: (data, success, error) => getAllReview(data, success, error),
+    imageUpload: (data, success, error) => imageUpload(data, success, error),
 }
 
 export default axiosFunction

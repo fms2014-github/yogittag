@@ -22,10 +22,10 @@
 </template>
 
 <script>
-import Drawer from './components/Drawer'
-import Toolbar from './components/Toolbar'
-import RouteView from './components/RouteView'
-import GoTop from './components/GoTop'
+import Drawer from './components/Drawer.vue'
+import Toolbar from './components/Toolbar.vue'
+import RouteView from './components/RouteView.vue'
+import GoTop from './components/GoTop.vue'
 
 import mainView from './components/View.vue'
 import menuButton from './components/MenuButton.vue'

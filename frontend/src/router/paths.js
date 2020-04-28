@@ -9,4 +9,14 @@ export default [
         view: 'UserSignNewForm',
         name: 'test',
     },
+    {
+        path: '/google-auth',
+        view: 'GoogleAuth',
+        name: 'GoogleAuth',
+    },
+    {
+        path: '/naver-auth',
+        view: 'NaverAuth',
+        name: 'NaverAuth',
+    },
 ]

@@ -5,23 +5,6 @@ const weatherAxios = axios.create({
     baseURL: 'https://jsonp.afeld.me/',
 })
 
-const searchStore = async (data, success, error) => {
-    http.get('/api/store/' + data.keyword, {
-        params: {
-            latitude: data.latitude,
-            longitude: data.longitude,
-            category: data.category,
-            distance: data.distance,
-        },
-    })
-        .then((res) => {
-            success(res)
-        })
-        .catch((err) => {
-            error(err)
-        })
-}
-
 const loginAxios = async (data, success, error) => {
     /* await axios({
             url: 'http://192.168.0.46:8080/apiTest/3sec-return',
@@ -53,32 +36,171 @@ const getForecastGrib = (data) => {
     })
 }
 
+// post /auth/google
 const googleOauthAxios = (data, success, error) => {
-    /* axios({
-            url: 'http://localhost:9999/api/check',
-            method: 'post',
-            data: data,
-        }) 
-    .then((res) => {
-            success(res)
+    http
+        .post('/api/auth/google', data)
+        .then(res => {
+            success(res);
         })
-        .catch((err) => {
+        .catch(err => {
             error(err)
-        })*/
+        })
 }
 
+// post /auth/naver
 const naverOauthAxios = (data, success, error) => {
-    /* axios({
-            url: 'http://localhost:9999/api/check2',
-            method: 'post',
-            data: data,
-        }) 
-    .then((res) => {
+    http
+        .post('/api/naver/google', data)
+        .then(res => {
+            success(res);
+        })
+        .catch(err => {
+            error(err)
+        })
+}
+
+// menu 
+// get menu/{id}
+const getMenuById = (data, success, error) => {
+    http
+        .get('/api/menu/' + data)
+        .then(res => {
+            success(res)
+        })
+        .catch(err => {
+            error(err)
+        })
+}
+
+// get menu/{name}
+const getMenuByName = (data, success, error) => {
+    http
+        .get('/api/menu' + data)
+        .then(res => {
+            success(res)
+        })
+        .catch(err => {
+            error(err)
+        })
+}
+
+
+//get menu/{price}/price
+const getMenuPriceList = (data, success, error) => {
+    http
+        .get('/api/menu/' + data + '/price')
+        .then(res => {
+            success(res)
+        })
+        .catch(err => {
+            error(err)
+        })
+}
+
+//Review
+//get review/{id}
+const getReview = (data, success, error) => {
+    http
+        .get('/api/review/' + data)
+        .then(res => {
+            success(res)
+        })
+        .catch(err => {
+            error(err)
+        })
+}
+
+// get review/{score}/score
+const getReviewScoreList = (data, success, error) => {
+    http
+        .get('/api/review/' + data + '/score')
+        .then(res => {
+            success(res)
+        })
+        .catch(err => {
+            error(err)
+        })
+}
+
+// post session-check
+const sessionCheck = (data, success, error) => {
+    http
+        .post('/api/session-check', data)
+        .then(res => {
+            success(res)
+        })
+        .catch(err => {
+            success(err)
+        })
+}
+
+
+//Store
+// get /store/{id}
+const getStore = (data, success, error) => {
+    http
+        .get('/api/store/' + data)
+        .then(res => {
+            success(res)
+        })
+        .catch(err => {
+            error(err)
+        })
+}
+
+//get /store/{id}/bhour
+const getStoreHour = (data, success, error) => {
+    http
+        .get('/api/store/' + data + '/hour')
+        .then(res => {
+            success(res)
+        })
+        .catch(err => {
+            error(err)
+        })
+}
+
+//get store/{id}/menu
+const getStoreMenu = (data, success, error) => {
+    http
+        .get('/api/store/' + data + '/menu')
+        .then(res => {
+            success(res)
+        })
+        .catch(err => {
+            error(err)
+        })
+}
+
+// get store/{id}/review
+const getStoreReview = (data, success, error) => {
+    http
+        .get('/api/store/' + data + '/review')
+        .then(res => {
+            success(res)
+        })
+        .catch(err => {
+            error(err)
+        })
+}
+
+// get store/{name} 
+const searchStore = async (data, success, error) => {
+    http.get('/api/store/' + data.keyword, {
+            params: {
+                latitude: data.latitude,
+                longitude: data.longitude,
+                category: data.category,
+                distance: data.distance,
+            },
+        })
+        .then((res) => {
             success(res)
         })
         .catch((err) => {
             error(err)
-        })*/
+        })
 }
 
 //// users
@@ -217,13 +339,13 @@ const updateFavoriteListStore = (data, success, error) => {
 // delete /users/{id}/favorite-list/{list_id}/favorite-store/{store}
 const deleteFavoriteListStore = (data, success, error) => {
     http.delete(
-        '/api/users/' +
+            '/api/users/' +
             data.id +
             '/favorite-list/' +
             data.list_id +
             '/favorite-store/' +
             data.store,
-    )
+        )
         .then((res) => {
             success(res)
         })
@@ -260,6 +382,21 @@ const axiosFunction = {
     getForecastGrib: (data) => getForecastGrib(data),
     googleOauthAxios: (data, success, error) => googleOauthAxios(data, success, error),
     naverOauthAxios: (data, success, error) => naverOauthAxios(data, success, error),
+
+    //
+    getMenuById: (data, success, error) => getMenuById(data, success, error),
+    getMenuByName: (data, success, error) => getMenuByName(data, success, error),
+    getMenuPriceList: (data, success, error) => getMenuPriceList(data, success, error),
+
+    getReview: (data, success, error) => getReview(data, success, error),
+    getReviewScoreList: (data, success, error) => getReviewScoreList(data, success, error),
+    sessionCheck: (data, success, error) => sessionCheck(data, success, error),
+
+    getStore: (data, success, error) => getStore(data, success, error),
+    getStoreHour: (data, success, error) => getStoreHour(data, success, error),
+    getStoreMenu: (data, success, error) => getStoreMenu(data, success, error),
+    getStoreReview: (data, success, error) => getStoreReview(data, success, error),
+    //
 
     getAllUser: (success, error) => getAllUser(success, error),
     createUser: (data, success, error) => createUser(data, success, error),

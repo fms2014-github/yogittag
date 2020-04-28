@@ -1,16 +1,26 @@
-version: "3"
-
+version: '3'
 services:
   db:
-    image: mariadb:10.3
+    image: 'mariadb:10.3'
     container_name: myMariaDB
-    command: --max_allowed_packet=1000000000
-      --character-set-server=utf8mb4
-      --collation-server=utf8mb4_unicode_ci
+    command: '--max_allowed_packet=1000000000 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci'
     environment:
       MYSQL_DATABASE: ssafy
       MYSQL_ROOT_PASSWORD: ssafyssafyroomroom
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: 1234
       TZ: Asia/Seoul
-
     ports:
-      - 3306:3306
+      - '3306:3306'
+  backend:
+    build: ./backend
+    links:
+      - 'db:db'
+    ports:
+      - '8000:8000'
+    environment:
+      DEBUG: 'true'
+      DATABASE_NAME: ssafy
+      DATABASE_USER: dev
+      DATABASE_PASSWORD: 1234
+      DATABASE_SERVICE_HOST: i02d105.p.ssafy.io

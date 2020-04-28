@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "api",
     'corsheaders',  # 이 부분 추가
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -86,12 +87,12 @@ DATABASES = {
     "default": {
         # "ENGINE": "django.db.backends.sqlite3",
         # "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ssafy',
-        'USER': 'dev',
-        'PASSWORD': '1234',
-        'HOST': 'i02d105.p.ssafy.io',
-        'PORT': '3306',
+        'ENGINE': os.getenv('DATABASE_ENGINE', 'django.db.backends.mysql'),
+        'NAME':  os.getenv('DATABASE_NAME', 'ssafy'),
+        'USER': os.getenv('DATABASE_USER', 'dev'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', '1234'),
+        'HOST':  os.getenv('DATABASE_SERVICE_HOST', 'i02d105.p.ssafy.io'),
+        'PORT': os.getenv('DATABASE_SERVICE_PORT', '3306'),
         'OPTIONS': {
             'charset': 'utf8mb4'
         },

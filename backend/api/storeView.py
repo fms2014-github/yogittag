@@ -1,0 +1,86 @@
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import api_view
+
+from .models import Store, BHour, Menu, Review
+
+from .serializers import StoreSerializer
+import math
+
+queryset = Store.objects.all()
+
+
+@api_view(['GET'])
+def detail(requset, id=None):
+    # id = requset.GET.get('id')
+    print(id)
+    result = queryset.filter(id__exact=id)
+    return Response({'result': result.values()}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def store_find_by_name(request, name=None):
+    # 검색 요청 정보 가져오기
+    params = request.GET
+    print(name)
+    print(params.dict())
+    result = Store.objects.filter(store_name__contains=name)
+    if params.dict() != {}:
+        print('params Check')
+        lat = float(params.get('latitude'))
+        lng = float(params.get('longitude'))
+        category = params.getlist('category[]')  # dict에 key값이 이렇게 들어가서 수정
+        distance = params.get('distance')
+
+        filter_data1 = []
+        filter_data2 = []
+        print(lat, lng, category, distance)
+        R = 6378.137
+        if distance is not None:
+            for data in result.values():
+                store_lat = float(data.get('latitude'))
+                store_lng = float(data.get('longitude'))
+                dLat = abs(store_lat * math.pi / 180.0 - lat * math.pi / 180.0)
+                dLng = abs(store_lng * math.pi / 180.0 - lng * math.pi / 180.0)
+                a = math.sin(dLat / 2) * math.sin(dLat / 2) + math.cos(lat * math.pi / 180) * \
+                    math.cos(store_lat * math.pi / 180) * \
+                    math.sin(dLng / 2) * math.sin(dLng / 2)
+                c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+                d = R * c
+                print(d*1000)
+                if d * 1000 < int(distance):
+                    filter_data1.append(data)
+        result = filter_data1
+        print(len(result))
+        if len(category) > 0:   # is not None 에 아무것도 없어도 들어가서 바꿨습니다
+            for data in result:
+                for cat in category:
+                    print(cat)
+                    print(data.get('category'))
+                    print(data.get('category').find(cat))
+                    if data.get('category').find(cat) > -1:
+                        filter_data2.append(data)
+                        break
+            result = filter_data2   # 요게 for문 바깥에 있어서 tap
+
+        return Response({'result': result}, status=status.HTTP_200_OK)
+    return Response({"result": result.values()}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def bhour_find_by_store(request, id=None):
+    result = BHour.objects.filter(store_id__exact=id)
+    return Response({"result": result.values()}, status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def menu_find_by_store(request, id=None):
+    result = Menu.objects.filter(store_id__exact=id)
+    return Response({"result": result.values()}, status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def review_find_by_store(request, id=None):
+    result = Review.objects.filter(store_id__exact=id)
+    print(result)
+    return Response({"result": result.values()}, status.HTTP_200_OK)

@@ -161,7 +161,7 @@
                 <a href target="_blank" rel="nofollow">우리 팀명</a>.
             </aside>
         </footer>
-        <test v-if="isEdit" />
+        <profileEditPage v-if="isEdit" :getEmail="this.email" />
     </div>
     <!-- .site -->
 </template>
@@ -170,12 +170,13 @@ import SmallCard from '@/components/cards/SmallCard'
 import UpFocusButton from '@/components/buttons/UpFocusButton'
 import infiniteScroll from 'vue-infinite-scroll'
 import ReviewForm from '@/components/forms/ReviewForm.vue'
-import test from './test1.vue'
+import profileEditPage from './profileEditPage.vue'
 
 import { mapState, mapMutations } from 'vuex'
 export default {
     data() {
         return {
+            email: '',
             testCardDate: [
                 {
                     img: 'https://loremflickr.com/700/400',
@@ -258,7 +259,7 @@ export default {
         UpFocusButton,
         infiniteScroll,
         ReviewForm,
-        test,
+        profileEditPage,
     },
     created: function () {
         window.addEventListener('scroll', this.handleScroll)

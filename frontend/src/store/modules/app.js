@@ -10,6 +10,11 @@ const state = {
     isRegistrate: false,
     selecterFilter: 'filter 1',
     isFilter: false,
+    userSession: {
+        email: '',
+        jwt: '',
+        uid: 0,
+    },
 }
 
 //getters

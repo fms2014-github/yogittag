@@ -110,28 +110,27 @@ $border-color: rgb(133, 133, 133);
         text-align: center;
         font-size: 0.95rem;
         .profile-edit-input {
-            margin: 16px 0;
+            margin: 8px 0;
+            padding: 4px 0;
+            border: {
+                style: solid;
+                width: 0 0 4px 0;
+                color: rgb(230, 230, 230);
+            }
             label {
                 padding: 5px;
                 width: 120px;
-                border-radius: 7px 0 0 7px;
+                margin: 0px;
                 border: {
                     style: solid;
-                    width: 1px;
-                    color: $border-color;
+                    width: 0 1px 0 0;
+                    color: rgb(230, 230, 230);
                 }
-                margin: 0px;
             }
             input,
             select {
                 padding: 5px;
                 width: calc(100% - 120px);
-                border-radius: 0 7px 7px 0;
-                border: {
-                    style: solid;
-                    width: 1px 1px 1px 0px;
-                    color: $border-color;
-                }
             }
             input[type='date'] {
                 font-size: 0.95rem;

@@ -4,7 +4,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
-                    <h1 class="my-4">{{ storeName }}</h1>
+                    <h1 class="my-4" style="font-family: h1c;">{{ storeName }}🍽</h1>
                     <div class="list-group">
                         <router-link
                             to="#"
@@ -18,7 +18,7 @@
                 </div>
 
                 <div class="col-lg-9">
-                    <Carousel />
+                    <Carousel :imgs="pictures" />
                 </div>
             </div>
             <div>
@@ -28,7 +28,7 @@
                     style="padding-bottom: 10px;"
                 >
                     <b-tab title="Home" active>
-                        <StoreInfoTable class="store-detail-component" :items="testStoreData" />
+                        <StoreInfoTable class="store-detail-component" :items="storeData" />
                         <div
                             class="store-detail-component"
                             id="map"
@@ -36,42 +36,42 @@
                         ></div>
                         <div class="store-detail-component">
                             <b-badge pill variant="secondary">{{
-                                testBHour.week_type | weekType
+                                bhour.week_type | weekType
                             }}</b-badge>
-                            <b-badge pill :variant="testBHour.mon ? 'info' : 'light'">월</b-badge>
-                            <b-badge pill :variant="testBHour.tue ? 'info' : 'light'">화</b-badge>
-                            <b-badge pill :variant="testBHour.wed ? 'info' : 'light'">수</b-badge>
-                            <b-badge pill :variant="testBHour.thu ? 'info' : 'light'">목</b-badge>
-                            <b-badge pill :variant="testBHour.fri ? 'info' : 'light'">금</b-badge>
-                            <b-badge pill :variant="testBHour.sat ? 'info' : 'light'">토</b-badge>
-                            <b-badge pill :variant="testBHour.sun ? 'info' : 'light'">일</b-badge>
+                            <b-badge pill :variant="bhour.mon ? 'info' : 'light'">월</b-badge>
+                            <b-badge pill :variant="bhour.tue ? 'info' : 'light'">화</b-badge>
+                            <b-badge pill :variant="bhour.wed ? 'info' : 'light'">수</b-badge>
+                            <b-badge pill :variant="bhour.thu ? 'info' : 'light'">목</b-badge>
+                            <b-badge pill :variant="bhour.fri ? 'info' : 'light'">금</b-badge>
+                            <b-badge pill :variant="bhour.sat ? 'info' : 'light'">토</b-badge>
+                            <b-badge pill :variant="bhour.sun ? 'info' : 'light'">일</b-badge>
 
-                            <div v-if="testBHour.type == 1">
+                            <div v-if="bhour.type == 1">
                                 <b-badge pill variant="success">
                                     OPEN
-                                    {{ testBHour.start_time | dateFilter }}
+                                    {{ bhour.start_time | dateFilter }}
                                     ~
-                                    {{ testBHour.end_time | dateFilter }}</b-badge
+                                    {{ bhour.end_time | dateFilter }}</b-badge
                                 >
                             </div>
-                            <div v-else-if="testBHour.type == 2">
+                            <div v-else-if="bhour.type == 2">
                                 <b-badge pill variant="warning">
                                     BREAK TIME
-                                    {{ testBHour.start_time | dateFilter }}
+                                    {{ bhour.start_time | dateFilter }}
                                     ~
-                                    {{ testBHour.end_time | dateFilter }}</b-badge
+                                    {{ bhour.end_time | dateFilter }}</b-badge
                                 >
                             </div>
-                            <b-badge pill variant="danger">{{ testBHour.etc }}</b-badge>
+                            <b-badge pill variant="danger">{{ bhour.etc }}</b-badge>
                         </div>
                     </b-tab>
                     <b-tab title="Menu">
-                        <SortingTable :fields="testMenuKeyData" :items="testMenuData" />
+                        <SortingTable :fields="MenuKeyData" :items="MenuData" />
                     </b-tab>
                     <b-tab title="Reviews">
                         <div class="row">
                             <small-card
-                                v-for="item in testCardDate"
+                                v-for="item in cardDate"
                                 :key="item.id"
                                 :routing="item.routing"
                                 :img="item.img"
@@ -109,6 +109,8 @@ import StoreInfoTable from '@/components/tables/StoreInfoTable'
 import dateFilter from '@/components/filters/dateFilter.js'
 import UpFocusButton from '@/components/buttons/UpFocusButton'
 import ReviewForm from '@/components/forms/ReviewForm.vue'
+import axios from '../api/axiosScript.js'
+
 export default {
     filters: {
         dateFilter: dateFilter,
@@ -135,117 +137,33 @@ export default {
                 light: 'light',
                 mint: 'info',
             },
-            testBHour: {
-                type: 1,
-                week_type: 1,
-                mon: 0,
-                tue: 1,
-                wed: 1,
-                thu: 1,
-                fri: 1,
-                sat: 1,
-                sun: 1,
-                start_time: '10:00:00',
-                end_time: '21:00:00',
-                etc: '매주 일요일 휴무',
-            },
-            testCardDate: [
-                {
-                    img: 'https://loremflickr.com/700/400',
-                    gender: '남',
-                    title: 'Reivew Title',
-                    reg_time: '2020-04-09 03:48:40.799058',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                    score: 4,
-                },
-                {
-                    img: 'https://picsum.photos/700/400',
-                    gender: '여',
-                    title: 'Reivew Title2',
-                    reg_time: '2020-04-09 03:48',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                    score: 1,
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-            ],
-            testMenuKeyData: [
+            bhour: {},
+            cardDate: [],
+            MenuKeyData: [
                 { key: 'Food', sortable: true },
                 { key: 'Price', sortable: true },
             ],
-            testMenuData: [
-                { Food: '아메리카노', Price: '1,000' },
-                { Food: '핫초코', Price: '13,500' },
-                { Food: '고기국수', Price: '6,000' },
-                { Food: '생맥주', Price: '7,000' },
-            ],
-            testStoreData: [
+            MenuData: [],
+            storeEtcInfo: {
+                group_seat: null,
+                reservation: null,
+                delivery: null,
+                take_away: null,
+                parking: null,
+            },
+            storeData: [
                 {
                     Branch: null,
-                    Area: '홍대',
-                    Tel: '010-6689-5886',
-                    Address: '서울특별시 마포구 동교동 170-13',
+                    Area: null,
+                    Tel: null,
+                    Address: null,
                 },
             ],
-            storeName: 'Shop Name',
-            latitude: 37.556862,
-            longitude: 126.926666,
+            storeName: null,
+            latitude: null,
+            longitude: null,
             categorys: ['Category 1', 'Category 2', 'Category 3'],
+            pictures: null,
             registerRiviewImg: require('@/assets/icons/registerReview.png'),
             pMap: null,
             scrollY: 0,
@@ -264,10 +182,7 @@ export default {
         ReviewForm,
     },
     mounted() {
-        this.createKakaoMap(this.storeName, this.latitude, this.longitude)
-        // setTimeout(() => {
-        //     this.relayout()
-        // }, 5000)
+        this.aixos(this.$route.params.id)
     },
     created: function () {
         window.addEventListener('scroll', this.handleScroll)
@@ -359,6 +274,68 @@ export default {
         modalCilck(bvModalEvt) {
             console.log('modal ok click')
         },
+        aixos(store_id) {
+            axios.getStore(
+                store_id,
+                (res) => {
+                    let resData = res.data.result[0]
+                    this.storeName = resData.store_name
+                    this.latitude = resData.latitude
+                    this.longitude = resData.longitude
+                    this.categorys = resData.category.split('|')
+                    ;(this.storeData = [
+                        {
+                            Branch: resData.branch,
+                            Area: resData.area,
+                            Tel: resData.tel,
+                            Address: resData.address,
+                        },
+                    ]),
+                        (this.pictures = resData.pictures.split('|')),
+                        (this.storeEtcInfo = {
+                            group_seat: resData.group_seat,
+                            reservation: resData.reservation,
+                            delivery: resData.delivery,
+                            take_away: resData.take_away,
+                            parking: resData.parking,
+                        })
+                    this.createKakaoMap(this.storeName, this.latitude, this.longitude)
+                },
+                (err) => {
+                    console.log(`getStore Data loading fail...`)
+                },
+            )
+            axios.getStoreHour(
+                store_id,
+                (res) => {
+                    this.bhour = res.data.result[0]
+                },
+                (error) => {
+                    console.log(`getStoreHour Data loading fail...`)
+                },
+            )
+            axios.getStoreReview(store_id, (res) => {
+                // this.cardDate = res.data.result
+
+                for (let r of res.data.result) {
+                    this.cardDate.push({
+                        title: r.user_id.toString(),
+                        routing: `/profile/${r.user_id}/review`,
+                        score: r.score,
+                        content: r.content,
+                        reg_time: r.reg_time,
+                    })
+                }
+            })
+            axios.getStoreMenu(store_id, (res) => {
+                for (let m of res.data.result) {
+                    this.MenuData.push({
+                        Food: m.menu_name,
+                        Price: m.price,
+                    })
+                }
+            })
+        },
     },
 }
 </script>
@@ -392,5 +369,9 @@ export default {
     right: 50px;
     height: 40px;
     z-index: 10;
+}
+@font-face {
+    font-family: h1c;
+    src: url('../assets/fonts/DXRMbxB-KSCpc-EUC-H.ttf');
 }
 </style>

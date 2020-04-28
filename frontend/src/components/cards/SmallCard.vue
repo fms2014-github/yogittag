@@ -42,7 +42,6 @@ export default {
         },
         img: {
             type: String,
-            default: 'http://placehold.it/700x400',
         },
         gender: {
             type: String,
@@ -50,7 +49,6 @@ export default {
         },
         title: {
             type: String,
-            default: 'Reivew Title',
         },
         reg_time: {
             type: String,

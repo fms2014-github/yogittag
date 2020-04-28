@@ -43,14 +43,16 @@
                 />
             </div>
             <button class="edit" id="submit" @click="submit">수정</button>
-            <button class="edit" id="cancel">취소</button>
+            <button class="edit" id="cancel" @click="cancel">취소</button>
         </div>
     </div>
 </template>
 
 <script>
 import axios from '../api/axiosScript'
+import { mapMutations } from 'vuex'
 export default {
+    porps: ['getEmail'],
     data() {
         return {
             edit: {
@@ -64,6 +66,7 @@ export default {
         }
     },
     methods: {
+        ...mapMutations('app', ['switchIsEdit']),
         submit() {
             axios.updateUser(
                 this.edit,
@@ -74,6 +77,9 @@ export default {
                     console.log(err)
                 },
             )
+        },
+        cancel() {
+            this.switchIsEdit()
         },
         async onChange(e) {
             console.log('aaa', e.target.files)
@@ -93,16 +99,18 @@ $border-color: rgb(133, 133, 133);
     width: 100vw;
     height: 100vh;
     z-index: 20;
-    position: relative;
-    top: 0px;
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
     #profile-edit {
         background-color: #fff;
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 0 3px 1px rgba(128, 128, 128, 0.7);
         text-align: center;
+        font-size: 0.95rem;
         .profile-edit-input {
-            margin: 4px 0;
+            margin: 16px 0;
             label {
                 padding: 5px;
                 width: 120px;
@@ -112,6 +120,7 @@ $border-color: rgb(133, 133, 133);
                     width: 1px;
                     color: $border-color;
                 }
+                margin: 0px;
             }
             input,
             select {
@@ -128,12 +137,12 @@ $border-color: rgb(133, 133, 133);
                 font-size: 0.95rem;
             }
             input[type='file'] {
-                font-size: 0.75rem;
+                font-size: 0.79rem;
                 vertical-align: top;
             }
         }
         .edit {
-            width: 112px;
+            width: 110px;
             height: 32px;
             margin: 0 8px;
             border: {

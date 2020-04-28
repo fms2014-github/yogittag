@@ -2,7 +2,7 @@ import { set, toggle } from '@/utils/vuex'
 
 const state = {
     drawer: null,
-
+    isEdit: false,
     menuOpenCheck: false,
     isLoading: false,
     isLogin: false,
@@ -33,7 +33,6 @@ const action = {}
 const mutations = {
     setDrawer: set('drawer'),
     toggleDrawer: toggle('drawer'),
-
     initState(state) {
         state.menuOpenCheck = false
         state.isLogin = false
@@ -72,6 +71,9 @@ const mutations = {
     },
     setSelecterFilter(state, value) {
         state.selecterFilter = value
+    },
+    switchIsEdit(state) {
+        state.isEdit = !state.isEdit
     },
 }
 

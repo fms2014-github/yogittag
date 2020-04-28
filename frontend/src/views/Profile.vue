@@ -26,6 +26,11 @@
                             <button>Follow</button>
                             <div class="user-profile-data">
                                 <h1>Seohyun</h1>
+                                <button id="profile-edit-button" @click="profileEdit">
+                                    <span class="material-icons">
+                                        settings
+                                    </span>
+                                </button>
                                 <p style="margin: 10px;">한식 | 중식 | 양식</p>
                             </div>
                             <ul class="data-user">
@@ -64,7 +69,10 @@
                         />
                         <div class="bucket">
                             <h3 class="bucket-title">폴이네 키친</h3>
-                            <p>친절하네요. 주말에 사람이 많았어요. 웨이팅하다가 들어갔는데 인기 비결은 맛이네요.</p>
+                            <p>
+                                친절하네요. 주말에 사람이 많았어요. 웨이팅하다가 들어갔는데 인기
+                                비결은 맛이네요.
+                            </p>
                         </div>
                         <!-- .bucket -->
                     </li>
@@ -153,6 +161,7 @@
                 <a href target="_blank" rel="nofollow">우리 팀명</a>.
             </aside>
         </footer>
+        <test v-if="isEdit" />
     </div>
     <!-- .site -->
 </template>
@@ -161,6 +170,9 @@ import SmallCard from '@/components/cards/SmallCard'
 import UpFocusButton from '@/components/buttons/UpFocusButton'
 import infiniteScroll from 'vue-infinite-scroll'
 import ReviewForm from '@/components/forms/ReviewForm.vue'
+import test from './test1.vue'
+
+import { mapState, mapMutations } from 'vuex'
 export default {
     data() {
         return {
@@ -246,6 +258,7 @@ export default {
         UpFocusButton,
         infiniteScroll,
         ReviewForm,
+        test,
     },
     created: function () {
         window.addEventListener('scroll', this.handleScroll)
@@ -253,7 +266,14 @@ export default {
     beforeDestroy: function () {
         window.removeEventListener('scroll', this.handleScroll)
     },
+    computed: {
+        ...mapState('app', ['isEdit']),
+    },
     methods: {
+        ...mapMutations('app', ['switchIsEdit']),
+        profileEdit() {
+            this.switchIsEdit()
+        },
         handleScroll() {
             if (this.timer === null) {
                 this.timer = setTimeout(
@@ -268,7 +288,6 @@ export default {
             }
         },
         registerButtonUX(scrollPosition) {
-            
             var rb = document.getElementById('registerButtonImg')
             if (scrollPosition > 200 && !this.ux.rBtnFlag) {
                 var player = rb.animate(
@@ -279,7 +298,7 @@ export default {
                     rb.style.transform = 'translate(0,-50px)'
                 })
                 this.ux.rBtnFlag = true
-            } else if(scrollPosition <= 200 && this.ux.rBtnFlag) {
+            } else if (scrollPosition <= 200 && this.ux.rBtnFlag) {
                 var player = rb.animate(
                     [{ transform: 'translate(0,-50px)' }, { transform: 'translate(0)' }],
                     150,
@@ -695,7 +714,6 @@ a {
     border-radius: 0 0.6em 0.6em 0;
     padding: 0.8em;
 }
-
 .profile-user-page button:hover {
     background: #51a7e0;
     transition: background 0.2s ease-in-out;
@@ -711,6 +729,7 @@ a {
     margin-top: 0.35em;
     color: #292f33;
     margin-bottom: 0;
+    display: inline-block;
 }
 .profile-user-page .user-profile-data p {
     font-family: 'Lato', sans-serif;
@@ -781,6 +800,22 @@ a {
     color: #3498db;
 }
 
+#profile-edit-button {
+    display: inline-block;
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
+    color: black;
+    vertical-align: 30%;
+    transform: translateX(35%);
+}
+
+#profile-edit-button span {
+    font-size: 1rem;
+}
 /* footer h4 {
     display: block;
     text-align: center;

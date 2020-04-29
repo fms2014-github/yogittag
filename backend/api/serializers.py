@@ -25,7 +25,7 @@ class FollowSerializer(serializers.ModelSerializer):
 
         followers = obj.followers.all()
         for follower in followers:
-            ret.append({"id": follower.id})
+            ret.append({"id": follower.id, "nick_name": follower.nick_name})
         return ret
 
 

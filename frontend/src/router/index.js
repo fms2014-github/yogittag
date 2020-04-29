@@ -1,11 +1,28 @@
 /* eslint-disable no-undef */
 import Vue from 'vue'
 import Router from 'vue-router'
+import appx from '../store/modules/app.js'
 
 // Routes
 import paths from './paths'
 
 function route(path, view, name) {
+    if (path === '/profile') {
+        return {
+            name: name || view,
+            path,
+            component: (resolve) => import(`@/views/${view}.vue`).then(resolve),
+            beforeEnter: (to, from, next) => {
+                let session = JSON.parse(sessionStorage.getItem('session'))
+                if (session === null) {
+                    appx.state.isLogin = true
+                    next({ path: '/' })
+                } else {
+                    next()
+                }
+            },
+        }
+    }
     return {
         name: name || view,
         path,

@@ -37,63 +37,59 @@ const getForecastGrib = (data) => {
 }
 
 // post /auth/google
-const googleOauthAxios = (data, success, error) => {
-    http
-        .post('/api/auth/google', data)
-        .then(res => {
-            success(res);
-        })
-        .catch(err => {
-            error(err)
-        })
+const googleOauthAxios = (data) => {
+    return new Promise((resolve, reject) => {
+        http.post('/api/auth/google', data)
+            .then((res) => {
+                resolve(res)
+            })
+            .catch((err) => {
+                reject(err)
+            })
+    })
 }
 
 // post /auth/naver
 const naverOauthAxios = (data, success, error) => {
-    http
-        .post('/api/naver/google', data)
-        .then(res => {
-            success(res);
+    http.post('/api/naver/google', data)
+        .then((res) => {
+            success(res)
         })
-        .catch(err => {
+        .catch((err) => {
             error(err)
         })
 }
 
-// menu 
+// menu
 // get menu/{id}
 const getMenuById = (data, success, error) => {
-    http
-        .get('/api/menu/' + data)
-        .then(res => {
+    http.get('/api/menu/' + data)
+        .then((res) => {
             success(res)
         })
-        .catch(err => {
+        .catch((err) => {
             error(err)
         })
 }
 
 // get menu/{name}
 const getMenuByName = (data, success, error) => {
-    http
-        .get('/api/menu' + data)
-        .then(res => {
+    http.get('/api/menu' + data)
+        .then((res) => {
             success(res)
         })
-        .catch(err => {
+        .catch((err) => {
             error(err)
         })
 }
 
-
 //get menu/{price}/price
 const getMenuPriceList = (data, success, error) => {
-    http
-        .get('/api/menu/' + data + '/price')
-        .then(res => {
+    http.get('/api/menu/' + data + '/price')
+        .then((res) => {
             success(res)
         })
-        .catch(err => {
+        .catch((err) => {
             error(err)
         })
 }
@@ -101,100 +97,94 @@ const getMenuPriceList = (data, success, error) => {
 //Review
 //get review/{id}
 const getReview = (data, success, error) => {
-    http
-        .get('/api/review/' + data)
-        .then(res => {
+    http.get('/api/review/' + data)
+        .then((res) => {
             success(res)
         })
-        .catch(err => {
+        .catch((err) => {
             error(err)
         })
 }
 
 // get review/{score}/score
 const getReviewScoreList = (data, success, error) => {
-    http
-        .get('/api/review/' + data + '/score')
-        .then(res => {
+    http.get('/api/review/' + data + '/score')
+        .then((res) => {
             success(res)
         })
-        .catch(err => {
+        .catch((err) => {
             error(err)
         })
 }
 
 // post session-check
 const sessionCheck = (data, success, error) => {
-    http
-        .post('/api/session-check', data)
-        .then(res => {
-            success(res)
-        })
-        .catch(err => {
-            success(err)
-        })
+    return new Promise((resolve, reject) => {
+        http.post('/api/session-check', data)
+            .then((res) => {
+                resolve(res)
+            })
+            .catch((err) => {
+                reject(err)
+            })
+    })
 }
-
 
 //Store
 // get /store/{id}
 const getStore = (data, success, error) => {
-    http
-        .get('/api/store/' + data)
-        .then(res => {
+    http.get('/api/store/' + data)
+        .then((res) => {
             success(res)
         })
-        .catch(err => {
+        .catch((err) => {
             error(err)
         })
 }
 
 //get /store/{id}/bhour
 const getStoreHour = (data, success, error) => {
-    http
-        .get('/api/store/' + data + '/hour')
-        .then(res => {
+    http.get('/api/store/' + data + '/hour')
+        .then((res) => {
             success(res)
         })
-        .catch(err => {
+        .catch((err) => {
             error(err)
         })
 }
 
 //get store/{id}/menu
 const getStoreMenu = (data, success, error) => {
-    http
-        .get('/api/store/' + data + '/menu')
-        .then(res => {
+    http.get('/api/store/' + data + '/menu')
+        .then((res) => {
             success(res)
         })
-        .catch(err => {
+        .catch((err) => {
             error(err)
         })
 }
 
 // get store/{id}/review
 const getStoreReview = (data, success, error) => {
-    http
-        .get('/api/store/' + data + '/review')
-        .then(res => {
+    http.get('/api/store/' + data + '/review')
+        .then((res) => {
             success(res)
         })
-        .catch(err => {
+        .catch((err) => {
             error(err)
         })
 }
 
-// get store/{name} 
+// get store/{name}
 const searchStore = async (data, success, error) => {
     http.get('/api/store/' + data.keyword, {
-            params: {
-                latitude: data.latitude,
-                longitude: data.longitude,
-                category: data.category,
-                distance: data.distance,
-            },
-        })
+        params: {
+            latitude: data.latitude,
+            longitude: data.longitude,
+            category: data.category,
+            distance: data.distance,
+        },
+    })
         .then((res) => {
             success(res)
         })
@@ -339,13 +329,13 @@ const updateFavoriteListStore = (data, success, error) => {
 // delete /users/{id}/favorite-list/{list_id}/favorite-store/{store}
 const deleteFavoriteListStore = (data, success, error) => {
     http.delete(
-            '/api/users/' +
+        '/api/users/' +
             data.id +
             '/favorite-list/' +
             data.list_id +
             '/favorite-store/' +
             data.store,
-        )
+    )
         .then((res) => {
             success(res)
         })
@@ -380,7 +370,7 @@ const axiosFunction = {
     searchStore: (data, success, error) => searchStore(data, success, error),
     loginAxios: (data, success, error) => loginAxios(data, success, error),
     getForecastGrib: (data) => getForecastGrib(data),
-    googleOauthAxios: (data, success, error) => googleOauthAxios(data, success, error),
+    googleOauthAxios: (data) => googleOauthAxios(data),
     naverOauthAxios: (data, success, error) => naverOauthAxios(data, success, error),
 
     //
@@ -390,7 +380,7 @@ const axiosFunction = {
 
     getReview: (data, success, error) => getReview(data, success, error),
     getReviewScoreList: (data, success, error) => getReviewScoreList(data, success, error),
-    sessionCheck: (data, success, error) => sessionCheck(data, success, error),
+    sessionCheck: (data) => sessionCheck(data),
 
     getStore: (data, success, error) => getStore(data, success, error),
     getStoreHour: (data, success, error) => getStoreHour(data, success, error),

@@ -325,7 +325,10 @@ def session_refresh(request):
         refresh_token = requests.post(refresh_token_url, data=data)
         # 토큰 정보가 없거나 검증에 실패했을 경우 세션 삭제
         return Response({'session':{"jwt": refresh_token.json()['id_token']}}, status=status.HTTP_200_OK)
-    return Response({'session': ''}, status=status.HTTP_200_OK)
+    return Response({'session': {
+        'email': '',
+        'jwt': '',
+    }}, status=status.HTTP_200_OK)
 
 
 @api_view(['DELETE'])
@@ -388,8 +391,6 @@ def oauth_code_google(request):
     session = User.objects.get(email__exact=userinfo.json()['email'])
     print(session.email)
     return Response({'session': {'email': session.email,
-                                 'profilePicture': session.profile_picture,
-                                 'coverPicture': session.cover_picture,
                                  'jwt': auth_data.json()['id_token']}}, status=status.HTTP_200_OK)
 
 

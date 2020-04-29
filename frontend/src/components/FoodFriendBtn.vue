@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-btn class="ma-2" icon @click="$emit('toggle')"><v-icon large>group_add</v-icon></v-btn>
+        <v-btn class="ma-2 group_add_btn" icon @click="$emit('toggle')"><v-icon large>group_add</v-icon></v-btn>
     </div>
 </template>
 <script>
@@ -17,4 +17,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.group_add_btn:focus {
+    outline:none;
+}
+</style>

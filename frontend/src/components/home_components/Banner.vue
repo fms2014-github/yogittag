@@ -4,7 +4,7 @@
             <TodayWeather @handleTemperature="" isTemp="true" />˚C
         </p>-->
         <p id="banner_info">
-            <!-- <TimeNow /> -->
+            <TimeNow />
             <TodayWeather :weather.sync="weather" :isIcon="true" :isTemp="true" />˚C
         </p>
         <br />

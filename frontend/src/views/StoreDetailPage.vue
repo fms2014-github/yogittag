@@ -79,20 +79,13 @@
                                 :title="item.title"
                                 :reg_time="item.reg_time"
                                 :content="item.content"
-                                :score="item.score"
+                                :score="parseInt(item.score)"
                             />
                         </div>
                         <button v-b-modal.modal id="registerButton">
                             <img id="registerButtonImg" :src="registerRiviewImg" />
                         </button>
-                        <b-modal
-                            :no-close-on-backdrop="true"
-                            @ok="modalCilck()"
-                            id="modal"
-                            size="lg"
-                            title="Review"
-                            ><ReviewForm
-                        /></b-modal>
+                        <ReviewForm :storeName="storeName" @registerReview="registerReview" />
                     </b-tab>
                 </b-tabs>
             </div>
@@ -159,6 +152,7 @@ export default {
                     Address: null,
                 },
             ],
+
             storeName: null,
             latitude: null,
             longitude: null,
@@ -191,6 +185,18 @@ export default {
         window.removeEventListener('scroll', this.handleScroll)
     },
     methods: {
+        registerReview() {
+            let local = localStorage
+            this.cardDate.unshift({
+                title: local.getItem(`card_title`),
+                routing: local.getItem(`card_routing`),
+                score: parseInt(local.getItem(`card_score`)),
+                content: local.getItem(`card_content`),
+                reg_time: local.getItem(`card_reg_time`),
+                img: local.getItem(`card_img`),
+            })
+            local.clear()
+        },
         handleScroll() {
             if (this.timer === null) {
                 this.timer = setTimeout(
@@ -271,9 +277,7 @@ export default {
             infowindow.open(map, marker)
             this.pMap = map
         },
-        modalCilck(bvModalEvt) {
-            console.log('modal ok click')
-        },
+
         aixos(store_id) {
             axios.getStore(
                 store_id,
@@ -319,7 +323,7 @@ export default {
 
                 for (let r of res.data.result) {
                     this.cardDate.push({
-                        title: r.user_id.toString(),
+                        title: `익명 ${r.user_id}`,
                         routing: `/profile/${r.user_id}/review`,
                         score: r.score,
                         content: r.content,

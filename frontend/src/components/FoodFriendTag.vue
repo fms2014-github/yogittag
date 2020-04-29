@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import axiosApi from '@/api/axiosScript.js'
 import VueTagsInput from '@johmun/vue-tags-input'
 export default {
     name: 'FoodFriendTag',
@@ -59,6 +60,21 @@ export default {
                 return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1
             })
         },
+    },
+    mounted() {
+        axiosApi.getAllFollowers(
+            {"fId": this.$store.state.userSession.uid},
+            (res) => {
+                console.log(res)
+                this.autocompleteItems = []
+                res.followers.forEach(element => {
+                    this.autocompleteItems.push({ text: element.nick_name, key: element.id })
+                })
+            },
+            (err) => {
+                console.log(err)
+            }
+        )
     },
     methods: {
         goRecommand() {

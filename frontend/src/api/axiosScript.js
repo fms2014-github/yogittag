@@ -50,14 +50,16 @@ const googleOauthAxios = (data) => {
 }
 
 // post /auth/naver
-const naverOauthAxios = (data, success, error) => {
-    http.post('/api/naver/google', data)
-        .then((res) => {
-            success(res)
-        })
-        .catch((err) => {
-            error(err)
-        })
+const naverOauthAxios = (data) => {
+    return new Promise((resolve, reject) => {
+        http.post('/api/auth/naver', data)
+            .then((res) => {
+                resolve(res)
+            })
+            .catch((err) => {
+                reject(err)
+            })
+    })
 }
 
 // menu
@@ -371,7 +373,7 @@ const axiosFunction = {
     loginAxios: (data, success, error) => loginAxios(data, success, error),
     getForecastGrib: (data) => getForecastGrib(data),
     googleOauthAxios: (data) => googleOauthAxios(data),
-    naverOauthAxios: (data, success, error) => naverOauthAxios(data, success, error),
+    naverOauthAxios: (data) => naverOauthAxios(data),
 
     //
     getMenuById: (data, success, error) => getMenuById(data, success, error),

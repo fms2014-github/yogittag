@@ -14,4 +14,5 @@ class User(models.Model):
     born_year = models.CharField(max_length=5, null=True)
     # followers = models.ManyToManyField("self", symmetrical=False)
     email = models.CharField(max_length=100)
-    google_refresh_token = models.CharField(max_length=600, null=True)
+    google_refresh_token = models.CharField(max_length=200, null=True)
+    naver_refresh_token = models.CharField(max_length=200, null=True)

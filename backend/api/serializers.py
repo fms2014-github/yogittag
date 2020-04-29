@@ -38,7 +38,8 @@ class UserSerializer(serializers.ModelSerializer):
     cover_picture = serializers.CharField(required=False)
     born_year = serializers.CharField(required=False)
     email = serializers.CharField()
-    google_refresh_token = serializers.CharField()
+    google_refresh_token = serializers.CharField(required=False)
+    naver_refresh_token = serializers.CharField(required=False)
     class Meta:
         model = User
         # 직렬화 시킬 컬럼명, 다른 의미로 주고 받을 데이터 명시

@@ -21,6 +21,8 @@ urlpatterns = [
     path('login', views.user_login),
     path('session-check', views.session_refresh),
     path('review/<int:id>', reviewView.detail),
+    path('review/<int:store_id>/click/<int:user_id>',
+         reviewView.update_default_score_by_click),
     path('review/<int:score>/score', reviewView.review_list),
     path('users/<int:id>/review', reviewView.review_list),
     path('menu/<int:id>', menuView.detail),

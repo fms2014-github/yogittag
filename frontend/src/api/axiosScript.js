@@ -121,15 +121,13 @@ const getReviewScoreList = (data, success, error) => {
 
 // post session-check
 const sessionCheck = (data, success, error) => {
-    return new Promise((resolve, reject) => {
-        http.post('/api/session-check', data)
-            .then((res) => {
-                resolve(res)
-            })
-            .catch((err) => {
-                reject(err)
-            })
-    })
+    http.post('/api/session-check', data)
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
 }
 
 //Store
@@ -382,7 +380,7 @@ const axiosFunction = {
 
     getReview: (data, success, error) => getReview(data, success, error),
     getReviewScoreList: (data, success, error) => getReviewScoreList(data, success, error),
-    sessionCheck: (data) => sessionCheck(data),
+    sessionCheck: (data, success, error) => sessionCheck(data, success, error),
 
     getStore: (data, success, error) => getStore(data, success, error),
     getStoreHour: (data, success, error) => getStoreHour(data, success, error),

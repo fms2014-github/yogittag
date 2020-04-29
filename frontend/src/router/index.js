@@ -2,7 +2,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import appx from '../store/modules/app.js'
-
+import sessionx from '../store/modules/session.js'
+import axios from '../api/axiosScript.js'
 // Routes
 import paths from './paths'
 
@@ -59,4 +60,22 @@ const router = new Router({
     },
 })
 
+router.beforeEach((to, from, next) => {
+    let data = sessionStorage.getItem('session')
+    if (data != null) {
+        axios.sessionCheck(
+            data,
+            (res) => {
+                sessionStorage.setItem('session', JSON.stringify(res.data.session))
+                next()
+            },
+            (err) => {
+                sessionStorage.removeItem('session')
+                sessionx.state.login = false
+                next('/')
+            },
+        )
+    }
+    next()
+})
 export default router

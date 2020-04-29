@@ -98,15 +98,6 @@ def recommand_based_user(request, id=None):
     user_review = queryset.filter(
         user_id__in=users)  # 유저가 리뷰한 것 전국 : 191개 마포구: 10개 ㅎ
 
-    print(f'id: {users[0]} reviews')
-    print(queryset.filter(user_id=users[0], score__gte=3).values())
-    print(f'id: {users[1]} reviews')
-    print(queryset.filter(user_id=users[1], score__gte=3).values())
-    print(f'id: {users[2]} reviews')
-    print(queryset.filter(user_id=users[2], score__gte=3).values())
-    print(f'id: {users[3]} reviews')
-    print(queryset.filter(user_id=users[3], score__gte=3).values())
-
     print("유저(들)의 해당지역 리뷰 개수 : {}".format(len(user_review)))
 
     # 유저의 리뷰수가 0개 : popular 순으로

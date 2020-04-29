@@ -2,11 +2,11 @@
     <div class="spinner-sentence">
         Make
         <div class="spinner" id="wordSpinner">
-            <li class="active">World</li>
-            <li class="next">Culture</li>
-            <li>Connection</li>
-            <li>Geography</li>
-            <li>Challenge</li>
+            <li class="active">{{banner_menu[0]}}</li>
+            <li class="next">{{banner_menu[1]}}</li>
+            <li v-for="menu in banner_menu" :key="menu">{{menu}}</li>
+            <!-- <li>Geography</li>
+            <li>Challenge</li>-->
         </div>Discovery Awesome
     </div>
 </template>
@@ -14,6 +14,12 @@
 <script>
 export default {
     name: 'WordSpinner',
+    props: {
+        banner_menu: {
+            type: Array,
+            default: ['고기', '치킨', '피자', '초밥']
+        }
+    },
     methods: {
         WordSpinner(el, frequency) {
             var spinner = document.getElementById('wordSpinner');
@@ -89,7 +95,7 @@ export default {
 
 <style lang="scss" scoped>
 $width: 200px;
-$height: 55px;
+$height: 45px;
 $font-size: 2em;
 
 .spinner-sentence {

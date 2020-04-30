@@ -269,6 +269,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@font-face {
+    font-family: 'Dovemayo-Medium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.0/Dovemayo-Medium.woff')
+        format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    font-family: 'Dovemayo-Medium';
+}
+
 #minigame-wrap {
     display: flex;
     position: sticky;

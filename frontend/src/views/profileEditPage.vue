@@ -42,8 +42,10 @@
                     @change="onChange"
                 />
             </div>
-            <button class="edit" id="submit" @click="submit">수정</button>
-            <button class="edit" id="cancel" @click="cancel">취소</button>
+            <button v-if="!isFullSize" class="edit" id="submit" @click="submit">수정</button>
+            <button v-if="!isFullSize" class="edit" id="cancel" @click="cancel">취소</button>
+            <button v-if="isFullSize" class="edit" id="submit" @click="submit">정보 추가</button>
+            <button v-if="isFullSize" class="edit" id="cancel" @click="cancel">나중에</button>
         </div>
     </div>
 </template>
@@ -52,7 +54,7 @@
 import axios from '../api/axiosScript'
 import { mapMutations } from 'vuex'
 export default {
-    porps: ['getEmail', 'isFullSize'],
+    props: ['isFullSize'],
     data() {
         return {
             edit: {

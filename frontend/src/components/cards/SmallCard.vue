@@ -1,5 +1,5 @@
 <template>
-    <div class="col-lg-4 col-md-6 mb-4">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
         <div class="card h-100">
             <router-link :to="routing">
                 <img class="card-img-top" :src="img" alt />
@@ -11,12 +11,8 @@
                         {{ gender != null ? '(' + gender + ')' : '' }}
                     </router-link>
                 </h4>
-                <p class="card-text"  v-if="content">{{ content }}</p>
+                <p class="card-text" v-if="content">{{ content }}</p>
                 <p style="float: right;" v-if="reg_time">{{ reg_time | dateFilter }}</p>
-            </div>
-            <div class="card-footer">
-                <small v-for="item in score" :key="item.id">&#9733;</small>
-                <small v-for="item in remainScore" :key="item.id">&#9734;</small>
             </div>
         </div>
     </div>
@@ -42,7 +38,7 @@ export default {
         },
         img: {
             type: String,
-            default: 'http://placehold.it/700x400',
+            default: 'http://placehold.it/420x312',
         },
         gender: {
             type: String,
@@ -50,7 +46,6 @@ export default {
         },
         title: {
             type: String,
-            default: 'Reivew Title',
         },
         reg_time: {
             type: String,
@@ -58,30 +53,17 @@ export default {
         },
         content: {
             type: String,
-            default:
-                'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
         },
         score: {
             type: Number,
-            default: 0,
         },
     },
     data() {
         return {
-            maxScore: 5,
-            remainScore: 0,
         }
     },
     filters: {
         dateFilter: dateFilter,
-    },
-    methods: {
-        calRemainScore(score) {
-            return this.maxScore - score
-        },
-    },
-    created() {
-        this.remainScore = this.calRemainScore(this.score)
     },
 }
 </script>

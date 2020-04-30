@@ -3,7 +3,7 @@ from django.db import models
 
 
 class Store(models.Model):
-    id = models.IntegerField(primary_key=True)
+    # id = models.IntegerField(primary_key=True)
     store_name = models.CharField(max_length=50)
     branch = models.CharField(max_length=50, null=True)
     area = models.CharField(max_length=50, null=True)
@@ -12,7 +12,7 @@ class Store(models.Model):
     latitude = models.FloatField(max_length=10, null=True)
     longitude = models.FloatField(max_length=10, null=True)
     category = models.CharField(max_length=200, null=True)
-    pictures = models.TextField(null=True)
+    pictures = models.TextField(null=True,blank=True)
     group_seat = models.IntegerField(null=True)
     reservation = models.IntegerField(null=True)
     delivery = models.IntegerField(null=True)

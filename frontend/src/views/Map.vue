@@ -233,7 +233,7 @@ export default {
         
         goToDetail(id){ 
             return ()=>{
-                this.$router.push('/store-detail-page/'+ id);
+                this.$router.push('/store/'+ id);
             }
             
         }

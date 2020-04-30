@@ -2,11 +2,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 
-from .models import Store, BHour, Menu, Review
+from .models import Store, BHour, Menu, Review, User
 
-from .serializers import StoreSerializer
+from .serializers import BhourSerializer, UserSerializer, StoreSerializer, ReviewSerializer, MenuSerializer, FollowSerializer, FavoriteListSerializer, FavoriteStoreSerializer
 import math
 
+from django.http import HttpResponse, JsonResponse
+from rest_framework.parsers import JSONParser
 queryset = Store.objects.all()
 
 
@@ -47,7 +49,7 @@ def store_find_by_name(request, name=None):
                     math.sin(dLng / 2) * math.sin(dLng / 2)
                 c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
                 d = R * c
-                print(d*1000)
+                # print(d*1000)
                 if d * 1000 < int(distance):
                     filter_data1.append(data)
         result = filter_data1
@@ -79,8 +81,17 @@ def menu_find_by_store(request, id=None):
     return Response({"result": result.values()}, status.HTTP_200_OK)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def review_find_by_store(request, id=None):
-    result = Review.objects.filter(store_id__exact=id)
-    print(result)
-    return Response({"result": result.values()}, status.HTTP_200_OK)
+    if request.method == 'GET':
+        riviews = Review.objects.filter(
+            store=id).select_related('user').order_by('-id')
+        return Response({"result": riviews.values()}, status.HTTP_200_OK)
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = ReviewSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_200_OK)
+            # return JsonResponse({serializer.data}, status=200)
+        return JsonResponse(serializer.errors, status=400)

@@ -6,8 +6,13 @@
                 <div class="col-lg-3">
                     <h1 class="my-4" style="font-family: h1c;">
                         {{ storeName
-                        }}<span v-if="!favorit" @click="favoritClick" class="favoritMark">🤍</span
-                        ><span v-else @click="favoritClick" class="favoritMark">🧡</span>
+                        }}
+                        <span
+                            v-if="!favorit"
+                            @click="favoritClick"
+                            class="favoritMark"
+                        >🤍</span>
+                        <span v-else @click="favoritClick" class="favoritMark">🧡</span>
                     </h1>
                     <b-breadcrumb style="justify-content: center;">
                         <b-badge variant="danger" v-show="storeEtcInfo.group_seat">단체석</b-badge>
@@ -26,8 +31,7 @@
                             :key="item.id"
                             class="list-group-item"
                             replace
-                            >{{ item }}</router-link
-                        >
+                        >{{ item }}</router-link>
                     </div>
                 </div>
 
@@ -50,9 +54,7 @@
                             style="width: 100%; height: 350px;"
                         ></div>
                         <div class="store-detail-component" v-if="bhour">
-                            <b-badge pill variant="secondary">
-                                {{ bhour.week_type | weekType }}
-                            </b-badge>
+                            <b-badge pill variant="secondary">{{ bhour.week_type | weekType }}</b-badge>
                             <b-badge pill :variant="bhour.mon ? 'info' : 'light'">월</b-badge>
                             <b-badge pill :variant="bhour.tue ? 'info' : 'light'">화</b-badge>
                             <b-badge pill :variant="bhour.wed ? 'info' : 'light'">수</b-badge>
@@ -202,6 +204,7 @@ export default {
     },
     mounted() {
         this.aixos(this.$route.params.id)
+        this.storeClickScore()
     },
     created: function () {
         window.addEventListener('scroll', this.handleScroll)
@@ -371,6 +374,28 @@ export default {
                 }
             })
         },
+        storeClickScore(){
+            if(sessionStorage.getItem('session') != null){
+                console.log('session is not null')
+                let userid = JSON.parse(sessionStorage.getItem('session')).userid
+                let data = {
+                    store_id : this.$route.params.id,
+                    user_id : userid
+                }
+
+                console.log(data)
+                axios.storeClickScore(
+                    data,
+                    (res)=>{
+                        console.log('success')
+                    },
+                    (err)=>{
+                        console.log('error')
+                    }
+                )
+            }
+
+        }
     },
 }
 </script>

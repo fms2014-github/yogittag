@@ -33,6 +33,7 @@ export default {
             tag: '',
             tags: [],
             autocompleteItems: [],
+            userid : 0
         }
     },
     computed: {
@@ -43,10 +44,15 @@ export default {
         },
     },
     mounted() {
-        let userid = JSON.parse(sessionStorage.getItem('session')).userid
-        if(userid != null){
+        //let userid = JSON.parse(sessionStorage.getItem('session')).userid
+        
+        if(sessionStorage.getItem('session') != null){
+            this.userid = JSON.parse(sessionStorage.getItem('session')).userid
+        }
+
+        if(this.userid != 0){
             axiosApi.getAllFollowers(
-                userid,
+                this.userid,
                 (res) => {
                     console.log(res)
 

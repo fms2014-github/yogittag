@@ -1,7 +1,8 @@
 <template>
     <div id="login-button" class="radius-button">
-        <button title="Login" @click="openLoginPage">
-            <img width="28px" src="../assets/icons/sign-in.svg" />
+        <button title="Login" @click="buttonAction">
+            <img v-if="loginState" width="28px" src="../assets/icons/sign-in.svg" />
+            <img v-if="!loginState" width="28px" src="../assets/icons/logout-icon-23398.png" />
         </button>
     </div>
 </template>
@@ -9,8 +10,18 @@
 <script>
 import { mapMutations } from 'vuex'
 export default {
+    props: ['loginState'],
     methods: {
         ...mapMutations('app', ['openLoginPage']),
+        ...mapMutations('session', ['sessionDelte']),
+        buttonAction() {
+            console.log(this.loginState)
+            if (this.loginState) {
+                this.openLoginPage()
+            } else {
+                this.sessionDelte()
+            }
+        },
     },
 }
 </script>

@@ -1,7 +1,13 @@
 <template>
     <span>
-        <template v-if="isTemp">{{ temperature }}</template>
+        <img
+            v-if="isIcon"
+            :src="require(`@/assets/img/weather/${precipitationType}.png`)"
+            style="height:50px; margin-top: -4px;"
+            alt="weatherIcon"
+        />
         <template v-if="isPrecip">{{ precipitationType }}</template>
+        <template v-if="isTemp">{{ temperature }}</template>
         <template v-if="isHumidity">{{ Humidity }}</template>
         <template v-if="isWindSpeed">{{ windSpeed }}</template>
     </span>
@@ -44,6 +50,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        isIcon: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         return {
@@ -51,6 +61,7 @@ export default {
             precipitationType: '',
             Humidity: '',
             windSpeed: '',
+            weather: {},
         }
     },
     async mounted() {
@@ -130,6 +141,9 @@ export default {
                         : datas[i].obsrValue
             }
         }
+        this.weather.temperature = this.temperature
+        this.weather.precipitationType = this.precipitationType
+        this.$emit("update:weather", this.weather)
     },
     methods: {
         testPrint() {
@@ -138,5 +152,3 @@ export default {
     },
 }
 </script>
-
-<style></style>

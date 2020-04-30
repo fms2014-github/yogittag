@@ -29,12 +29,21 @@ class FollowSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    # id
+    name = serializers.CharField(required=False)
+    nick_name = serializers.CharField(required=False)
+    gender = serializers.CharField(required=False)
+    birthday = serializers.CharField(required=False)
+    profile_picture = serializers.CharField(required=False)
+    cover_picture = serializers.CharField(required=False)
+    born_year = serializers.CharField(required=False)
+    email = serializers.CharField()
+    google_refresh_token = serializers.CharField(required=False)
+    naver_refresh_token = serializers.CharField(required=False)
     class Meta:
         model = User
         # 직렬화 시킬 컬럼명, 다른 의미로 주고 받을 데이터 명시
-        # fields = '__all__'
-        fields = ('id', 'name', 'nick_name', 'gender', 'birthday',
-                  'profile_picture', 'cover_picture', 'born_year')
+        fields = '__all__'
 
 
 class FavoriteListSerializer(serializers.ModelSerializer):

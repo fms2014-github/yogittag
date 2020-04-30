@@ -37,25 +37,29 @@ const getForecastGrib = (data) => {
 }
 
 // post /auth/google
-const googleOauthAxios = (data, success, error) => {
-    http.post('/api/auth/google', data)
-        .then((res) => {
-            success(res)
-        })
-        .catch((err) => {
-            error(err)
-        })
+const googleOauthAxios = (data) => {
+    return new Promise((resolve, reject) => {
+        http.post('/api/auth/google', data)
+            .then((res) => {
+                resolve(res)
+            })
+            .catch((err) => {
+                reject(err)
+            })
+    })
 }
 
 // post /auth/naver
-const naverOauthAxios = (data, success, error) => {
-    http.post('/api/naver/google', data)
-        .then((res) => {
-            success(res)
-        })
-        .catch((err) => {
-            error(err)
-        })
+const naverOauthAxios = (data) => {
+    return new Promise((resolve, reject) => {
+        http.post('/api/auth/naver', data)
+            .then((res) => {
+                resolve(res)
+            })
+            .catch((err) => {
+                reject(err)
+            })
+    })
 }
 
 // menu
@@ -122,7 +126,7 @@ const sessionCheck = (data, success, error) => {
             success(res)
         })
         .catch((err) => {
-            success(err)
+            error(err)
         })
 }
 
@@ -376,8 +380,8 @@ const axiosFunction = {
     searchStore: (data, success, error) => searchStore(data, success, error),
     loginAxios: (data, success, error) => loginAxios(data, success, error),
     getForecastGrib: (data) => getForecastGrib(data),
-    googleOauthAxios: (data, success, error) => googleOauthAxios(data, success, error),
-    naverOauthAxios: (data, success, error) => naverOauthAxios(data, success, error),
+    googleOauthAxios: (data) => googleOauthAxios(data),
+    naverOauthAxios: (data) => naverOauthAxios(data),
 
     //
     getMenuById: (data, success, error) => getMenuById(data, success, error),

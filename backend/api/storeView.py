@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
+from django.db.models import Q
 
 from .models import Store, BHour, Menu, Review
 
@@ -19,19 +20,18 @@ def detail(requset, id=None):
 
 
 @api_view(['GET'])
-def store_find_by_name(request, name=None):
+def store_find_by_name(request):
     # 검색 요청 정보 가져오기
     params = request.GET
-    print(name)
     print(params.dict())
-    result = Store.objects.filter(store_name__contains=name)
     if params.dict() != {}:
         print('params Check')
+        keyword = params.get('keyword')
         lat = float(params.get('latitude'))
         lng = float(params.get('longitude'))
         category = params.getlist('category[]')  # dict에 key값이 이렇게 들어가서 수정
         distance = params.get('distance')
-
+        result = Store.objects.filter(Q(store_name__contains=keyword) | Q(category__contains=keyword))
         filter_data1 = []
         filter_data2 = []
         print(lat, lng, category, distance)

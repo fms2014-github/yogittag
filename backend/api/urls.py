@@ -24,7 +24,7 @@ urlpatterns = [
     path('review/<int:score>/score', reviewView.review_list),
     path('users/<int:id>/review', reviewView.review_list),
     path('menu/<int:id>', menuView.detail),
-    path('menu/<str:name>', menuView.menu_list_by_name),
+    path('menu/name', menuView.menu_list_by_name),
     path('menu/<int:price>/price', menuView.menu_list_by_price),
     path('store/<int:id>', storeView.detail),
     path('store/<str:name>', storeView.store_find_by_name),

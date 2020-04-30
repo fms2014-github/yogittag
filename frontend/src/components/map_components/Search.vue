@@ -147,6 +147,7 @@ export default {
                 console.log(this.selectedTags)
             } else {
                 this.selectedTags.push(t)
+                console.log(this.selectedTags)
             }
 
             //this.findData()  //이거 넣어야함. 통신없어서 주석 처리 해놓음

@@ -47,7 +47,7 @@ def store_find_by_name(request, name=None):
                     math.sin(dLng / 2) * math.sin(dLng / 2)
                 c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
                 d = R * c
-                print(d*1000)
+                # print(d*1000)
                 if d * 1000 < int(distance):
                     filter_data1.append(data)
         result = filter_data1

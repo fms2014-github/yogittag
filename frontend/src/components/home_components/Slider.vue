@@ -5,15 +5,14 @@
             <!-- <s-card class=""></s-card> -->
             <!-- <s-card class="swiper-slide"></s-card> -->
             <!-- <s-card class="swiper-slide"></s-card>
-            <s-card class="swiper-slide"></s-card> -->
+            <s-card class="swiper-slide"></s-card>-->
             <s-card
                 class="swiper-slide"
                 v-for="item in cardData"
                 :key="item.id"
                 :title="item.title"
                 :content="item.content"
-            >
-            </s-card>
+            ></s-card>
             <div class="swiper-button-prev" slot="button-prev"></div>
             <div class="swiper-button-next" slot="button-next"></div>
         </swiper>
@@ -82,13 +81,13 @@ export default {
     mounted() {
         document.querySelectorAll('.swiper-slide').forEach((ss) => {
             ss.addEventListener('mouseover', (e) => {
-                console.log(e, 'over')
+                //console.log(e, 'over')
             })
         })
 
         document.querySelectorAll('.swiper-slide').forEach((ss) => {
             ss.addEventListener('mouseout', (e) => {
-                console.log(e, 'out')
+                //console.log(e, 'out')
             })
         })
     },

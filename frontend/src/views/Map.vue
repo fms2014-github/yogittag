@@ -3,6 +3,7 @@
         <search-bar
             :latitude="latitude"
             :longitude="longitude"
+            :area="area"
             :result.sync="result"
             v-on:mouseoverid="getMouseoverId"
         />
@@ -71,6 +72,7 @@ export default {
         return {
             latitude: 0,
             longitude: 0,
+            area: '',
             map: {},
             result: [],
             markers: [],
@@ -93,7 +95,6 @@ export default {
 
         // eslint-disable-next-line no-unused-vars
         this.map = new kakao.maps.Map(container, options) //지도 생성 및 객체 리턴
-
         this.gpsFocus()
     },
     watch: {
@@ -107,6 +108,17 @@ export default {
                 navigator.geolocation.getCurrentPosition((pos) => {
                     this.latitude = pos.coords.latitude
                     this.longitude = pos.coords.longitude
+
+                    var geocoder = new kakao.maps.services.Geocoder()
+                    console.log(geocoder)
+                    // 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
+                    geocoder.coord2RegionCode(this.longitude, this.latitude, (result, status)=>{
+
+                        console.log(result)
+                        if (status == kakao.maps.services.Status.OK) {
+                            this.area = result[0].region_2depth_name
+                        }
+                    });   
 
                     var imageSrc = require('@/assets/icons/rec.png'),
                         imageSize = new kakao.maps.Size(25, 25), // 마커이미지의 크기입니다

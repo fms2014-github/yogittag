@@ -32,16 +32,21 @@ def store_find_by_name(request):
         keyword = params.get('keyword')
         lat = float(params.get('latitude'))
         lng = float(params.get('longitude'))
-        category = params.getlist('category')  # dict에 key값이 이렇게 들어가서 수정
+        category = params.getlist('category[]')  # dict에 key값이 이렇게 들어가서 수정
         distance = params.get('distance')
-        if keyword is not None:
-            keyword_result = queryset.filter(Q(store_name__contains=keyword) | Q(category__contains=keyword))
+        if keyword != '':
+            print('keyword is not none')
+            keyword_result = queryset.filter(
+                Q(store_name__contains=keyword) | Q(category__contains=keyword))
         else:
+            print('keyword is none')
             area = params.get('area')
             keyword_result = queryset.filter(address__contains=area)
+
         filter_data1 = []
         filter_data2 = []
         print(lat, lng, category, distance)
+        print(len(keyword_result))
         R = 6378.137
         if distance is not None:
             for data in keyword_result.values():

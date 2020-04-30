@@ -60,10 +60,10 @@
 </style>
 
 <script>
-import searchBar from '@/components/map_components/Search.vue'
+import searchBar from '../components/map_components/Search.vue'
 
-function clickListener(id){
-    this.goToDetail(id);
+function clickListener(id) {
+    this.goToDetail(id)
 }
 
 export default {
@@ -76,8 +76,8 @@ export default {
             markers: [],
             infowindows: [],
             preid: -1,
-            bounds : {},
-            count : 0
+            bounds: {},
+            count: 0,
         }
     },
     components: {
@@ -137,11 +137,11 @@ export default {
             this.markers = []
             this.infowindows = []
 
-            if(this.result.length == 0){
+            if (this.result.length == 0) {
                 return
             }
 
-            this.bounds = new kakao.maps.LatLngBounds();    
+            this.bounds = new kakao.maps.LatLngBounds()
 
             for (let i = 0; i < this.result.length; i++) {
                 // 마커가 표시될 위치입니다
@@ -154,7 +154,7 @@ export default {
                 var marker = new kakao.maps.Marker({
                     position: markerPosition,
                     title: this.result[i].id,
-                    clickable: true
+                    clickable: true,
                 })
                 this.markers.push(marker)
 
@@ -162,7 +162,7 @@ export default {
                 marker.setMap(this.map)
 
                 // LatLngBounds 객체에 좌표를 추가합니다
-                this.bounds.extend(markerPosition);
+                this.bounds.extend(markerPosition)
 
                 var iwContent = '<div style="padding:5px;">' + this.result[i].store_name + '</div>'
                 //iwPosition = new kakao.maps.LatLng(this.result[i].latitude, this.result[i].longitude)
@@ -174,8 +174,6 @@ export default {
                 })
                 this.infowindows.push(infowindow)
 
-
-                
                 // 마우스 오버 아웃 이벤트 등록
                 kakao.maps.event.addListener(
                     marker,
@@ -186,9 +184,8 @@ export default {
 
                 // 마커에 클릭이벤트를 등록합니다
                 kakao.maps.event.addListener(marker, 'click', this.goToDetail(marker.mc))
-
             }
-            this.setBounds();
+            this.setBounds()
         },
 
         makeOverListener(map, marker, infowindow) {
@@ -228,15 +225,14 @@ export default {
         setBounds() {
             // LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정합니다
             // 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
-            this.map.setBounds(this.bounds);
+            this.map.setBounds(this.bounds)
         },
-        
-        goToDetail(id){ 
-            return ()=>{
-                this.$router.push('/store-detail-page/'+ id);
+
+        goToDetail(id) {
+            return () => {
+                this.$router.push('/store-detail-page/' + id)
             }
-            
-        }
+        },
     },
 }
 </script>

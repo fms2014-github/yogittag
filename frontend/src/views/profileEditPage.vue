@@ -52,7 +52,7 @@
 import axios from '../api/axiosScript'
 import { mapMutations } from 'vuex'
 export default {
-    porps: ['getEmail'],
+    porps: ['getEmail', 'isFullSize'],
     data() {
         return {
             edit: {
@@ -79,7 +79,11 @@ export default {
             )
         },
         cancel() {
-            this.switchIsEdit()
+            if (!this.isFullSize) {
+                this.switchIsEdit()
+            } else {
+                this.$router.push('/')
+            }
         },
         async onChange(e) {
             console.log('aaa', e.target.files)

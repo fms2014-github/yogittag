@@ -161,7 +161,7 @@
                 <a href target="_blank" rel="nofollow">우리 팀명</a>.
             </aside>
         </footer>
-        <profileEditPage v-if="isEdit" :getEmail="this.email" />
+        <profileEditPage v-if="isEdit" :getEmail="this.email" :isFullSize="false" />
     </div>
     <!-- .site -->
 </template>

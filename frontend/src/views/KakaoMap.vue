@@ -60,7 +60,7 @@
 </style>
 
 <script>
-import searchBar from '../components/Search.vue'
+// import searchBar from '../components/Search.vue'
 
 export default {
     data() {

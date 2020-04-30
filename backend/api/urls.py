@@ -28,12 +28,14 @@ urlpatterns = [
     path('menu/<int:id>', menuView.detail),
     path('menu/<str:name>', menuView.menu_list_by_name),
     path('menu/<int:price>/price', menuView.menu_list_by_price),
+    path('store', storeView.store_find_by_name),
     path('store/<int:id>', storeView.detail),
-    path('store/<str:name>', storeView.store_find_by_name),
     path('store/<int:id>/menu', storeView.menu_find_by_store),
     path('store/<int:id>/bhour', storeView.bhour_find_by_store),
     path('store/<int:id>/review', storeView.review_find_by_store),
     path('auth/google', views.oauth_code_google),
     path('auth/naver', views.oauth_code_naver),
-    path('recomm/<int:id>', recommView.recommand_based_user)
+    path('recomm/<int:id>', recommView.recommand_based_user),
+    path('recomm/<int:id>/followers', recommView.recommand_by_followers)
+
 ]

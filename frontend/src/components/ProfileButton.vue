@@ -11,7 +11,9 @@ import { mapMutations } from 'vuex'
 import '../assets/css/button.scss'
 export default {
     methods: {
-        ...mapMutations('app', ['openUserProfilePage']),
+        openUserProfilePage() {
+            this.$router.push('/profile')
+        },
     },
 }
 </script>

@@ -7,10 +7,12 @@
             :autocomplete-items="filteredItems"
             :autocomplete-min-length="0"
             :add-only-from-autocomplete="true"
-            @tags-changed="(newTags) => {
-                tags = newTags
-                emittags()
-            }"
+            @tags-changed="
+                (newTags) => {
+                    tags = newTags
+                    emittags()
+                }
+            "
         />
         <!-- <v-btn @click="goRecommand">
             <v-icon>search</v-icon>
@@ -47,20 +49,20 @@ export default {
                 console.log(res)
 
                 this.autocompleteItems = []
-                res.data.followers.forEach(element => {
+                res.data.followers.forEach((element) => {
                     this.autocompleteItems.push({ text: element.nick_name, key: element.id })
                 })
             },
             (err) => {
                 console.log(err)
-            }
+            },
         )
     },
     methods: {
-        emittags(){
-            console.log("first emit")
-            this.$emit("emittags", this.tags)
-        }
+        emittags() {
+            console.log('first emit')
+            this.$emit('emittags', this.tags)
+        },
     },
 }
 </script>

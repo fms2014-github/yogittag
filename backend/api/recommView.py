@@ -2,16 +2,16 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 
-from .models import Store, BHour, Menu, Review
+from .models import Store, BHour, Menu, Review, User
 
-from .serializers import StoreSerializer
+from .serializers import StoreSerializer, FollowSerializer
+
 import math
 import pandas as pd
 import numpy as np
-from django.db.models import Count, Avg
+from django.db.models import Count, Avg, Max, Subquery, OuterRef
 from scipy.sparse.linalg import svds
 
-from .models import Review
 
 reviews = Review.objects.all()
 stores = Store.objects.all()
@@ -38,14 +38,14 @@ def getStoresAround(lat, lng, area):
             math.sin(dLng / 2) * math.sin(dLng / 2)
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
         d = R * c
-        if d * 1000 <= 3000:  # 3km 이내
+        if d * 1000 <= 2000:  # 3km 이내
             filter_data.append(data)
 
     # 스토어 dataframe 만들기
     store_df = pd.DataFrame(filter_data)
 
-    # 리뷰
-    queryset = reviews.filter(store_id__in=list(store_df['id']))
+    # 최신 리뷰
+    queryset = reviews.filter(store_id__in=list(store_df['id'])).values()
 
     return queryset
 
@@ -65,6 +65,28 @@ def cal_rmse(user_rating, predicted_user_rating):
 
 
 @api_view(['GET'])
+def recommand_by_followers(request, id):
+
+    user = User.objects.get(pk=id)
+    serializer = FollowSerializer(user)
+
+    followers = [item['id'] for item in serializer.data['followers']]
+    # print(followers)
+
+    # 팔로워들이 리뷰한 목록들 (최신)
+    maxid_list = reviews.filter(user_id__in=followers, score__gte=4).values(
+        'user_id', 'store_id').order_by().annotate(maxid=Max('id')).values('maxid')
+    queryset = reviews.filter(id__in=[v.get(
+        'maxid') for v in maxid_list.values('maxid')]).order_by('-score')[:20]
+
+    # 해당 음식점들
+    result = stores.filter(id__in=[item.get('store_id')
+                                   for item in queryset.values('store_id')])
+
+    return Response(result.values(), status.HTTP_200_OK)
+
+
+@api_view(['GET'])
 def recommand_based_user(request, id=None):
     # params
     params = request.GET
@@ -78,9 +100,20 @@ def recommand_based_user(request, id=None):
 
     print(users)  # (68632, 539244, 21180, 209301)
 
-    queryset = getStoresAround(lat, lng, area)  # 주변 음식점들의 리뷰들
+    queryset = getStoresAround(lat, lng, area)  # 2km 주변 음식점들의 리뷰들
 
-    user_review = queryset.filter(
+    # 가장 최신 리뷰들
+    ''' SELECT a.id, a.score, a.reg_time, a.store_id, a.user_id
+    FROM api_review a
+    WHERE a.id = (SELECT MAX(id) FROM api_review WHERE user_id = a.user_id AND store_id = a.store_id); '''
+
+    tmp = queryset.values('user_id', 'store_id').order_by().annotate(
+        maxid=Max('id')).values('maxid')
+
+    queryset_latest = queryset.filter(
+        id__in=[v.get('maxid') for v in tmp.values('maxid')])
+
+    user_review = queryset_latest.filter(
         user_id__in=users)  # 유저가 리뷰한 것 전국 : 191개 마포구: 10개 ㅎ
 
     print("유저(들)의 해당지역 리뷰 개수 : {}".format(len(user_review)))

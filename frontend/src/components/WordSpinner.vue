@@ -1,11 +1,11 @@
 <template>
     <div class="spinner-sentence">
         <div class="spinner" id="wordSpinner">
-            <li class="active">{{banner_menu[0]}}</li>
-            <li class="next">{{banner_menu[1]}}</li>
-            <li>{{banner_menu[2]}}</li>
-            <li>{{banner_menu[3]}}</li>
-            <li>{{banner_menu[4]}}</li>
+            <li class="active">{{ banner_menu[0] }}</li>
+            <li class="next">{{ banner_menu[1] }}</li>
+            <li>{{ banner_menu[2] }}</li>
+            <li>{{ banner_menu[3] }}</li>
+            <li>{{ banner_menu[4] }}</li>
         </div>
         <span>어때요?</span>
     </div>
@@ -17,32 +17,32 @@ export default {
     props: {
         banner_menu: {
             type: Array,
-        }
+        },
     },
     methods: {
         WordSpinner(el, frequency) {
-            var spinner = document.getElementById('wordSpinner');
-            var words = Array.from(document.getElementById('wordSpinner').children);
-            var active = 0;
-            var next = 1;
-            
-            setInterval(function() {
-            spinner.classList.add('spin');
+            var spinner = document.getElementById('wordSpinner')
+            var words = Array.from(document.getElementById('wordSpinner').children)
+            var active = 0
+            var next = 1
 
-            setTimeout(function() {
-                words[active].className = '';
-                active = next;
-                words[active].className = 'active';
-                if (++next == words.length) next = 0;
-                words[next].className = 'next';
-                spinner.classList.remove('spin');
-            }, 500);
-        }, frequency);
+            setInterval(function () {
+                spinner.classList.add('spin')
+
+                setTimeout(function () {
+                    words[active].className = ''
+                    active = next
+                    words[active].className = 'active'
+                    if (++next == words.length) next = 0
+                    words[next].className = 'next'
+                    spinner.classList.remove('spin')
+                }, 500)
+            }, frequency)
         },
     },
     mounted() {
-        this.WordSpinner('WordSpinner', 3000);
-    }
+        this.WordSpinner('WordSpinner', 3000)
+    },
 }
 </script>
 

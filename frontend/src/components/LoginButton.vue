@@ -20,6 +20,9 @@ export default {
                 this.openLoginPage()
             } else {
                 this.sessionDelte()
+                if (this.$route.path === '/profile') {
+                    this.$router.push('/')
+                }
             }
         },
     },

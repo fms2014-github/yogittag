@@ -90,7 +90,7 @@ import StarRating from 'vue-star-rating'
 import axios from '@/api/axiosScript.js'
 
 export default {
-    props:['storeName'],
+    props: ['storeName'],
     components: {
         StarRating,
     },
@@ -102,7 +102,7 @@ export default {
             rating: 0,
             img: null,
             imageData: '', // we will store base64 format of image in this string
-            imageLink: null
+            imageLink: null,
         }
     },
     computed: {
@@ -111,12 +111,11 @@ export default {
         },
     },
     methods: {
-
         modalCilck(e) {
             axios.createReview(
                 {
-                    store: this.$route.params.id,
-                    user: this.$store.state.data.userId,
+                    store_id: this.$route.params.id,
+                    user_id: this.$store.state.data.userId,
                     score: this.rating,
                     content: this.content,
                     img: this.file == null ? null : this.imageLink,
@@ -124,12 +123,12 @@ export default {
                 (res) => {
                     alert(`${this.storeName} 음식점에 리뷰를 등록하였습니다.\n감사합니다~`)
                     let local = localStorage
-                    local.setItem("card_title",`익명 ${res.data.user}`)
-                    local.setItem("card_routing",`/profile/${res.data.user}/review`)
-                    local.setItem("card_score",res.data.score)
-                    local.setItem("card_content",res.data.content)
-                    local.setItem("card_reg_time",res.data.reg_time)
-                    local.setItem("card_img",res.data.img)
+                    local.setItem('card_title', `익명 ${res.data.user}`)
+                    local.setItem('card_routing', `/profile/${res.data.user}/review`)
+                    local.setItem('card_score', res.data.score)
+                    local.setItem('card_content', res.data.content)
+                    local.setItem('card_reg_time', res.data.reg_time)
+                    local.setItem('card_img', res.data.img)
                     this.$emit('registerReview')
                 },
                 (err) => {

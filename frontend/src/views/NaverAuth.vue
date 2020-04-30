@@ -4,7 +4,7 @@
 
 <script>
 import axiosApi from '../api/axiosScript'
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import {  mapMutations } from 'vuex'
 export default {
     async mounted() {
         var fragmentString = location.search.substring(1)

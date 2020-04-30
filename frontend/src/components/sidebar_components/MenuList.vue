@@ -14,11 +14,6 @@
                 <div>
                     <router-link class="list-button" :to="{ name: 'Profile' }">Profile</router-link>
                 </div>
-                <div>
-                    <router-link class="list-button" :to="{ name: 'StoreListPage' }"
-                        >StoreListPage</router-link
-                    >
-                </div>
             </div>
         </b-sidebar>
     </div>

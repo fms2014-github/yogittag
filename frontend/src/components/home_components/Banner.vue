@@ -5,7 +5,7 @@
             <TodayWeather :weather.sync="weather" :isIcon="true" :isTemp="true" />˚C
         </div>
         <div id="banner_sentence">
-            <div id="banner_text">{{this.banner_text}}</div>
+            <div id="banner_text">{{ this.banner_text }}</div>
             <word-spinner :banner_menu="banner_menu" />
         </div>
     </div>
@@ -33,12 +33,11 @@ export default {
         }
     },
     watch: {
-        weather: function(v) {
-            
-            let today = new Date();
-            let hour = today.getHours(); // 시간 정보 (0 ~ 23)
-            let day = today.getDay(); // 요일 정보 (일요일 0, 월요일 1, 토요일 6)
-            let month = today.getMonth(); // 월 정보 (0 ~ 11 1월 0)
+        weather: function (v) {
+            let today = new Date()
+            let hour = today.getHours() // 시간 정보 (0 ~ 23)
+            let day = today.getDay() // 요일 정보 (일요일 0, 월요일 1, 토요일 6)
+            let month = today.getMonth() // 월 정보 (0 ~ 11 1월 0)
             console.log(v.temperature)
             let prec = v.precipitationType // 날씨 정보 맑음(0), 비(1), 비/눈(2), 눈(3), 소나기(4)
             let temp = parseFloat(v.temperature)
@@ -117,7 +116,7 @@ export default {
                 this.banner_menu = ['파스타', '짜장면', '초밥', '피자', '치킨']
             }
             document.getElementById('banner').classList.add(this.banner_image)
-        } 
+        },
     },
 }
 </script>

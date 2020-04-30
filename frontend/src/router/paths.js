@@ -1,4 +1,5 @@
-export default [{
+export default [
+    {
         path: '/',
         view: 'Home',
         name: 'Home',
@@ -10,7 +11,7 @@ export default [{
     },
     {
         path: '/test',
-        view: 'UserSignNewForm',
+        view: 'test1',
         name: 'test',
     },
     {
@@ -29,9 +30,10 @@ export default [{
         name: 'StoreDetailPage',
     },
     {
-        path: '/storeListPage',
-        view: 'StoreListPage',
-        name: 'StoreListPage',
+        path: '/listPage/:keyword',
+        view: 'ListPage',
+        name: 'ListPage',
+        props: true,
     },
     {
         path: '/profile',

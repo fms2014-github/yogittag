@@ -31,7 +31,7 @@ def store_find_by_name(request, name=None):
         print('params Check')
         lat = float(params.get('latitude'))
         lng = float(params.get('longitude'))
-        category = params.getlist('category[]')  # dict에 key값이 이렇게 들어가서 수정
+        category = params.getlist('category')  # dict에 key값이 이렇게 들어가서 수정
         distance = params.get('distance')
 
         filter_data1 = []

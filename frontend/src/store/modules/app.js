@@ -1,4 +1,5 @@
 import { set, toggle } from '@/utils/vuex'
+import axios from '../../api/axiosScript.js'
 
 const state = {
     drawer: null,
@@ -10,11 +11,6 @@ const state = {
     isRegistrate: false,
     selecterFilter: 'filter 1',
     isFilter: false,
-    userSession: {
-        email: '',
-        jwt: '',
-        uid: 0,
-    },
 }
 
 //getters

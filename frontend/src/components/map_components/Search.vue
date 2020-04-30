@@ -9,17 +9,33 @@
                 type="text"
             />
 
-            <button id="search-button" @click="findData" style="float:left;">
+            <button id="search-button" @click="findData" style="float: left;">
                 <span class="material-icons">search</span>
             </button>
-            <hr />
 
-            <v-chip-group multiple active-class="primary--text">
-                <v-chip v-for="tag in tags" :key="tag" @click="tagClick">{{ tag }}</v-chip>
+            <button id="filter-button">
+                <span class="material-icons" @click="useFilter = !useFilter">filter_list</span>
+                <span id="is-filter" v-show="useFilter">필터 사용</span>
+            </button>
+
+            <v-chip-group
+                multiple
+                active-class="deep-purple--text text--accent-4"
+                v-show="useFilter"
+            >
+                <v-chip color="white" v-for="tag in tags" :key="tag" @click="tagClick">{{ tag }}</v-chip>
             </v-chip-group>
             <div
-                v-show="isshow"
-                style="display:block;margin-top: 10px; width:100%;opacity: 0.7;background: white; max-height:25em;overflow-y:scroll;"
+                v-show="useFilter"
+                style="
+                    display: block;
+                    margin-top: 10px;
+                    width: 100%;
+                    opacity: 0.7;
+                    background: white;
+                    max-height: 25em;
+                    overflow-y: scroll;
+                "
             >
                 <div
                     id="search-result"
@@ -27,12 +43,13 @@
                     v-bind:key="item.id"
                     v-on:mouseover="mouseOver(item.id)"
                     v-on:mouseout="mouseOut(item.id)"
+                    @click="goToDetail(item.id)"
                 >
-                    <strong>{{item.store_name}}</strong>
+                    <strong>{{ item.store_name }}</strong>
                     <br />
-                    <small>{{item.category}}</small>
+                    <small>{{ item.category }}</small>
                     <br />
-                    <small>{{item.address}}</small>
+                    <small>{{ item.address }}</small>
                     <hr />
                 </div>
             </div>
@@ -41,34 +58,27 @@
 </template>
 
 <script>
-import filterList from '../components/FilterList.vue'
-import axiosApi from '../api/axiosScript.js'
+import filterList from '@/components/FilterList.vue'
+import axiosApi from '@/api/axiosScript.js'
 import { mapMutations, mapState, mapGetters } from 'vuex'
 export default {
-    props:{
-        latitude : {
-            type : Number,
-            require : true
+    props: {
+        latitude: {
+            type: Number,
+            require: true,
         },
-        longitude : {
-            type : Number,
-            require : true
-        }
+        longitude: {
+            type: Number,
+            require: true,
+        },
     },
     data() {
         return {
-            keyword:'',
+            keyword: '',
             result: [],
-            isshow: false,
-            tags: [
-                '음식점',
-                '카페',
-                '술집',
-                '300m',
-                '500m',
-                '1km'
-            ],
-            selectedTags : []
+            tags: ['음식점', '카페', '술집', '500m', '1km', '2km'],
+            selectedTags: [],
+            useFilter: false
         }
     },
     components: {
@@ -83,30 +93,28 @@ export default {
             document.getElementById('search-bar').classList.toggle('open-filter')
         },
         async findData() {
-
-            let distance = 300;
-            let category = [];
-            for(let i=0; i<this.selectedTags.length; i++){
-                if(this.selectedTags[i] == '300m' && distance <= 300){
-                    distance = 300
-                }
-                else if(this.selectedTags[i]=='500m' && distance <= 500){
+            let distance = 500
+            let category = []
+            for (let i = 0; i < this.selectedTags.length; i++) {
+                if (this.selectedTags[i] == '500m' && distance <= 500) {
                     distance = 500
-                }
-                else if(this.selectedTags[i]=='1km' && distance <= 1000) {  // 1km 선택
+                } else if (this.selectedTags[i] == '1km' && distance <= 1000) {
                     distance = 1000
-                }
-                else { // 카테고리
-                    category.push(this.selectedTags[i]);
+                } else if (this.selectedTags[i] == '2km' && distance <= 2000) {
+                    // 2km 선택
+                    distance = 2000
+                } else {
+                    // 카테고리
+                    category.push(this.selectedTags[i])
                 }
             }
 
             let data = {
-                keyword : this.keyword,
-                latitude : this.latitude,
-                longitude : this.longitude,
-                category : category,
-                diatance : distance
+                keyword: this.keyword,
+                latitude: this.latitude,
+                longitude: this.longitude,
+                category: category,
+                distance: distance,
             }
             console.log(data)
             this.initState()
@@ -116,10 +124,10 @@ export default {
                 (res) => {
                     this.loadingSpinner()
                     this.result = res.data.result
-                    this.isshow = true
-            
-                    this.$emit("update:result", this.result)
 
+                    this.$emit('update:result', this.result)
+                    this.useFilter = true
+                    console.log(res.data.result)
                 },
                 (err) => {
                     this.loadingSpinner()
@@ -128,28 +136,31 @@ export default {
             )
         },
 
-        tagClick(event){
+        tagClick(event) {
             //console.log(event)
-            let t = event.target.innerText;
+            let t = event.target.innerText
             //console.log(t)
 
             let idx = this.selectedTags.indexOf(t)
-            if(idx>-1){
-                this.selectedTags.splice(idx,1)
+            if (idx > -1) {
+                this.selectedTags.splice(idx, 1)
                 console.log(this.selectedTags)
-            }
-            else{
+            } else {
                 this.selectedTags.push(t)
             }
 
             //this.findData()  //이거 넣어야함. 통신없어서 주석 처리 해놓음
         },
 
-        mouseOver(id){
-            this.$emit("mouseoverid", id);
+        mouseOver(id) {
+            this.$emit('mouseoverid', id)
         },
-        mouseOut(id){
-            this.$emit("mouseoverid", -1);
+        mouseOut(id) {
+            this.$emit('mouseoverid', -1)
+        },
+
+        goToDetail(id){
+            this.$router.push('/store-detail-page/'+ id);
         }
     },
 }
@@ -164,7 +175,7 @@ export default {
     background-color: white;
     width: 50vw;
     max-width: 500px;
-    min-height: 15vh;
+    //min-height: 15vh;
     z-index: 10;
     .search-bar {
         display: flex;
@@ -204,7 +215,7 @@ export default {
             color: rgb(255, 255, 255);
         }
         .material-icons {
-            margin-left: 18px;
+            //margin-left: 18px;
             margin-top: 8px;
             font-size: 38px;
         }

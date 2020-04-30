@@ -7,7 +7,7 @@
                     <div class="social-container">
                         <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
                         <a
-                            href="https://accounts.google.com/o/oauth2/v2/auth?client_id=25608544222-lfe7jdkikoef92jgt45mvhe83ts98n80.apps.googleusercontent.com&redirect_uri=http://localhost:8080/google-auth&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile+openid+https://www.googleapis.com/auth/user.birthday.read&access_type=offline&approval_prompt=force"
+                            href="https://accounts.google.com/o/oauth2/v2/auth?client_id=25608544222-lfe7jdkikoef92jgt45mvhe83ts98n80.apps.googleusercontent.com&redirect_uri=http://localhost:8080/google-auth&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile+openid&access_type=offline&prompt=consent"
                             class="social"
                             ><i class="fab fa-google-plus-g"></i
                         ></a>
@@ -30,7 +30,7 @@
                             ><i class="fab fa-facebook-f"></i
                         ></a>
                         <a
-                            href="https://accounts.google.com/o/oauth2/v2/auth?client_id=25608544222-lfe7jdkikoef92jgt45mvhe83ts98n80.apps.googleusercontent.com&redirect_uri=http://localhost:8080/google-auth&response_type=code&scope=https://www.googleapis.com/auth/user.birthday.read+openid+https://www.googleapis.com/auth/userinfo.profile+https://www.googleapis.com/auth/userinfo.email&access_type=offline&include_granted_scopes=true"
+                            href="https://accounts.google.com/o/oauth2/v2/auth?client_id=25608544222-lfe7jdkikoef92jgt45mvhe83ts98n80.apps.googleusercontent.com&redirect_uri=http://localhost:8080/google-auth&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile+openid&access_type=offline&prompt=consent"
                             class="social"
                             ><i class="fab fa-google-plus-g"></i
                         ></a>

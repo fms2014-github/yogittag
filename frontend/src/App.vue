@@ -1,15 +1,9 @@
 <template>
-    <v-app>
-        <toolbar />
-        <drawer />
-        <router-view />
-        <go-top />
-    </v-app>
-    <!-- <div id="app">
+    <div id="app">
         <loading-spinner v-if="this.isLoading" />
         <menu-button />
         <menu-list @closeCheckChange="menuOpenClose" />
-        <login-button />
+        <login-button :loginState="!login" />
         <login-page v-if="this.isLogin" />
         <user-registrate v-if="isRegistrate" />
         <profile-button />
@@ -18,7 +12,7 @@
         <main-view />
         <minigame />
         <weather />
-    </div> -->
+    </div>
 </template>
 
 <script>
@@ -28,13 +22,13 @@ import RouteView from './components/RouteView.vue'
 import GoTop from './components/GoTop.vue'
 
 import mainView from './components/View.vue'
-import menuButton from './components/MenuButton.vue'
+import menuButton from './components/sidebar_components/MenuButton'
+import MenuList from './components/sidebar_components/MenuList'
 import profileButton from './components/ProfileButton.vue'
-import MenuList from './components/MenuList.vue'
 import FAQnQNAButton from './components/FAQnQNAButton.vue'
 import loadingSpinner from './components/LoadingSpinner.vue'
 import loginButton from './components/LoginButton.vue'
-import loginPage from './components/UserSignNewForm.vue'
+import loginPage from './components/UserSign.vue'
 import userProfile from './components/UserProfile.vue'
 import weather from './components/TodayWeather.vue'
 import minigame from './components/Minigame.vue'
@@ -62,10 +56,19 @@ export default {
     },
     computed: {
         ...mapState('app', ['menuOpenCheck', 'isLoading', 'isLogin', 'isProfile', 'isRegistrate']),
+        ...mapState('session', ['login']),
         ...mapGetters('app', ['menuOpenState']),
     },
     methods: {
         ...mapMutations('app', ['menuOpenClose']),
+        ...mapMutations('session', ['sessionSave']),
+    },
+    mounted() {
+        let session = JSON.parse(sessionStorage.getItem('session'))
+        console.log('app.vue', session)
+        if (session != undefined) {
+            this.sessionSave(session)
+        }
     },
 }
 </script>

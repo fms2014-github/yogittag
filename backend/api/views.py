@@ -320,7 +320,7 @@ def session_refresh(request):
             }
             refresh_token = requests.post(refresh_token_url, data=data)
             # 토큰 정보가 없거나 검증에 실패했을 경우 세션 삭제
-            return Response({'session':{"jwt": refresh_token.json()['id_token']}}, status=status.HTTP_200_OK)
+            return Response({'session':{"email":email, "jwt": refresh_token.json()['id_token']}}, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
     elif jwt_iss == 'https://nid.naver.com':
         if dt < jwt_exp:
@@ -404,6 +404,7 @@ def oauth_code_google(request):
     headers = {'Authorization': auth_data.json()['token_type'] + ' ' + auth_data.json()['access_token']}
     userInfoRequsetURL = 'https://www.googleapis.com/oauth2/v2/userinfo'
     userinfo = requests.get(userInfoRequsetURL, headers=headers)
+    print(userinfo.json()['email'])
     try:
         find_user = User.objects.get(email__exact=userinfo.json()['email'])
         serializer = UserSerializer(find_user, data={'google_refresh_token': auth_data.json()['refresh_token']}, partial=True)

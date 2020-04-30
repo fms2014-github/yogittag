@@ -1,11 +1,17 @@
 <template>
-    <div></div>
+    <div id="profile-edit">
+        <profile-edit />
+    </div>
 </template>
 
 <script>
 import axiosApi from '../api/axiosScript'
+import profileEdit from './profileEditPage'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 export default {
+    components: {
+        profileEdit,
+    },
     async mounted() {
         var fragmentString = location.search.substring(1)
 
@@ -22,10 +28,17 @@ export default {
             sessionStorage.setItem('session', JSON.stringify(data))
             this.sessionSave(data)
         }
-        this.$router.push('/')
     },
     methods: {
         ...mapMutations('session', ['sessionSave']),
     },
 }
 </script>
+
+<style lang="scss" scoped>
+#profile-edit {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(128, 128, 128);
+}
+</style>

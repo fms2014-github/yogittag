@@ -41,7 +41,7 @@ export default {
             console.log(v.temperature)
             let prec = v.precipitationType // 날씨 정보 맑음(0), 비(1), 비/눈(2), 눈(3), 소나기(4)
             let temp = parseFloat(v.temperature)
-            if ((17 <= hour && hour <= 23 && prec == 0) || (0 <= hour && hour <= 3 && prec == 0)) {
+            if ((17 <= hour && hour <= 23 && prec == 0) || (0 <= hour && hour <= 4 && prec == 0)) {
                 this.banner_image = 'day_afternoon'
                 this.banner_text = '오늘 하루의 마무리는...'
                 this.banner_menu = ['피자', '족발', '치킨', '곱창', '연탄불고기']
@@ -67,6 +67,10 @@ export default {
                     this.banner_image = 'spring_hot'
                     this.banner_text = '어느덧 봄이 가고 여름이 오려나 봐요.'
                     this.banner_menu = ['메밀소바', '초밥', '비빔냉면', '빙수', '국수']
+                } else {
+                    this.banner_image = 'spring_hot'
+                    this.banner_text = '봄날의 출출한 이 시간,'
+                    this.banner_menu = ['햄버거', '샌드위치', '짜장면', '떡볶이', '치킨']
                 }
             } else if (5 <= month && month <= 7) {
                 if (prec == '1' || prec == '4') {

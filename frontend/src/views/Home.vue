@@ -1,7 +1,7 @@
 <template>
     <v-container class="mt-5" fill-height>
         <v-card-text class="text-center">
-            <p class="display-2 pa-5" style="font-family: h1c;">🍜 코딩도 식후경</p>
+            <img height="300px;" src="@/assets/img/main_logo.png" alt="요기딱" />
             <banner />
 
             <v-btn
@@ -124,5 +124,16 @@ export default {
 @font-face {
     font-family: h1c;
     src: url('../assets/fonts/DXRMbxB-KSCpc-EUC-H.ttf');
+}
+@font-face {
+    font-family: 'Dovemayo-Medium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.0/Dovemayo-Medium.woff')
+        format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    font-family: 'Dovemayo-Medium';
 }
 </style>

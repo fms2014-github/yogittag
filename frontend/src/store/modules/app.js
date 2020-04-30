@@ -3,6 +3,7 @@ import axios from '../../api/axiosScript.js'
 
 const state = {
     drawer: null,
+    isEdit: false,
     menuOpenCheck: false,
     isLoading: false,
     isLogin: false,
@@ -10,10 +11,6 @@ const state = {
     isRegistrate: false,
     selecterFilter: 'filter 1',
     isFilter: false,
-    session: {
-        email: '',
-        jwt: '',
-    },
 }
 
 //getters
@@ -37,7 +34,6 @@ const action = {}
 const mutations = {
     setDrawer: set('drawer'),
     toggleDrawer: toggle('drawer'),
-
     initState(state) {
         state.menuOpenCheck = false
         state.isLogin = false
@@ -76,6 +72,9 @@ const mutations = {
     },
     setSelecterFilter(state, value) {
         state.selecterFilter = value
+    },
+    switchIsEdit(state) {
+        state.isEdit = !state.isEdit
     },
 }
 

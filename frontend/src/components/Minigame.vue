@@ -2,30 +2,37 @@
     <div id="minigame-wrap" class="close-minigame">
         <div class="minigame-nav" @click="minigameButton">
             <span class="material-icons" v-if="isMinigmae">
-                double_arrow
+                <img height="33px;" src="@/assets/img/double_arrow.png" alt=">>" />
             </span>
             <span v-if="!isMinigmae">
-                미<br />
-                니<br />
-                게<br />
-                임<br />
+                미
+                <br />니
+                <br />게
+                <br />임
+                <br />
             </span>
         </div>
         <div id="minigame">
             <h3 align="center">음식 카테고리 월드컵</h3>
             <h4 align="center">남은 시간 : {{ setTime >= 0 ? setTime.toFixed(1) : '' }}</h4>
-            <button class="selected" @click="selected(choiseA)" v-show="ready && index <= 10">
-                {{ choiseA }}</button
-            ><button class="selected" @click="selected(choiseB)" v-show="ready && index <= 10">
-                {{ choiseB }}
-            </button>
+            <button
+                class="selected"
+                @click="selected(choiseA)"
+                v-show="ready && index <= 10"
+            >{{ choiseA }}</button>
+            <button
+                class="selected"
+                @click="selected(choiseB)"
+                v-show="ready && index <= 10"
+            >{{ choiseB }}</button>
             <div id="answer" v-if="index > 10">
-                <h4>추천해주는<br />음식 카테고리는??</h4>
+                <h4>
+                    추천해주는
+                    <br />음식 카테고리는??
+                </h4>
                 <b>{{ answer }}</b> 입니다.
             </div>
-            <button v-show="!ready" id="ready" @click="start">
-                {{ setTime == 60 ? '시작' : '다시 시작' }}
-            </button>
+            <button v-show="!ready" id="ready" @click="start">{{ setTime == 60 ? '시작' : '다시 시작' }}</button>
         </div>
     </div>
 </template>
@@ -170,6 +177,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@font-face {
+    font-family: 'Dovemayo-Medium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.0/Dovemayo-Medium.woff')
+        format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    font-family: 'Dovemayo-Medium';
+}
+
 #minigame-wrap {
     display: flex;
     position: absolute;

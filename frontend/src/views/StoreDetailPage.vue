@@ -5,6 +5,13 @@
             <div class="row">
                 <div class="col-lg-3">
                     <h1 class="my-4" style="font-family: h1c;">{{ storeName }}🍽</h1>
+                    <b-breadcrumb style="justify-content: center;">
+                        <b-badge variant="danger" v-show="storeEtcInfo.group_seat">단체석</b-badge>
+                        <b-badge variant="warning" v-show="storeEtcInfo.reservation">예약</b-badge>
+                        <b-badge variant="info" v-show="storeEtcInfo.delivery">배달</b-badge>
+                        <b-badge variant="light" v-show="storeEtcInfo.take_away">포장</b-badge>
+                        <b-badge variant="dark" v-show="storeEtcInfo.parking">주차</b-badge>
+                    </b-breadcrumb>
                     <div class="list-group">
                         <router-link
                             to="#"
@@ -18,7 +25,8 @@
                 </div>
 
                 <div class="col-lg-9">
-                    <Carousel :imgs="pictures" />
+                    <Carousel v-if="pictures" :imgs="pictures" />
+                    <Carousel v-else />
                 </div>
             </div>
             <div>
@@ -295,15 +303,18 @@ export default {
                             Address: resData.address,
                         },
                     ]),
-                        (this.pictures = resData.pictures.split('|')),
+                        (this.pictures =
+                            resData.pictures.split('|')[0] == ''
+                                ? null
+                                : resData.pictures.split('|')),
                         (this.storeEtcInfo = {
                             group_seat: resData.group_seat,
                             reservation: resData.reservation,
                             delivery: resData.delivery,
                             take_away: resData.take_away,
                             parking: resData.parking,
-                        })
-                    this.createKakaoMap(this.storeName, this.latitude, this.longitude)
+                        }),
+                        this.createKakaoMap(this.storeName, this.latitude, this.longitude)
                 },
                 (err) => {
                     console.log(`getStore Data loading fail...`)

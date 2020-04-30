@@ -41,6 +41,7 @@ export default {
         },
         img: {
             type: String,
+             default: require('../../assets/img/review_default_img.png'),
         },
         gender: {
             type: String,

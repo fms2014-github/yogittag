@@ -7,7 +7,7 @@
 <script>
 import axiosApi from '../api/axiosScript'
 import profileEdit from './profileEditPage.vue'
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 export default {
     components: {
         profileEdit,
@@ -27,7 +27,7 @@ export default {
             let data = (await axiosApi.naverOauthAxios({ oauthCode: params })).data.session
             sessionStorage.setItem('session', JSON.stringify(data))
             this.sessionSave(data)
-            if (data.isCompleted) {
+            if (data.isCompleted === 1) {
                 this.$router.push('/')
             }
         }

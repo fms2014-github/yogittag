@@ -203,6 +203,25 @@ const searchStore = async (data, success, error) => {
         })
 }
 
+// get /recomm/{id}
+const getRecommandationById = (data, success, error) => {
+    http.get('/api/recomm/' + data.id, {
+            params: {
+                latitude: data.latitude,
+                longitude: data.longitude,
+                users: data.users,
+                area: data.area
+            }
+        })
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
+
+
 //// users
 // get /users
 const getAllUser = (success, error) => {
@@ -228,7 +247,7 @@ const createUser = (data, success, error) => {
 
 // get /users/{fId}/followers
 const getAllFollowers = (data, success, error) => {
-    http.get('/api/users/' + data.fId + '/followers')
+    http.get('/api/users/' + data + '/followers')
         .then((res) => {
             success(res)
         })
@@ -414,6 +433,8 @@ const axiosFunction = {
     getStoreHour: (data, success, error) => getStoreHour(data, success, error),
     getStoreMenu: (data, success, error) => getStoreMenu(data, success, error),
     getStoreReview: (data, success, error) => getStoreReview(data, success, error),
+
+    getRecommandationById: (data, success, error) => getRecommandationById(data, success, error),
     //
 
     getAllUser: (success, error) => getAllUser(success, error),

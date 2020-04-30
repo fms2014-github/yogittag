@@ -5,12 +5,16 @@
             :tags="tags"
             placeholder="같이 밥먹을 친구를 추가하세요"
             :autocomplete-items="filteredItems"
+            :autocomplete-min-length="0"
             :add-only-from-autocomplete="true"
-            @tags-changed="(newTags) => (tags = newTags)"
+            @tags-changed="(newTags) => {
+                tags = newTags
+                emittags()
+            }"
         />
-        <v-btn @click="goRecommand">
+        <!-- <v-btn @click="goRecommand">
             <v-icon>search</v-icon>
-        </v-btn>
+        </v-btn>-->
     </div>
 </template>
 
@@ -26,32 +30,7 @@ export default {
         return {
             tag: '',
             tags: [],
-            autocompleteItems: [
-                {
-                    text: 'Spain',
-                    key: 123,
-                },
-                {
-                    text: 'France',
-                    key: 234,
-                },
-                {
-                    text: 'USA',
-                    key: 345,
-                },
-                {
-                    text: 'Germany',
-                    key: 456,
-                },
-                {
-                    text: 'China',
-                    key: 567,
-                },
-                {
-                    text: '가나다라',
-                    key: 123,
-                },
-            ],
+            autocompleteItems: [],
         }
     },
     computed: {
@@ -63,11 +42,12 @@ export default {
     },
     mounted() {
         axiosApi.getAllFollowers(
-            {"fId": this.$store.state.userSession.uid},
+            950332,
             (res) => {
                 console.log(res)
+
                 this.autocompleteItems = []
-                res.followers.forEach(element => {
+                res.data.followers.forEach(element => {
                     this.autocompleteItems.push({ text: element.nick_name, key: element.id })
                 })
             },
@@ -77,9 +57,10 @@ export default {
         )
     },
     methods: {
-        goRecommand() {
-            console.log('goRecommand')
-        },
+        emittags(){
+            console.log("first emit")
+            this.$emit("emittags", this.tags)
+        }
     },
 }
 </script>

@@ -11,7 +11,7 @@ class Review(models.Model):
     score = models.FloatField(null=True)
     content = models.TextField(null=True)
     reg_time = models.DateTimeField(auto_now_add=True, null=True)
-    img = models.TextField(null=True)
+    img = models.TextField(null=True,blank=True)
 
     class Meta:
         ordering = ['reg_time']

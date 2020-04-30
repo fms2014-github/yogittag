@@ -13,6 +13,7 @@ class User(models.Model):
     cover_picture = models.CharField(max_length=300, null=True)
     born_year = models.CharField(max_length=5, null=True)
     followers = models.ManyToManyField("self", symmetrical=False)
-    email = models.CharField(max_length=100)
+    email = models.CharField(max_length=100, blank=True)
     google_refresh_token = models.CharField(max_length=200, null=True)
     naver_refresh_token = models.CharField(max_length=200, null=True)
+    isCompleted = models.BooleanField(null = True)

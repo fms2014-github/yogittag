@@ -38,7 +38,7 @@ export default {
         },
         img: {
             type: String,
-            default: 'http://placehold.it/420x312',
+             default: require('../../assets/img/review_default_img.png'),
         },
         gender: {
             type: String,

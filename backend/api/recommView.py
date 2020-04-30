@@ -11,9 +11,6 @@ import numpy as np
 from django.db.models import Count, Avg
 from scipy.sparse.linalg import svds
 
-from surprise import SVD, Reader
-from surprise.model_selection import cross_validate
-
 from .models import Review
 
 reviews = Review.objects.all()
@@ -48,7 +45,7 @@ def getStoresAround(lat, lng, area):
     store_df = pd.DataFrame(filter_data)
 
     # 리뷰
-    queryset = reviews.filter(store_id__in=list(store_df['id'])).filter()
+    queryset = reviews.filter(store_id__in=list(store_df['id']))
 
     return queryset
 
@@ -67,19 +64,6 @@ def cal_rmse(user_rating, predicted_user_rating):
     return (rmse/cnt)**0.5
 
 
-def testsurprise(queryset):
-
-    dataframe = pd.DataFrame(list(queryset.values('id', 'store', 'score')))
-    R = dataframe.as_matrix()
-    reader = Reader(rating_scale=(0.5, 5.0))
-
-    # svd
-    algo = SVD()
-    algo.fit(R)
-
-    print(algo.pu, algo.qi, algo.bu, algo.bi)
-
-
 @api_view(['GET'])
 def recommand_based_user(request, id=None):
     # params
@@ -89,6 +73,7 @@ def recommand_based_user(request, id=None):
     lng = float(params.get('longitude'))
     area = params.get('area')
     users = params.getlist('users')
+    # users = params.getlist('users[]')
     users.append(id)
 
     print(users)  # (68632, 539244, 21180, 209301)
@@ -188,4 +173,4 @@ def recommand_based_user(request, id=None):
         # k=30 일때 MF rmse : 3.2105433783469404
         # k=100 일때 MF rmse : 2.4704298644120493
 
-        return Response({"result": result.values()}, status.HTTP_200_OK)
+        return Response(result.values(), status.HTTP_200_OK)

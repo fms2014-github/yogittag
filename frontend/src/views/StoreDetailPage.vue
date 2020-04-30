@@ -265,6 +265,7 @@ export default {
     },
     mounted() {
         this.createKakaoMap(this.storeName, this.latitude, this.longitude)
+        console.log("storeId: ", this.$route.params.storeId)
         // setTimeout(() => {
         //     this.relayout()
         // }, 5000)

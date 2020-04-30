@@ -8,8 +8,7 @@
                 class="display-1 font-italic font-weight-bold"
                 large
                 style="font-family: 'Inconsolata';"
-                >Right Now!</v-btn
-            >
+            >Right Now!</v-btn>
             <food-friend />
             <slider title="나의 단골 맛집" :cardData="cardData" />
             <slider title="지인 추천 맛집" />
@@ -21,6 +20,7 @@
 import Banner from '../components/home_components/Banner'
 import FoodFriend from '../components/home_components/FoodFriend'
 import Slider from '../components/home_components/Slider'
+import axiosApi from '@/api/axiosScript.js'
 
 export default {
     components: {
@@ -30,36 +30,37 @@ export default {
     },
     data() {
         return {
-            cardData: [
-                {
-                    title: 'TITLE',
-                    content: 'CONTENT',
-                },
-                {
-                    title: 'TITLE2',
-                    content: 'CONTENT2',
-                },
-                {
-                    title: 'TITLE3',
-                    content: 'CONTENT3',
-                },
-                {
-                    title: 'TITLE4',
-                    content: 'CONTENT4',
-                },
-                {
-                    title: 'TITLE5',
-                    content: 'CONTENT5',
-                },
-                {
-                    title: 'TITLE6',
-                    content: 'CONTENT6',
-                },
-            ],
+            cardData: [],
         }
     },
     methods: {},
-    mount() {},
+    mounted() {
+        axiosApi.getRecommandationById(
+            {
+                id: 68632,
+                latitude: 37.556862,
+                longitude: 126.926666,
+                users: [539244, 21180, 209301],
+                area: "마포구",
+            },
+            (res) => {
+                console.log(res.data)
+                this.cardData = res.data
+                this.cardData.forEach( card => {
+                    if (card.pictures != null && card.pictures != "") {
+                        card.pictures = card.pictures.split("|");
+                    }
+                    else if ( card.pictures == null ){
+                        card.pictures = ""
+                    }
+                })
+                console.log(this.cardData)
+            },
+            (err) => {
+                console.log(err)
+            }
+        )
+    },
 }
 </script>
 

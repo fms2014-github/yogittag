@@ -4,19 +4,36 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
-                    <h1 class="my-4" style="font-family: h1c;">{{ storeName }}🍽</h1>
+                    <h1 class="my-4" style="font-family: h1c;">
+                        {{ storeName
+                        }}<span v-if="!favorit" @click="favoritClick" class="favoritMark">🤍</span
+                        ><span v-else @click="favoritClick" class="favoritMark">🧡</span>
+                    </h1>
+                    <b-breadcrumb style="justify-content: center;">
+                        <b-badge variant="danger" v-show="storeEtcInfo.group_seat">단체석</b-badge>
+                        <b-badge variant="warning" v-show="storeEtcInfo.reservation">예약</b-badge>
+                        <b-badge variant="info" v-show="storeEtcInfo.delivery">배달</b-badge>
+                        <b-badge variant="light" v-show="storeEtcInfo.take_away">포장</b-badge>
+                        <b-badge variant="dark" v-show="storeEtcInfo.parking">주차</b-badge>
+                    </b-breadcrumb>
                     <div class="list-group">
                         <router-link
-                            to="#"
+                            :to="{
+                                path: `/listPage/${item}`,
+                                query: { title: item, subTitle: '키워드 검색' },
+                            }"
                             v-for="item in categorys"
                             :key="item.id"
                             class="list-group-item"
-                        >{{ item }}</router-link>
+                            replace
+                            >{{ item }}</router-link
+                        >
                     </div>
                 </div>
 
                 <div class="col-lg-9">
-                    <Carousel :imgs="pictures" />
+                    <Carousel v-if="pictures" :imgs="pictures" />
+                    <Carousel v-else />
                 </div>
             </div>
             <div>
@@ -32,11 +49,9 @@
                             id="map"
                             style="width: 100%; height: 350px;"
                         ></div>
-                        <div class="store-detail-component">
+                        <div class="store-detail-component" v-if="bhour">
                             <b-badge pill variant="secondary">
-                                {{
-                                bhour.week_type | weekType
-                                }}
+                                {{ bhour.week_type | weekType }}
                             </b-badge>
                             <b-badge pill :variant="bhour.mon ? 'info' : 'light'">월</b-badge>
                             <b-badge pill :variant="bhour.tue ? 'info' : 'light'">화</b-badge>
@@ -71,7 +86,7 @@
                     <b-tab title="Reviews">
                         <div class="row">
                             <small-card
-                                v-for="item in cardDate"
+                                v-for="item in cardData"
                                 :key="item.id"
                                 :routing="item.routing"
                                 :img="item.img"
@@ -130,8 +145,17 @@ export default {
                 light: 'light',
                 mint: 'info',
             },
-            bhour: {},
-            cardDate: [],
+            bhour: {
+                week_type:null,
+                mon:null,
+                tue:null,
+                wed:null,
+                thu:null,
+                fri:null,
+                sat:null,
+                sun:null,
+            },
+            cardData: [],
             MenuKeyData: [
                 { key: 'Food', sortable: true },
                 { key: 'Price', sortable: true },
@@ -156,7 +180,7 @@ export default {
             storeName: null,
             latitude: null,
             longitude: null,
-            categorys: ['Category 1', 'Category 2', 'Category 3'],
+            categorys: [],
             pictures: null,
             registerRiviewImg: require('@/assets/icons/registerReview.png'),
             pMap: null,
@@ -165,6 +189,7 @@ export default {
             ux: {
                 rBtnFlag: false,
             },
+            favorit: false,
         }
     },
     components: {
@@ -185,9 +210,12 @@ export default {
         window.removeEventListener('scroll', this.handleScroll)
     },
     methods: {
+        favoritClick() {
+            this.favorit = !this.favorit
+        },
         registerReview() {
             let local = localStorage
-            this.cardDate.unshift({
+            this.cardData.unshift({
                 title: local.getItem(`card_title`),
                 routing: local.getItem(`card_routing`),
                 score: parseInt(local.getItem(`card_score`)),
@@ -295,15 +323,18 @@ export default {
                             Address: resData.address,
                         },
                     ]),
-                        (this.pictures = resData.pictures.split('|')),
+                        (this.pictures =
+                            resData.pictures.split('|')[0] == ''
+                                ? null
+                                : resData.pictures.split('|')),
                         (this.storeEtcInfo = {
                             group_seat: resData.group_seat,
                             reservation: resData.reservation,
                             delivery: resData.delivery,
                             take_away: resData.take_away,
                             parking: resData.parking,
-                        })
-                    this.createKakaoMap(this.storeName, this.latitude, this.longitude)
+                        }),
+                        this.createKakaoMap(this.storeName, this.latitude, this.longitude)
                 },
                 (err) => {
                     console.log(`getStore Data loading fail...`)
@@ -319,10 +350,10 @@ export default {
                 },
             )
             axios.getStoreReview(store_id, (res) => {
-                // this.cardDate = res.data.result
+                // this.cardData = res.data.result
 
                 for (let r of res.data.result) {
-                    this.cardDate.push({
+                    this.cardData.push({
                         title: `익명 ${r.user_id}`,
                         routing: `/profile/${r.user_id}/review`,
                         score: r.score,
@@ -377,5 +408,8 @@ export default {
 @font-face {
     font-family: h1c;
     src: url('../assets/fonts/DXRMbxB-KSCpc-EUC-H.ttf');
+}
+.favoritMark {
+    cursor: pointer;
 }
 </style>

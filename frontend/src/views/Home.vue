@@ -11,8 +11,8 @@
                 @click="getLocation"
             >요기딱!</v-btn>
             <food-friend :tags.sync="tags" />
-            <slider title="나의 단골 맛집" :cardData="cardData" />
-            <slider title="지인 추천 맛집" />
+            <slider title="맞춤 추천 맛집" :cardData="cardData" />
+            <slider title="지인 추천 맛집" :cardData="cardData2" />
         </v-card-text>
     </v-container>
 </template>
@@ -22,6 +22,7 @@ import Banner from '../components/home_components/Banner'
 import FoodFriend from '../components/home_components/FoodFriend'
 import Slider from '../components/home_components/Slider'
 import axiosApi from '@/api/axiosScript.js'
+import { mapMutations, mapState, mapGetters } from 'vuex'
 
 export default {
     components: {
@@ -32,15 +33,38 @@ export default {
     data() {
         return {
             cardData: [],
+            cardData2 :[],
             tags: [],
             //map: {},
             position: {}
         }
     },
-    mount() {
+    mounted() {
+        
+        // 지인 추천 로그인되어있는지 확인해야하눈뎅
+        axiosApi.getRecommandationByFollowers(
+            68632,
+            (res)=>{
+                console.log(res.data)
+                this.cardData2 = res.data
+                this.cardData2.forEach( card => {
+                    if (card.pictures) {
+                        card.pictures = card.pictures.split("|");
+                    }
+                })
+            },
+            (err)=>{
+                console.log(err)
+            }
+        )
+
+
+
         // this.map = new kakao.maps.Map(container, options) //지도 생성 및 객체 리턴
     },
     methods: {
+        ...mapMutations('app', ['loadingSpinner', 'initState']),
+
         recommand(){
             let user = []
             for (let i=0; i<this.tags.length; i++){
@@ -57,10 +81,14 @@ export default {
 
             console.log(data)
 
+            this.initState()
+            this.loadingSpinner()
             axiosApi.getRecommandationById(
                 data,
                 (res) => {
+                    this.loadingSpinner()
                     console.log(res.data)
+                    
                     this.cardData = res.data.result
                     this.cardData.forEach( card => {
                         if (card.pictures) {
@@ -69,6 +97,7 @@ export default {
                     })
                 },
                 (err) => {
+                    this.loadingSpinner()
                     console.log(err)
                 }
             )

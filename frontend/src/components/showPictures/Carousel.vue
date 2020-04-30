@@ -24,7 +24,7 @@ export default {
         imgs: {
             type: Array,
             default: function () {
-                return ['http://placehold.it/1024x480']
+                return [require('../../assets/img/store_default_img.png')]
             },
         },
     },

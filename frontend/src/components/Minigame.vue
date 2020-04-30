@@ -4,9 +4,7 @@
             <span class="material-icons" v-if="isMinigmae">double_arrow</span>
             <span v-if="!isMinigmae">
                 미
-                <br />니
-                <br />게
-                <br />임
+                <br />니 <br />게 <br />임
                 <br />
             </span>
         </div>
@@ -42,7 +40,6 @@
 
 <script>
 var timer
-var stoptimer
 var mql = window.matchMedia('screen and (max-width: 480px)')
 if (mql.matches) {
     window.onload = () => {

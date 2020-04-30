@@ -3,7 +3,7 @@
         <img
             v-if="isIcon"
             :src="require(`@/assets/img/weather/${precipitationType}.png`)"
-            style="height:50px; margin-top: -4px;"
+            style="height: 50px; margin-top: -4px;"
             alt="weatherIcon"
         />
         <template v-if="isPrecip">{{ precipitationType }}</template>
@@ -144,7 +144,7 @@ export default {
         }
         this.weather.temperature = this.temperature
         this.weather.precipitationType = this.precipitationType
-        this.$emit("update:weather", this.weather)
+        this.$emit('update:weather', this.weather)
     },
     methods: {
         testPrint() {

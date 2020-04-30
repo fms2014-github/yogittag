@@ -3,28 +3,28 @@
         <div id="profile-edit">
             <h3>회원 정보 수정</h3>
             <div class="profile-edit-input">
-                <label for="edit-name">이름</label
-                ><input v-model="edit.name" id="edit-name" type="text" />
+                <label for="edit-name">이름</label>
+                <input v-model="edit.name" id="edit-name" type="text" />
             </div>
             <div class="profile-edit-input">
-                <label for="edit-nickname">닉네임</label
-                ><input v-model="edit.nickname" id="edit-nickname" type="text" />
+                <label for="edit-nickname">닉네임</label>
+                <input v-model="edit.nickName" id="edit-nickname" type="text" />
             </div>
             <div class="profile-edit-input">
-                <label for="edit-gender">성별</label
-                ><select v-model="edit.gender" id="edit-gender"
-                    ><option value="" disabled selected>선택해주세요</option>
-                    <option value="남">남</option
-                    ><option value="여">여</option></select
-                >
+                <label for="edit-gender">성별</label>
+                <select v-model="edit.gender" id="edit-gender">
+                    <option value disabled selected>선택해주세요</option>
+                    <option value="남">남</option>
+                    <option value="여">여</option>
+                </select>
             </div>
             <div class="profile-edit-input">
-                <label for="edit-birth">생일</label
-                ><input v-model="edit.birthday" id="edit-birth" type="date" />
+                <label for="edit-birth">생일</label>
+                <input v-model="edit.birthday" id="edit-birth" type="date" />
             </div>
             <div class="profile-edit-input">
-                <label for="edit-profile-image">프로필 이미지</label
-                ><input
+                <label for="edit-profile-image">프로필 이미지</label>
+                <input
                     id="edit-profile-image"
                     name="profilePicture"
                     type="file"
@@ -33,8 +33,8 @@
                 />
             </div>
             <div class="profile-edit-input">
-                <label for="edit-cover-image">커버 이미지</label
-                ><input
+                <label for="edit-cover-image">커버 이미지</label>
+                <input
                     id="edit-cover-image"
                     name="coverPicture"
                     type="file"
@@ -42,8 +42,10 @@
                     @change="onChange"
                 />
             </div>
-            <button class="edit" id="submit" @click="submit">수정</button>
-            <button class="edit" id="cancel" @click="cancel">취소</button>
+            <button v-if="!isFullSize" class="edit" id="submit" @click="submit">수정</button>
+            <button v-if="!isFullSize" class="edit" id="cancel" @click="cancel">취소</button>
+            <button v-if="isFullSize" class="edit" id="submit" @click="submit">정보 추가</button>
+            <button v-if="isFullSize" class="edit" id="cancel" @click="cancel">나중에</button>
         </div>
     </div>
 </template>
@@ -52,7 +54,7 @@
 import axios from '../api/axiosScript'
 import { mapMutations } from 'vuex'
 export default {
-    porps: ['getEmail', 'isFullSize'],
+    props: ['isFullSize'],
     data() {
         return {
             edit: {
@@ -60,18 +62,30 @@ export default {
                 nickName: '',
                 gender: '',
                 birthday: '',
+                bornYear: '',
                 profilePicture: '',
                 coverPicture: '',
-            },
+            }
         }
     },
     methods: {
         ...mapMutations('app', ['switchIsEdit']),
+        ...mapMutations('session', ['sessionSave']),
         submit() {
+
+            let year = this.edit.birthday.substring(0,4)
+            let birthday = this.edit.birthday.substring(6,8) + this.edit.birthday.substring(9)
+            //console.log(year, birthday)
+            this.edit.id = JSON.parse(sessionStorage.getItem('session')).userid
+            this.edit.bornYear = year
+            this.edit.birthday = birthday
+            console.log(this.edit)
+
             axios.updateUser(
                 this.edit,
                 (res) => {
                     console.log(res)
+                    this.$router.push('/')
                 },
                 (err) => {
                     console.log(err)

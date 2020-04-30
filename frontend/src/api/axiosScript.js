@@ -178,13 +178,13 @@ const getStoreReview = (data, success, error) => {
 // get store/{name}
 const searchStore = async (data, success, error) => {
     http.get('/api/store/' + data.keyword, {
-        params: {
-            latitude: data.latitude,
-            longitude: data.longitude,
-            category: data.category,
-            distance: data.distance,
-        },
-    })
+            params: {
+                latitude: data.latitude,
+                longitude: data.longitude,
+                category: data.category,
+                distance: data.distance,
+            },
+        })
         .then((res) => {
             success(res)
         })
@@ -192,6 +192,7 @@ const searchStore = async (data, success, error) => {
             error(err)
         })
 }
+
 
 //// users
 // get /users
@@ -218,7 +219,7 @@ const createUser = (data, success, error) => {
 
 // get /users/{fId}/followers
 const getAllFollowers = (data, success, error) => {
-    http.get('/api/users/' + data.fId + '/followers')
+    http.get('/api/users/' + data + '/followers')
         .then((res) => {
             success(res)
         })
@@ -329,13 +330,13 @@ const updateFavoriteListStore = (data, success, error) => {
 // delete /users/{id}/favorite-list/{list_id}/favorite-store/{store}
 const deleteFavoriteListStore = (data, success, error) => {
     http.delete(
-        '/api/users/' +
+            '/api/users/' +
             data.id +
             '/favorite-list/' +
             data.list_id +
             '/favorite-store/' +
             data.store,
-    )
+        )
         .then((res) => {
             success(res)
         })
@@ -368,6 +369,24 @@ const getAllReview = (data, success, error) => {
 // get /users/{id}/review
 const createReview = (data, success, error) => {
     http.post('/api/store/' + data.store + '/review', data)
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
+
+// get /recomm/{id}
+const getRecommandationById = (data, success, error) => {
+    http.get('/api/recomm/' + data.id, {
+            params: {
+                latitude: data.latitude,
+                longitude: data.longitude,
+                users: data.users,
+                area: data.area
+            }
+        })
         .then((res) => {
             success(res)
         })
@@ -415,6 +434,8 @@ const axiosFunction = {
         deleteFavoriteListStore(data, success, error),
     getAllFavoriteStore: (data, success, error) => getAllFavoriteStore(data, success, error),
     getAllReview: (data, success, error) => getAllReview(data, success, error),
+
+    getRecommandationById: (data, success, error) => getRecommandationById(data, success, error),
     createReview: (data, success, error) => createReview(data, success, error),
 }
 

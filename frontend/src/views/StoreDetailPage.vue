@@ -18,9 +18,7 @@
                             v-for="item in categorys"
                             :key="item.id"
                             class="list-group-item"
-                        >
-                            {{ item }}
-                        </router-link>
+                        >{{ item }}</router-link>
                     </div>
                 </div>
 
@@ -43,9 +41,11 @@
                             style="width: 100%; height: 350px;"
                         ></div>
                         <div class="store-detail-component">
-                            <b-badge pill variant="secondary">{{
+                            <b-badge pill variant="secondary">
+                                {{
                                 bhour.week_type | weekType
-                            }}</b-badge>
+                                }}
+                            </b-badge>
                             <b-badge pill :variant="bhour.mon ? 'info' : 'light'">월</b-badge>
                             <b-badge pill :variant="bhour.tue ? 'info' : 'light'">화</b-badge>
                             <b-badge pill :variant="bhour.wed ? 'info' : 'light'">수</b-badge>
@@ -59,16 +59,16 @@
                                     OPEN
                                     {{ bhour.start_time | dateFilter }}
                                     ~
-                                    {{ bhour.end_time | dateFilter }}</b-badge
-                                >
+                                    {{ bhour.end_time | dateFilter }}
+                                </b-badge>
                             </div>
                             <div v-else-if="bhour.type == 2">
                                 <b-badge pill variant="warning">
                                     BREAK TIME
                                     {{ bhour.start_time | dateFilter }}
                                     ~
-                                    {{ bhour.end_time | dateFilter }}</b-badge
-                                >
+                                    {{ bhour.end_time | dateFilter }}
+                                </b-badge>
                             </div>
                             <b-badge pill variant="danger">{{ bhour.etc }}</b-badge>
                         </div>

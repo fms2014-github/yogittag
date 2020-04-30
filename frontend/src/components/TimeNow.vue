@@ -67,40 +67,24 @@ export default {
             h=`12`;
         }
         switch(month){
-            case 0:
-            mon = "겨울";
-            break;
-            case 1:
-            mon = "겨울";
-            break;
             case 2:
-            mon = "봄";
-            break;
             case 3:
-            mon = "봄";
-            break;
             case 4:
             mon = "봄";
             break;
             case 5:
-            mon = "여름";
-            break;
             case 6:
-            mon = "여름";
-            break;
             case 7:
             mon = "여름";
             break;
             case 8:
-            mon = "가을";
-            break;
             case 9:
-            mon = "가을";
-            break;
             case 10:
             mon = "가을";
             break;
             case 11:
+            case 0:
+            case 1:
             mon = "겨울";
             break;
         }

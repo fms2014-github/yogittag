@@ -4,21 +4,36 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
-                    <h1 class="my-4">{{ storeName }}</h1>
+                    <h1 class="my-4" style="font-family: h1c;">
+                        {{ storeName
+                        }}<span v-if="!favorit" @click="favoritClick" class="favoritMark">🤍</span
+                        ><span v-else @click="favoritClick" class="favoritMark">🧡</span>
+                    </h1>
+                    <b-breadcrumb style="justify-content: center;">
+                        <b-badge variant="danger" v-show="storeEtcInfo.group_seat">단체석</b-badge>
+                        <b-badge variant="warning" v-show="storeEtcInfo.reservation">예약</b-badge>
+                        <b-badge variant="info" v-show="storeEtcInfo.delivery">배달</b-badge>
+                        <b-badge variant="light" v-show="storeEtcInfo.take_away">포장</b-badge>
+                        <b-badge variant="dark" v-show="storeEtcInfo.parking">주차</b-badge>
+                    </b-breadcrumb>
                     <div class="list-group">
                         <router-link
-                            to="#"
+                            :to="{
+                                path: `/listPage/${item}`,
+                                query: { title: item, subTitle: '키워드 검색' },
+                            }"
                             v-for="item in categorys"
                             :key="item.id"
                             class="list-group-item"
+                            replace
+                            >{{ item }}</router-link
                         >
-                            {{ item }}
-                        </router-link>
                     </div>
                 </div>
 
                 <div class="col-lg-9">
-                    <Carousel />
+                    <Carousel v-if="pictures" :imgs="pictures" />
+                    <Carousel v-else />
                 </div>
             </div>
             <div>
@@ -28,50 +43,50 @@
                     style="padding-bottom: 10px;"
                 >
                     <b-tab title="Home" active>
-                        <StoreInfoTable class="store-detail-component" :items="testStoreData" />
+                        <StoreInfoTable class="store-detail-component" :items="storeData" />
                         <div
                             class="store-detail-component"
                             id="map"
                             style="width: 100%; height: 350px;"
                         ></div>
-                        <div class="store-detail-component">
-                            <b-badge pill variant="secondary">{{
-                                testBHour.week_type | weekType
-                            }}</b-badge>
-                            <b-badge pill :variant="testBHour.mon ? 'info' : 'light'">월</b-badge>
-                            <b-badge pill :variant="testBHour.tue ? 'info' : 'light'">화</b-badge>
-                            <b-badge pill :variant="testBHour.wed ? 'info' : 'light'">수</b-badge>
-                            <b-badge pill :variant="testBHour.thu ? 'info' : 'light'">목</b-badge>
-                            <b-badge pill :variant="testBHour.fri ? 'info' : 'light'">금</b-badge>
-                            <b-badge pill :variant="testBHour.sat ? 'info' : 'light'">토</b-badge>
-                            <b-badge pill :variant="testBHour.sun ? 'info' : 'light'">일</b-badge>
+                        <div class="store-detail-component" v-if="bhour">
+                            <b-badge pill variant="secondary">
+                                {{ bhour.week_type | weekType }}
+                            </b-badge>
+                            <b-badge pill :variant="bhour.mon ? 'info' : 'light'">월</b-badge>
+                            <b-badge pill :variant="bhour.tue ? 'info' : 'light'">화</b-badge>
+                            <b-badge pill :variant="bhour.wed ? 'info' : 'light'">수</b-badge>
+                            <b-badge pill :variant="bhour.thu ? 'info' : 'light'">목</b-badge>
+                            <b-badge pill :variant="bhour.fri ? 'info' : 'light'">금</b-badge>
+                            <b-badge pill :variant="bhour.sat ? 'info' : 'light'">토</b-badge>
+                            <b-badge pill :variant="bhour.sun ? 'info' : 'light'">일</b-badge>
 
-                            <div v-if="testBHour.type == 1">
+                            <div v-if="bhour.type == 1">
                                 <b-badge pill variant="success">
                                     OPEN
-                                    {{ testBHour.start_time | dateFilter }}
+                                    {{ bhour.start_time | dateFilter }}
                                     ~
-                                    {{ testBHour.end_time | dateFilter }}</b-badge
-                                >
+                                    {{ bhour.end_time | dateFilter }}
+                                </b-badge>
                             </div>
-                            <div v-else-if="testBHour.type == 2">
+                            <div v-else-if="bhour.type == 2">
                                 <b-badge pill variant="warning">
                                     BREAK TIME
-                                    {{ testBHour.start_time | dateFilter }}
+                                    {{ bhour.start_time | dateFilter }}
                                     ~
-                                    {{ testBHour.end_time | dateFilter }}</b-badge
-                                >
+                                    {{ bhour.end_time | dateFilter }}
+                                </b-badge>
                             </div>
-                            <b-badge pill variant="danger">{{ testBHour.etc }}</b-badge>
+                            <b-badge pill variant="danger">{{ bhour.etc }}</b-badge>
                         </div>
                     </b-tab>
                     <b-tab title="Menu">
-                        <SortingTable :fields="testMenuKeyData" :items="testMenuData" />
+                        <SortingTable :fields="MenuKeyData" :items="MenuData" />
                     </b-tab>
                     <b-tab title="Reviews">
                         <div class="row">
                             <small-card
-                                v-for="item in testCardDate"
+                                v-for="item in cardData"
                                 :key="item.id"
                                 :routing="item.routing"
                                 :img="item.img"
@@ -79,20 +94,13 @@
                                 :title="item.title"
                                 :reg_time="item.reg_time"
                                 :content="item.content"
-                                :score="item.score"
+                                :score="parseInt(item.score)"
                             />
                         </div>
                         <button v-b-modal.modal id="registerButton">
                             <img id="registerButtonImg" :src="registerRiviewImg" />
                         </button>
-                        <b-modal
-                            :no-close-on-backdrop="true"
-                            @ok="modalCilck()"
-                            id="modal"
-                            size="lg"
-                            title="Review"
-                            ><ReviewForm
-                        /></b-modal>
+                        <ReviewForm :storeName="storeName" @registerReview="registerReview" />
                     </b-tab>
                 </b-tabs>
             </div>
@@ -109,6 +117,8 @@ import StoreInfoTable from '@/components/tables/StoreInfoTable'
 import dateFilter from '@/components/filters/dateFilter.js'
 import UpFocusButton from '@/components/buttons/UpFocusButton'
 import ReviewForm from '@/components/forms/ReviewForm.vue'
+import axios from '../api/axiosScript.js'
+
 export default {
     filters: {
         dateFilter: dateFilter,
@@ -135,117 +145,43 @@ export default {
                 light: 'light',
                 mint: 'info',
             },
-            testBHour: {
-                type: 1,
-                week_type: 1,
-                mon: 0,
-                tue: 1,
-                wed: 1,
-                thu: 1,
-                fri: 1,
-                sat: 1,
-                sun: 1,
-                start_time: '10:00:00',
-                end_time: '21:00:00',
-                etc: '매주 일요일 휴무',
+            bhour: {
+                week_type:null,
+                mon:null,
+                tue:null,
+                wed:null,
+                thu:null,
+                fri:null,
+                sat:null,
+                sun:null,
             },
-            testCardDate: [
-                {
-                    img: 'https://loremflickr.com/700/400',
-                    gender: '남',
-                    title: 'Reivew Title',
-                    reg_time: '2020-04-09 03:48:40.799058',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                    score: 4,
-                },
-                {
-                    img: 'https://picsum.photos/700/400',
-                    gender: '여',
-                    title: 'Reivew Title2',
-                    reg_time: '2020-04-09 03:48',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                    score: 1,
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-            ],
-            testMenuKeyData: [
+            cardData: [],
+            MenuKeyData: [
                 { key: 'Food', sortable: true },
                 { key: 'Price', sortable: true },
             ],
-            testMenuData: [
-                { Food: '아메리카노', Price: '1,000' },
-                { Food: '핫초코', Price: '13,500' },
-                { Food: '고기국수', Price: '6,000' },
-                { Food: '생맥주', Price: '7,000' },
-            ],
-            testStoreData: [
+            MenuData: [],
+            storeEtcInfo: {
+                group_seat: null,
+                reservation: null,
+                delivery: null,
+                take_away: null,
+                parking: null,
+            },
+            storeData: [
                 {
                     Branch: null,
-                    Area: '홍대',
-                    Tel: '010-6689-5886',
-                    Address: '서울특별시 마포구 동교동 170-13',
+                    Area: null,
+                    Tel: null,
+                    Address: null,
                 },
             ],
-            storeName: 'Shop Name',
-            latitude: 37.556862,
-            longitude: 126.926666,
-            categorys: ['Category 1', 'Category 2', 'Category 3'],
+
+            storeName: null,
+            latitude: null,
+            longitude: null,
+            categorys: [],
+            pictures: null,
             registerRiviewImg: require('@/assets/icons/registerReview.png'),
             pMap: null,
             scrollY: 0,
@@ -253,6 +189,7 @@ export default {
             ux: {
                 rBtnFlag: false,
             },
+            favorit: false,
         }
     },
     components: {
@@ -264,10 +201,7 @@ export default {
         ReviewForm,
     },
     mounted() {
-        this.createKakaoMap(this.storeName, this.latitude, this.longitude)
-        // setTimeout(() => {
-        //     this.relayout()
-        // }, 5000)
+        this.aixos(this.$route.params.id)
     },
     created: function () {
         window.addEventListener('scroll', this.handleScroll)
@@ -276,6 +210,21 @@ export default {
         window.removeEventListener('scroll', this.handleScroll)
     },
     methods: {
+        favoritClick() {
+            this.favorit = !this.favorit
+        },
+        registerReview() {
+            let local = localStorage
+            this.cardData.unshift({
+                title: local.getItem(`card_title`),
+                routing: local.getItem(`card_routing`),
+                score: parseInt(local.getItem(`card_score`)),
+                content: local.getItem(`card_content`),
+                reg_time: local.getItem(`card_reg_time`),
+                img: local.getItem(`card_img`),
+            })
+            local.clear()
+        },
         handleScroll() {
             if (this.timer === null) {
                 this.timer = setTimeout(
@@ -356,8 +305,71 @@ export default {
             infowindow.open(map, marker)
             this.pMap = map
         },
-        modalCilck(bvModalEvt) {
-            console.log('modal ok click')
+
+        aixos(store_id) {
+            axios.getStore(
+                store_id,
+                (res) => {
+                    let resData = res.data.result[0]
+                    this.storeName = resData.store_name
+                    this.latitude = resData.latitude
+                    this.longitude = resData.longitude
+                    this.categorys = resData.category.split('|')
+                    ;(this.storeData = [
+                        {
+                            Branch: resData.branch,
+                            Area: resData.area,
+                            Tel: resData.tel,
+                            Address: resData.address,
+                        },
+                    ]),
+                        (this.pictures =
+                            resData.pictures.split('|')[0] == ''
+                                ? null
+                                : resData.pictures.split('|')),
+                        (this.storeEtcInfo = {
+                            group_seat: resData.group_seat,
+                            reservation: resData.reservation,
+                            delivery: resData.delivery,
+                            take_away: resData.take_away,
+                            parking: resData.parking,
+                        }),
+                        this.createKakaoMap(this.storeName, this.latitude, this.longitude)
+                },
+                (err) => {
+                    console.log(`getStore Data loading fail...`)
+                },
+            )
+            axios.getStoreHour(
+                store_id,
+                (res) => {
+                    this.bhour = res.data.result[0]
+                },
+                (error) => {
+                    console.log(`getStoreHour Data loading fail...`)
+                },
+            )
+            axios.getStoreReview(store_id, (res) => {
+                // this.cardData = res.data.result
+
+                for (let r of res.data.result) {
+                    this.cardData.push({
+                        title: `익명 ${r.user_id}`,
+                        routing: `/profile/${r.user_id}/review`,
+                        score: r.score,
+                        content: r.content,
+                        reg_time: r.reg_time,
+                    })
+                }
+            })
+            axios.getStoreMenu(store_id, (res) => {
+                for (let m of res.data.result) {
+                    this.MenuData.push({
+                        Food: m.menu_name,
+                        Price: m.price,
+                    })
+                }
+            })
         },
     },
 }
@@ -392,5 +404,12 @@ export default {
     right: 50px;
     height: 40px;
     z-index: 10;
+}
+@font-face {
+    font-family: h1c;
+    src: url('../assets/fonts/DXRMbxB-KSCpc-EUC-H.ttf');
+}
+.favoritMark {
+    cursor: pointer;
 }
 </style>

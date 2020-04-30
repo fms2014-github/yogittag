@@ -6,14 +6,10 @@
                     <router-link class="list-button" :to="{ name: 'Home' }">Home</router-link>
                 </div>
                 <div>
-                    <router-link class="list-button" :to="{ name: 'Map' }"
-                        >Map</router-link
-                    >
+                    <router-link class="list-button" :to="{ name: 'Map' }">Map</router-link>
                 </div>
                 <div>
-                    <router-link class="list-button" :to="{ name: 'StoreDetailPage' }"
-                        >StoreDetail</router-link
-                    >
+                    <router-link class="list-button" to="/store/145030">StoreDetail</router-link>
                 </div>
                 <div>
                     <router-link class="list-button" :to="{ name: 'Profile' }">Profile</router-link>
@@ -24,13 +20,7 @@
 </template>
 
 <script>
-export default {
-    methods: {
-        closeMenu() {
-            this.$emit('closeCheckChange')
-        },
-    },
-}
+export default {}
 </script>
 
 <style lang="scss" scoped>

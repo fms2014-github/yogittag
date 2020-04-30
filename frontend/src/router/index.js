@@ -17,7 +17,9 @@ function route(path, view, name) {
                 let session = JSON.parse(sessionStorage.getItem('session'))
                 if (session === null) {
                     appx.state.isLogin = true
-                    next({ path: '/' })
+                    next({
+                        path: '/'
+                    })
                 } else {
                     next()
                 }
@@ -38,12 +40,10 @@ const router = new Router({
     mode: 'history',
     routes: paths
         .map((path) => route(path.path, path.view, path.name))
-        .concat([
-            {
-                path: '*',
-                redirect: '/',
-            },
-        ]),
+        .concat([{
+            path: '*',
+            redirect: '/',
+        }, ]),
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
             return savedPosition

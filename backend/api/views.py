@@ -14,7 +14,7 @@ import requests
 
 from .models import BHour, Menu, Review, Store, User, FavoriteList, FavoriteStore
 
-from .serializers import BhourSerializer, UserSerializer, StoreSerializer, ReviewSerializer, MenuSerializer, FollowSerializer, FavoriteListSerializer, FavoriteStoreSerializer
+from .serializers import BhourSerializer, UserSerializer, StoreSerializer, ReviewSerializer, MenuSerializer, FollowSerializer, FavoriteListSerializer, FavoriteStoreSerializer, GoogleAuthSerializer
 
 import time
 import json
@@ -23,7 +23,7 @@ import base64
 
 from django.http import HttpResponse, JsonResponse
 from rest_framework.parsers import JSONParser
-
+''' 
 # user models
 @api_view(['GET', 'POST'])
 def user_list(request):
@@ -43,7 +43,6 @@ def user_list(request):
             return JsonResponse(serializer.data, status=201)
         return JsonResponse(serializer.errors, status=400)
 
-
 @api_view(['GET', 'PUT', 'DELETE'])
 def user_detail(request, pk):
     """
@@ -59,10 +58,15 @@ def user_detail(request, pk):
         return Response(serializer.data)
 
     elif request.method == 'PUT':
+        print('put')
+        print(user.email, user.id, user.name)
         serializer = UserSerializer(user, data=request.data)
         if serializer.is_valid():
+            print('valid')
             serializer.save()
             return Response(serializer.data)
+        else:
+            print('not valid')
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
@@ -108,7 +112,7 @@ def followers_detail(request, fId, tId):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
+ '''
 # user models
 @api_view(['GET', 'POST'])
 def user_list(request):
@@ -144,7 +148,7 @@ def user_detail(request, pk):
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = UserSerializer(user, data=request.data)
+        serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -305,12 +309,15 @@ def user_login(request):
 def session_refresh(request):
     get_jwt = request.data.get('jwt').split('.')
     dt = datetime.now().microsecond
-    jwt_iss = json.loads(base64.b64decode(get_jwt[1] + ("=" * ((4 - len(get_jwt[1]) % 4) % 4))).decode("UTF-8").replace('\'','\"')).get('iss')
-    jwt_exp = json.loads(base64.b64decode(get_jwt[1] + ("=" * ((4 - len(get_jwt[1]) % 4) % 4))).decode("UTF-8").replace('\'','\"')).get('exp')
+    jwt_iss = json.loads(base64.b64decode(
+        get_jwt[1] + ("=" * ((4 - len(get_jwt[1]) % 4) % 4))).decode("UTF-8").replace('\'', '\"')).get('iss')
+    jwt_exp = json.loads(base64.b64decode(
+        get_jwt[1] + ("=" * ((4 - len(get_jwt[1]) % 4) % 4))).decode("UTF-8").replace('\'', '\"')).get('exp')
     if jwt_iss == 'https://accounts.google.com':
         if dt < jwt_exp:
             email = request.data.get('email')
-            refresh_token = User.objects.get(email__exact=email).google_refresh_token
+            refresh_token = User.objects.get(
+                email__exact=email).google_refresh_token
             refresh_token_url = 'https://oauth2.googleapis.com/token'
             data = {
                 'client_id': '25608544222-lfe7jdkikoef92jgt45mvhe83ts98n80.apps.googleusercontent.com',
@@ -320,20 +327,22 @@ def session_refresh(request):
             }
             refresh_token = requests.post(refresh_token_url, data=data)
             # 토큰 정보가 없거나 검증에 실패했을 경우 세션 삭제
-            return Response({'session':{"jwt": refresh_token.json()['id_token']}}, status=status.HTTP_200_OK)
+            return Response({'session': {"email": email, "jwt": refresh_token.json()['id_token']}}, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
     elif jwt_iss == 'https://nid.naver.com':
         if dt < jwt_exp:
             email = request.data.get('email')
-            refresh_token = User.objects.get(email__exact=email).naver_refresh_token
+            refresh_token = User.objects.get(
+                email__exact=email).naver_refresh_token
             refresh_token_url = 'https://nid.naver.com/oauth2.0/token?grant_type=refresh_token&client_id=ISrEReGthtZMH67maTLZ&client_secret=kCOv4mVaGK&refresh_token=' + refresh_token
             refresh_token = requests.get(refresh_token_url)
 
-            headers = {'Authorization': refresh_token.json()['token_type'] + ' ' + refresh_token.json()['access_token']}
+            headers = {'Authorization': refresh_token.json(
+            )['token_type'] + ' ' + refresh_token.json()['access_token']}
             userInfoRequsetURL = 'https://openapi.naver.com/v1/nid/me'
             userinfo = requests.get(userInfoRequsetURL, headers=headers)
             jwt_sub = json.loads(
-                base64.b64decode(get_jwt[1] + ("=" * ((4 - len(get_jwt[1]) % 4) % 4))).decode("UTF-8").replace('\'','\"')).get('sub')
+                base64.b64decode(get_jwt[1] + ("=" * ((4 - len(get_jwt[1]) % 4) % 4))).decode("UTF-8").replace('\'', '\"')).get('sub')
             if jwt_sub != userinfo.json()['response']['id']:
                 print("???")
                 return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -351,8 +360,8 @@ def session_refresh(request):
 
             # jwt 토큰 생성
             jwt = base64.b64encode(repr(header).encode()).decode("UTF-8") + '.' + \
-                  base64.b64encode(repr(payload).encode()).decode("UTF-8") + '.' + \
-                  base64.b64encode(signature.hexdigest().encode()).decode()
+                base64.b64encode(repr(payload).encode()).decode("UTF-8") + '.' + \
+                base64.b64encode(signature.hexdigest().encode()).decode()
 
             return Response({'session': {
                 'email': userinfo.json()['response']['email'],
@@ -385,7 +394,7 @@ def user_delete(request):
             # 유효기간이 지났을 경우 로그아웃
             return Response({"success": "delete user"}, status=status.HTTP_400_BAD_REQUEST)
     # 토큰 정보가 없거나 검증에 실패했을 경우 세션 삭제
-    return Response({"jwt": ''},status=status.HTTP_400_BAD_REQUEST)
+    return Response({"jwt": ''}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
@@ -401,24 +410,42 @@ def oauth_code_google(request):
         'grant_type': 'authorization_code',
     }
     auth_data = requests.post(tokenRequestURL, data=data)
-    headers = {'Authorization': auth_data.json()['token_type'] + ' ' + auth_data.json()['access_token']}
+
+    print('auth_data-----------------')
+    print(auth_data.json())
+
+    headers = {'Authorization': auth_data.json(
+    )['token_type'] + ' ' + auth_data.json()['access_token']}
     userInfoRequsetURL = 'https://www.googleapis.com/oauth2/v2/userinfo'
     userinfo = requests.get(userInfoRequsetURL, headers=headers)
+
+    print('user_info------------------------')
+    print(userinfo.json())
     try:
+
         find_user = User.objects.get(email__exact=userinfo.json()['email'])
-        serializer = UserSerializer(find_user, data={'google_refresh_token': auth_data.json()['refresh_token']}, partial=True)
+        print(find_user)
+        serializer = GoogleAuthSerializer(find_user, data={
+            'google_refresh_token': auth_data.json()['refresh_token']}, partial=True)
         if serializer.is_valid():
             serializer.save()
-    except ObjectDoesNotExist:
-        serializer = UserSerializer(data={
+    except User.DoesNotExist:
+        serializer = GoogleAuthSerializer(data={
+            'name': userinfo.json()['name'],
             'email': userinfo.json()['email'],
             'google_refresh_token': auth_data.json()['refresh_token'],
             'profile_picture': userinfo.json()['picture']
         })
+
         if serializer.is_valid():
             serializer.save()
+
+    user_id = User.objects.get(email__exact=userinfo.json()[
+                               'email']).id
+    print(user_id)
     return Response({'session': {'email': userinfo.json()['email'],
-                                 'jwt': auth_data.json()['id_token']}}, status=status.HTTP_200_OK)
+                                 'jwt': auth_data.json()['id_token'],
+                                 'userid': user_id}}, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -436,13 +463,16 @@ def oauth_code_naver(request):
     print(auth_data.json())
     print(auth_data.json()['access_token'])
     print(auth_data.json()['refresh_token'])
-    headers = {'Authorization': auth_data.json()['token_type'] + ' ' + auth_data.json()['access_token']}
+    headers = {'Authorization': auth_data.json(
+    )['token_type'] + ' ' + auth_data.json()['access_token']}
     userInfoRequsetURL = 'https://openapi.naver.com/v1/nid/me'
     userinfo = requests.get(userInfoRequsetURL, headers=headers)
     print(userinfo.json()['response'])
     try:
-        find_user = User.objects.get(email__exact=userinfo.json()['response']['email'])
-        serializer = UserSerializer(find_user, data={'naver_refresh_token': auth_data.json()['refresh_token']}, partial=True)
+        find_user = User.objects.get(
+            email__exact=userinfo.json()['response']['email'])
+        serializer = UserSerializer(find_user, data={
+                                    'naver_refresh_token': auth_data.json()['refresh_token']}, partial=True)
         if serializer.is_valid():
             serializer.save()
     except ObjectDoesNotExist:
@@ -468,10 +498,10 @@ def oauth_code_naver(request):
 
     # jwt 토큰 생성
     jwt = base64.b64encode(repr(header).encode()).decode("UTF-8") + '.' + \
-          base64.b64encode(repr(payload).encode()).decode("UTF-8") + '.' + \
-          base64.b64encode(signature.hexdigest().encode()).decode()
+        base64.b64encode(repr(payload).encode()).decode("UTF-8") + '.' + \
+        base64.b64encode(signature.hexdigest().encode()).decode()
 
-    return Response({'session': {'email': userinfo.json()['response']['email'],'jwt': jwt.replace('=', '')}}, status=status.HTTP_200_OK)
+    return Response({'session': {'email': userinfo.json()['response']['email'], 'jwt': jwt.replace('=', '')}}, status=status.HTTP_200_OK)
 
 
 # user end

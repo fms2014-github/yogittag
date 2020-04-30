@@ -11,7 +11,7 @@ export default [
     },
     {
         path: '/test',
-        view: 'UserSignNewForm',
+        view: 'test1',
         name: 'test',
     },
     {
@@ -25,9 +25,15 @@ export default [
         name: 'NaverAuth',
     },
     {
-        path: '/store-detail-page',
+        path: '/store/:id',
         view: 'StoreDetailPage',
         name: 'StoreDetailPage',
+    },
+    {
+        path: '/listPage/:keyword',
+        view: 'ListPage',
+        name: 'ListPage',
+        props: true,
     },
     {
         path: '/profile',

@@ -3,7 +3,7 @@
         <img
             v-if="isIcon"
             :src="require(`@/assets/img/weather/${precipitationType}.png`)"
-            style="height:50px; margin-top: -4px;"
+            style="height: 50px; margin-top: -4px;"
             alt="weatherIcon"
         />
         <template v-if="isPrecip">{{ precipitationType }}</template>
@@ -15,6 +15,7 @@
 
 <script>
 import apiAxios from '../api/axiosScript'
+
 var RE = 6371.00877 // 지구 반경(km)
 var GRID = 5.0 // 격자 간격(km)
 var SLAT1 = 30.0 // 투영 위도1(degree)
@@ -143,7 +144,7 @@ export default {
         }
         this.weather.temperature = this.temperature
         this.weather.precipitationType = this.precipitationType
-        this.$emit("update:weather", this.weather)
+        this.$emit('update:weather', this.weather)
     },
     methods: {
         testPrint() {

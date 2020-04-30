@@ -16,3 +16,4 @@ class User(models.Model):
     email = models.CharField(max_length=100, blank=True)
     google_refresh_token = models.CharField(max_length=200, null=True)
     naver_refresh_token = models.CharField(max_length=200, null=True)
+    isCompleted = models.BooleanField(null = True)

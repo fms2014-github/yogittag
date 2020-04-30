@@ -1,5 +1,4 @@
-export default [
-    {
+export default [{
         path: '/',
         view: 'Home',
         name: 'Home',

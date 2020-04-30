@@ -1,12 +1,12 @@
 <template>
     <div>
-        <b-btton v-b-toggle.sidebar-1>
+        <button v-b-toggle.sidebar-1>
             <div id="menu" class="radius-button">
                 <span class="material-icons">
                     menu
                 </span>
             </div>
-        </b-btton>
+        </button>
     </div>
 </template>
 

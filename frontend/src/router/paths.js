@@ -25,9 +25,14 @@ export default [
         name: 'NaverAuth',
     },
     {
-        path: '/store-detail-page',
+        path: '/store/:id',
         view: 'StoreDetailPage',
         name: 'StoreDetailPage',
+    },
+    {
+        path: '/storeListPage',
+        view: 'StoreListPage',
+        name: 'StoreListPage',
     },
     {
         path: '/profile',

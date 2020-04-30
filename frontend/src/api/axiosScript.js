@@ -144,7 +144,7 @@ const getStore = (data, success, error) => {
 
 //get /store/{id}/bhour
 const getStoreHour = (data, success, error) => {
-    http.get('/api/store/' + data + '/hour')
+    http.get('/api/store/' + data + '/bhour')
         .then((res) => {
             success(res)
         })
@@ -365,6 +365,16 @@ const getAllReview = (data, success, error) => {
             error(err)
         })
 }
+// get /users/{id}/review
+const createReview = (data, success, error) => {
+    http.post('/api/store/' + data.store + '/review', data)
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
 
 const axiosFunction = {
     searchStore: (data, success, error) => searchStore(data, success, error),
@@ -405,6 +415,7 @@ const axiosFunction = {
         deleteFavoriteListStore(data, success, error),
     getAllFavoriteStore: (data, success, error) => getAllFavoriteStore(data, success, error),
     getAllReview: (data, success, error) => getAllReview(data, success, error),
+    createReview: (data, success, error) => createReview(data, success, error),
 }
 
 export default axiosFunction

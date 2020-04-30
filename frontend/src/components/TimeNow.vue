@@ -1,11 +1,8 @@
 <template>
-    <!-- <div onLoad="initClock()"> -->
     <div id="clock">
-        <p>
-            <span id="day">MON</span> &nbsp;
-            <span id="utc">10 APRIL 2019</span>
-        </p>
-        <p id="time">10:15:40 AM</p>
+        <span id="utc" style="font-family: 'BMEULJIRO'; margin-right: 10px;">봄</span>
+        <span id="day" style="font-family: 'BMEULJIRO'; margin-right: 10px;">MON</span>
+        <span id="time">10:15:40 AM</span>
     </div>
 </template>
 <script>
@@ -21,13 +18,12 @@ export default {
         let day = document.querySelector('#day');
         let utc = document.querySelector('#utc');
         let date = new Date();
-        console.log(date);
         let h = date.getHours();
         let m = date.getMinutes();
         let s = date.getSeconds();
         let month = date.getMonth();
-        let datenum = date.getDate();
-        let fullYear= date.getFullYear();
+        // let datenum = date.getDate();
+        // let fullYear= date.getFullYear();
         let session; 
         let mon;
         if(h>11){
@@ -41,20 +37,20 @@ export default {
 
         let daynum = date.getDay();
         let dayText= daynum;
-        if(dayText==0){
-            day.textContent="SUN";
-        }else if(dayText == 1){
-            day.textContent="MON";
-        }else if(dayText==2){
-            day.textContent="TUE";
-        }else if(dayText==3){
-            day.textContent="WEB"
-        }else if(dayText==4){
-            day.textContent="THUR"
-        }else if(dayText==5){
-            day.textContent="FRI"
-        }else if(dayText==6){
-            day.textContent="SAT"
+        if(daynum==0){
+            day.textContent="일요일";
+        }else if(daynum == 1){
+            day.textContent="월요일";
+        }else if(daynum==2){
+            day.textContent="화요일";
+        }else if(daynum==3){
+            day.textContent="수요일"
+        }else if(daynum==4){
+            day.textContent="목요일"
+        }else if(daynum==5){
+            day.textContent="금요일"
+        }else if(daynum==6){
+            day.textContent="토요일"
         }
 
         if(s<10){
@@ -72,44 +68,49 @@ export default {
         }
         switch(month){
             case 0:
-            mon = "January";
+            mon = "겨울";
             break;
             case 1:
-            mon = "February";
+            mon = "겨울";
             break;
             case 2:
-            mon = "March";
+            mon = "봄";
             break;
             case 3:
-            mon = "April";
+            mon = "봄";
             break;
             case 4:
-            mon = "MAY";
+            mon = "봄";
             break;
             case 5:
-            mon = "June";
+            mon = "여름";
             break;
             case 6:
-            mon = "July";
+            mon = "여름";
             break;
             case 7:
-            mon = "August";
+            mon = "여름";
             break;
             case 8:
-            mon = "September";
+            mon = "가을";
             break;
             case 9:
-            mon = "October";
+            mon = "가을";
             break;
             case 10:
-            mon = "November";
+            mon = "가을";
             break;
             case 11:
-            mon = "December";
+            mon = "겨울";
             break;
         }
-        utc.textContent = `${datenum} ${mon} ${fullYear}`;
-        let time = `${h} : ${m} : ${s} ${session}`;
+        if (daynum == 6) {
+            document.getElementById('day').classList.add('saturday')
+        } else if(daynum == 0) {
+             document.getElementById('day').classList.add('sunday')
+        }
+        utc.textContent = `${mon}`;
+        let time = `${h}:${m}:${s} ${session}`;
         h1.textContent = time;
         setTimeout(this.showTime,1000);
     }
@@ -122,11 +123,28 @@ export default {
     
 </script>
 <style>
+@font-face {
+    font-family: 'BMEULJIRO';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/BMEULJIRO.woff')
+        format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+.saturday {
+    color: #0000ff; /* 토요일 */
+}
+.sunday {
+    color: #ff0000; /* 일요일 */
+}
+
 #clock {
-    /* position: absolute; */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    height: 50px;
+    text-align: center;
+    vertical-align: center;
+    padding: 13px 15px;
+    #utc {
+        margin-right: 15px;
+    }
     #time {
         font-size: 60px;
         color: #1b9cfc;

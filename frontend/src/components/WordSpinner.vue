@@ -1,13 +1,13 @@
 <template>
     <div class="spinner-sentence">
-        Make
         <div class="spinner" id="wordSpinner">
             <li class="active">{{banner_menu[0]}}</li>
             <li class="next">{{banner_menu[1]}}</li>
-            <li v-for="menu in banner_menu" :key="menu">{{menu}}</li>
-            <!-- <li>Geography</li>
-            <li>Challenge</li>-->
-        </div>Discovery Awesome
+            <li>{{banner_menu[2]}}</li>
+            <li>{{banner_menu[3]}}</li>
+            <li>{{banner_menu[4]}}</li>
+        </div>
+        <span>어때요?</span>
     </div>
 </template>
 
@@ -17,7 +17,6 @@ export default {
     props: {
         banner_menu: {
             type: Array,
-            default: ['고기', '치킨', '피자', '초밥']
         }
     },
     methods: {
@@ -45,65 +44,19 @@ export default {
         this.WordSpinner('WordSpinner', 3000);
     }
 }
-
-
-
-
-// export default {
-//     name: 'wordSpinner',
-//     props: {
-//         isRotate: Boolean,
-//     },
-//     methods: {
-//         rotate(start, words) {
-//             for (let i = 0; i < words.length; ++i) {
-//                 const j = (start + i) % words.length
-//                 let percent = j / words.length
-//                 let rad = percent * 2 * Math.PI
-//                 let ty = Math.sin(rad) * 200
-//                 let tz = 40 * Math.cos(rad) - 40
-//                 let op = (Math.cos(rad) + 1) / 3
-//                 words[
-//                 ].style.transform = `perspective(10px) translateZ(${tz}px) translateY(${ty}%)`
-//                 words[i].style.opacity = `${op}`
-//                 words[(words.length - start) % words.length].style.opacity = 1
-//             }
-//         },
-//     },
-//     mounted() {
-//         const wr = document.querySelector('.word-rotate')
-//         const words = wr.children
-//         let x = 0
-//         for (let i = 0; i < words.length; ++i) {
-//             const j = i % words.length
-//             let percent = j / words.length
-//             let rad = percent * 2 * Math.PI
-//             let ty = Math.sin(rad) * 200
-//             let tz = 40 * Math.cos(rad) - 40
-//             words[i].style.transform = `perspective(5px) translateZ(${tz}px) translateY(${ty}%)`
-//             words[i].style.opacity = 0
-//         }
-//         setInterval(() => {
-//             if (this.isRotate) {
-//                 x = ++x % words.length
-//                 this.rotate(x, words)
-//             }
-//         }, 1000)
-//     },
-// }
 </script>
 
 <style lang="scss" scoped>
 $width: 200px;
 $height: 45px;
-$font-size: 2em;
+$font-size: 1em;
 
 .spinner-sentence {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    // display: flex;
+    align-items: right;
+    justify-content: right;
     font-size: $font-size;
-    font-family: sans-serif;
+    font-family: h1c;
     height: 100%;
 }
 
@@ -113,8 +66,9 @@ $font-size: 2em;
     display: inline-block;
     text-align: center;
     transform-style: preserve-3d;
+    font-size: 1.2em;
     font-weight: 700;
-    margin: 0 10px;
+    margin: 20px 20px 0px 20px;
 
     &.spin {
         transform: rotateX(-90deg);
@@ -127,7 +81,7 @@ $font-size: 2em;
     position: absolute;
     width: $width;
     height: $height;
-    background-color: gold;
+    background-color: rgba(255, 217, 0, 0.863);
     list-style: none;
     display: none;
     align-items: center;

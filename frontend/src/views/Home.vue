@@ -22,6 +22,7 @@ import Banner from '../components/home_components/Banner'
 import FoodFriend from '../components/home_components/FoodFriend'
 import Slider from '../components/home_components/Slider'
 import axiosApi from '@/api/axiosScript.js'
+import { mapMutations, mapState, mapGetters } from 'vuex'
 
 export default {
     components: {
@@ -62,6 +63,8 @@ export default {
         // this.map = new kakao.maps.Map(container, options) //지도 생성 및 객체 리턴
     },
     methods: {
+        ...mapMutations('app', ['loadingSpinner', 'initState']),
+
         recommand(){
             let user = []
             for (let i=0; i<this.tags.length; i++){
@@ -78,10 +81,14 @@ export default {
 
             console.log(data)
 
+            this.initState()
+            this.loadingSpinner()
             axiosApi.getRecommandationById(
                 data,
                 (res) => {
+                    this.loadingSpinner()
                     console.log(res.data)
+                    
                     this.cardData = res.data.result
                     this.cardData.forEach( card => {
                         if (card.pictures) {
@@ -90,6 +97,7 @@ export default {
                     })
                 },
                 (err) => {
+                    this.loadingSpinner()
                     console.log(err)
                 }
             )

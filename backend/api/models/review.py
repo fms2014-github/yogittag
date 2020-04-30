@@ -15,3 +15,6 @@ class Review(models.Model):
 
     class Meta:
         ordering = ['reg_time']
+
+    def __str__(self):
+        return self.content

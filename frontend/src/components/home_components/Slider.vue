@@ -1,19 +1,17 @@
 <template>
     <div>
         <p class="display-2 font-weight-thin text--secondary text-left">&nbsp;{{ title }}</p>
-        <swiper class="swiper" :options="swiperOption">
-            <!-- <s-card class=""></s-card> -->
-            <!-- <s-card class="swiper-slide"></s-card> -->
-            <!-- <s-card class="swiper-slide"></s-card>
-            <s-card class="swiper-slide"></s-card> -->
+        <swiper :options="swiperOption">
             <s-card
                 class="swiper-slide"
                 v-for="item in cardData"
                 :key="item.id"
-                :title="item.title"
-                :content="item.content"
-            >
-            </s-card>
+                :title="item.store_name"
+                :content="item.category"
+                :img="item.pictures[0]"
+                :routing="'/store/' + item.id"
+                style="padding: 0;"
+            ></s-card>
             <div class="swiper-button-prev" slot="button-prev"></div>
             <div class="swiper-button-next" slot="button-next"></div>
         </swiper>
@@ -49,30 +47,25 @@ export default {
                     prevEl: '.swiper-button-prev',
                 },
                 breakpoints: {
-                    1264: {
-                        slidesPerGroup: 5,
-                        slidesPerView: 5,
-                        spaceBetween: 30,
-                    },
-                    960: {
+                    1000: {
                         slidesPerGroup: 4,
                         slidesPerView: 4,
-                        spaceBetween: 30,
+                        // spaceBetween: 20,
                     },
                     768: {
                         slidesPerGroup: 3,
                         slidesPerView: 3,
-                        spaceBetween: 30,
+                        // spaceBetween: 20,
                     },
-                    500: {
+                    540: {
                         slidesPerGroup: 2,
                         slidesPerView: 2,
-                        spaceBetween: 30,
+                        // spaceBetween: 20,
                     },
                     0: {
                         slidesPerGroup: 1,
                         slidesPerView: 1,
-                        spaceBetween: 30,
+                        // spaceBetween: 20,
                     },
                 },
             },
@@ -80,17 +73,6 @@ export default {
     },
     methods: {},
     mounted() {
-        document.querySelectorAll('.swiper-slide').forEach((ss) => {
-            ss.addEventListener('mouseover', (e) => {
-                console.log(e, 'over')
-            })
-        })
-
-        document.querySelectorAll('.swiper-slide').forEach((ss) => {
-            ss.addEventListener('mouseout', (e) => {
-                console.log(e, 'out')
-            })
-        })
     },
 }
 </script>
@@ -99,7 +81,7 @@ export default {
 .swiper {
     height: 100%;
     width: 100%;
-    padding: 100px;
+    // padding: 100px;
 
     .swiper-slide {
         display: flex;

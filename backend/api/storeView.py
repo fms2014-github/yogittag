@@ -49,7 +49,7 @@ def store_find_by_name(request, name=None):
                     math.sin(dLng / 2) * math.sin(dLng / 2)
                 c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
                 d = R * c
-                print(d*1000)
+                # print(d*1000)
                 if d * 1000 < int(distance):
                     filter_data1.append(data)
         result = filter_data1
@@ -81,10 +81,11 @@ def menu_find_by_store(request, id=None):
     return Response({"result": result.values()}, status.HTTP_200_OK)
 
 
-@api_view(['GET','POST'])
+@api_view(['GET', 'POST'])
 def review_find_by_store(request, id=None):
     if request.method == 'GET':
-        riviews = Review.objects.filter(store=id).select_related('user').order_by('-id')
+        riviews = Review.objects.filter(
+            store=id).select_related('user').order_by('-id')
         return Response({"result": riviews.values()}, status.HTTP_200_OK)
     elif request.method == 'POST':
         data = JSONParser().parse(request)

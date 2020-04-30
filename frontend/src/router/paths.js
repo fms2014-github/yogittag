@@ -11,7 +11,7 @@ export default [
     },
     {
         path: '/test',
-        view: 'UserSignNewForm',
+        view: 'test1',
         name: 'test',
     },
     {

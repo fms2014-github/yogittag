@@ -23,7 +23,9 @@
                 active-class="deep-purple--text text--accent-4"
                 v-show="useFilter"
             >
-                <v-chip color="white" v-for="tag in tags" :key="tag" @click="tagClick">{{ tag }}</v-chip>
+                <v-chip color="white" v-for="tag in tags" :key="tag" @click="tagClick">{{
+                    tag
+                }}</v-chip>
             </v-chip-group>
             <div
                 v-show="useFilter"
@@ -78,7 +80,7 @@ export default {
             result: [],
             tags: ['음식점', '카페', '술집', '500m', '1km', '2km'],
             selectedTags: [],
-            useFilter: false
+            useFilter: false,
         }
     },
     components: {
@@ -157,12 +159,12 @@ export default {
             this.$emit('mouseoverid', id)
         },
         mouseOut(id) {
-            this.$emit('mouseoverid', -1)
+            this.$emit('mouseoverid',-1)
         },
 
-        goToDetail(id){
-            this.$router.push('/store/'+ id);
-        }
+        goToDetail(id) {
+            this.$router.push('/store/' + id)
+        },
     },
 }
 </script>

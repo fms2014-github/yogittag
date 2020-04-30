@@ -19,22 +19,21 @@ export default {
     data() {
         return {
             isHidden: false,
-            test: false
+            test: false,
         }
     },
     methods: {
         toggle() {
             this.isHidden = !this.isHidden
         },
-        emittags(tags){
+        emittags(tags) {
             console.log('second emit')
             console.log(tags)
 
-            this.$emit("update:tags", tags)
-        }
+            this.$emit('update:tags', tags)
+        },
     },
 }
 </script>
 
-<style>
-</style>
+<style></style>

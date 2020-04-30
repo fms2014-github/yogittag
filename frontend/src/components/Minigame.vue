@@ -6,25 +6,19 @@
             </span>
             <span v-if="!isMinigmae">
                 미
-                <br />니
-                <br />게
-                <br />임
+                <br />니 <br />게 <br />임
                 <br />
             </span>
         </div>
         <div id="minigame">
             <h3 align="center">음식 카테고리 월드컵</h3>
             <h4 align="center">남은 시간 : {{ setTime >= 0 ? setTime.toFixed(1) : '' }}</h4>
-            <button
-                class="selected"
-                @click="selected(choiseA)"
-                v-show="ready && index <= 10"
-            >{{ choiseA }}</button>
-            <button
-                class="selected"
-                @click="selected(choiseB)"
-                v-show="ready && index <= 10"
-            >{{ choiseB }}</button>
+            <button class="selected" @click="selected(choiseA)" v-show="ready && index <= 10">
+                {{ choiseA }}
+            </button>
+            <button class="selected" @click="selected(choiseB)" v-show="ready && index <= 10">
+                {{ choiseB }}
+            </button>
             <div id="answer" v-if="index > 10">
                 <h4>
                     추천해주는
@@ -32,14 +26,15 @@
                 </h4>
                 <b>{{ answer }}</b> 입니다.
             </div>
-            <button v-show="!ready" id="ready" @click="start">{{ setTime == 60 ? '시작' : '다시 시작' }}</button>
+            <button v-show="!ready" id="ready" @click="start">
+                {{ setTime == 60 ? '시작' : '다시 시작' }}
+            </button>
         </div>
     </div>
 </template>
 
 <script>
 var timer
-var stoptimer
 var mql = window.matchMedia('screen and (max-width: 480px)')
 if (mql.matches) {
     window.onload = () => {

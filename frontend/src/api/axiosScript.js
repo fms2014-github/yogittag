@@ -376,6 +376,24 @@ const getAllReview = (data, success, error) => {
         })
 }
 
+// get /recomm/{id}
+const getRecommandationById = (data, success, error) => {
+    http.get('/api/recomm/' + data.id, {
+            params: {
+                latitude: data.latitude,
+                longitude: data.longitude,
+                users: data.users,
+                area: data.area
+            }
+        })
+        .then((res) => {
+            success(res)
+        })
+        .catch((err) => {
+            error(err)
+        })
+}
+
 const axiosFunction = {
     searchStore: (data, success, error) => searchStore(data, success, error),
     loginAxios: (data, success, error) => loginAxios(data, success, error),
@@ -415,6 +433,8 @@ const axiosFunction = {
         deleteFavoriteListStore(data, success, error),
     getAllFavoriteStore: (data, success, error) => getAllFavoriteStore(data, success, error),
     getAllReview: (data, success, error) => getAllReview(data, success, error),
+
+    getRecommandationById: (data, success, error) => getRecommandationById(data, success, error),
 }
 
 export default axiosFunction

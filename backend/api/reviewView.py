@@ -35,6 +35,18 @@ def review_list(request, score=None, id=None):
 def update_default_score_by_click(request, store_id, user_id):
     reviews = queryset.filter(user_id=user_id, store_id=store_id)
     if reviews:
+        prev_score = reviews[len(reviews) - 1].score
+        if prev_score == 5:
+            return Response(status=status.HTTP_202_ACCEPTED)
+        if prev_score <= 4.8:
+            serializer = ReviewSerializer(
+                data={"content": "auto-generated", "score": prev_score + 0.2})
+        elif prev_score < 5:
+            serializer = ReviewSerializer(
+                data={"content": "auto-generated", "score": 5})
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(store_id=store_id, user_id=user_id)
+            return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_202_ACCEPTED)
     else:
         serializer = ReviewSerializer(

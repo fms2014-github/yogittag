@@ -5,7 +5,7 @@
             <TodayWeather :weather.sync="weather" :isIcon="true" :isTemp="true" />˚C
         </div>
         <div id="banner_sentence">
-            <div id="banner_text">{{ this.banner_text }}</div>
+            <div id="banner_text">{{ banner_text }}</div>
             <word-spinner :banner_menu="banner_menu" />
         </div>
     </div>
@@ -30,6 +30,11 @@ export default {
             banner_image: '',
             banner_text: '',
             banner_menu: [],
+        }
+    },
+    methods: {
+        searchByCategoryStore() {
+            
         }
     },
     watch: {

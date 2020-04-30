@@ -177,14 +177,16 @@ const getStoreReview = (data, success, error) => {
 
 // get store/{name}
 const searchStore = async (data, success, error) => {
-    http.get('/api/store/' + data.keyword, {
-            params: {
-                latitude: data.latitude,
-                longitude: data.longitude,
-                category: data.category,
-                distance: data.distance,
-            },
-        })
+    http.get('/api/store', {
+        params: {
+            keyword: data.keyword,
+            latitude: data.latitude,
+            longitude: data.longitude,
+            category: data.category,
+            distance: data.distance,
+            area: data.area,
+        },
+    })
         .then((res) => {
             success(res)
         })
@@ -329,13 +331,13 @@ const updateFavoriteListStore = (data, success, error) => {
 // delete /users/{id}/favorite-list/{list_id}/favorite-store/{store}
 const deleteFavoriteListStore = (data, success, error) => {
     http.delete(
-            '/api/users/' +
+        '/api/users/' +
             data.id +
             '/favorite-list/' +
             data.list_id +
             '/favorite-store/' +
             data.store,
-        )
+    )
         .then((res) => {
             success(res)
         })
@@ -379,13 +381,13 @@ const createReview = (data, success, error) => {
 // get /recomm/{id}
 const getRecommandationById = (data, success, error) => {
     http.get('/api/recomm/' + data.id, {
-            params: {
-                latitude: data.latitude,
-                longitude: data.longitude,
-                users: data.users,
-                area: data.area,
-            },
-        })
+        params: {
+            latitude: data.latitude,
+            longitude: data.longitude,
+            users: data.users,
+            area: data.area,
+        },
+    })
         .then((res) => {
             success(res)
         })
@@ -396,26 +398,24 @@ const getRecommandationById = (data, success, error) => {
 
 const getRecommandationByFollowers = (data, success, error) => {
     http.get('/api/recomm/' + data + '/followers')
-        .then(res => {
+        .then((res) => {
             success(res)
         })
-        .catch(err => {
+        .catch((err) => {
             error(err)
         })
 }
 
-
-
 const imageUpload = async (data, success, error) => {
     return new Promise((resolve, reject) => {
         axios({
-                url: 'https://api.imgur.com/3/image',
-                method: 'post',
-                headers: {
-                    Authorization: 'Client-ID e4b1b507e84fdc3',
-                },
-                data: data,
-            })
+            url: 'https://api.imgur.com/3/image',
+            method: 'post',
+            headers: {
+                Authorization: 'Client-ID e4b1b507e84fdc3',
+            },
+            data: data,
+        })
             .then((res) => {
                 resolve(res.data.data.link)
             })
@@ -466,7 +466,8 @@ const axiosFunction = {
     getAllReview: (data, success, error) => getAllReview(data, success, error),
     getRecommandationById: (data, success, error) => getRecommandationById(data, success, error),
     createReview: (data, success, error) => createReview(data, success, error),
-    getRecommandationByFollowers: (data, success, error) => getRecommandationByFollowers(data, success, error),
+    getRecommandationByFollowers: (data, success, error) =>
+        getRecommandationByFollowers(data, success, error),
     imageUpload: (data, success, error) => imageUpload(data, success, error),
 }
 

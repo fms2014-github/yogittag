@@ -64,7 +64,10 @@
                         />
                         <div class="bucket">
                             <h3 class="bucket-title">폴이네 키친</h3>
-                            <p>친절하네요. 주말에 사람이 많았어요. 웨이팅하다가 들어갔는데 인기 비결은 맛이네요.</p>
+                            <p>
+                                친절하네요. 주말에 사람이 많았어요. 웨이팅하다가 들어갔는데 인기
+                                비결은 맛이네요.
+                            </p>
                         </div>
                         <!-- .bucket -->
                     </li>
@@ -153,6 +156,7 @@
                 <a href target="_blank" rel="nofollow">우리 팀명</a>.
             </aside>
         </footer>
+        <UpFocusButton />
     </div>
     <!-- .site -->
 </template>
@@ -268,7 +272,6 @@ export default {
             }
         },
         registerButtonUX(scrollPosition) {
-            
             var rb = document.getElementById('registerButtonImg')
             if (scrollPosition > 200 && !this.ux.rBtnFlag) {
                 var player = rb.animate(
@@ -279,7 +282,7 @@ export default {
                     rb.style.transform = 'translate(0,-50px)'
                 })
                 this.ux.rBtnFlag = true
-            } else if(scrollPosition <= 200 && this.ux.rBtnFlag) {
+            } else if (scrollPosition <= 200 && this.ux.rBtnFlag) {
                 var player = rb.animate(
                     [{ transform: 'translate(0,-50px)' }, { transform: 'translate(0)' }],
                     150,

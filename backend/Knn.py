@@ -4,18 +4,18 @@ import pandas as pd
 import shutil
 
 
-def sim_cosine(data, name1, name2):
-    sum_name1 = 0
-    sum_name2 = 0
-    sum_name1_name2 = 0
-    count = 0
-    for stores in data[name1]:
-        if stores in data[name2]:  # 같은 음식점을 갔다면
-            sum_name1 += pow(data[name1][stores], 2)
-            sum_name2 += pow(data[name2][stores], 2)
-            sum_name1_name2 += data[name1][stores]*data[name2][stores]
+# def sim_cosine(data, name1, name2):
+#     sum_name1 = 0
+#     sum_name2 = 0
+#     sum_name1_name2 = 0
+#     count = 0
+#     for stores in data[name1]:
+#         if stores in data[name2]:  # 같은 음식점을 갔다면
+#             sum_name1 += pow(data[name1][stores], 2)
+#             sum_name2 += pow(data[name2][stores], 2)
+#             sum_name1_name2 += data[name1][stores]*data[name2][stores]
 
-    return sum_name1_name2 / (math.sqrt(sum_name1)*math.sqrt(sum_name2))
+#     return sum_name1_name2 / (math.sqrt(sum_name1)*math.sqrt(sum_name2))
 
 
 def sim_pearson(data, name1, name2):
@@ -56,7 +56,7 @@ def top_match(data, name, index=3, sim_function=sim_pearson):
     return li[:index]
 
 
-def getRecommendation(data, person, k=3, sim_function=sim_pearson):
+def getRecommendation(data, person, k=3):
 
     result = top_match(data, person, k)
 
@@ -119,4 +119,4 @@ for userid in user_ids:
             ratings_expand[userid].update(
                 {int(user_review["store"]): int(user_review["score"])})
 
-getRecommendation(ratings_expand, 15192, k=3, sim_function=sim_cosine)
+getRecommendation(ratings_expand, 15192, k=3)

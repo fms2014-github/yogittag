@@ -12,7 +12,7 @@ class Store(models.Model):
     latitude = models.FloatField(max_length=10, null=True)
     longitude = models.FloatField(max_length=10, null=True)
     category = models.CharField(max_length=200, null=True)
-    pictures = models.TextField(null=True)
+    pictures = models.TextField(null=True,blank=True)
     group_seat = models.IntegerField(null=True)
     reservation = models.IntegerField(null=True)
     delivery = models.IntegerField(null=True)

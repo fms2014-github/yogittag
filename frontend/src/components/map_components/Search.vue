@@ -161,7 +161,7 @@ export default {
         },
 
         goToDetail(id){
-            this.$router.push('/store-detail-page/'+ id);
+            this.$router.push('/store/'+ id);
         }
     },
 }

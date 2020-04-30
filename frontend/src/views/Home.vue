@@ -61,13 +61,10 @@ export default {
                 data,
                 (res) => {
                     console.log(res.data)
-                    this.cardData = res.data
+                    this.cardData = res.data.result
                     this.cardData.forEach( card => {
-                        if (card.pictures != null) {
+                        if (card.pictures) {
                             card.pictures = card.pictures.split("|");
-                        }
-                        else {
-                            card.pictures = ""
                         }
                     })
                 },

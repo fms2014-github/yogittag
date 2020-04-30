@@ -46,7 +46,6 @@ export default {
         },
         title: {
             type: String,
-            default: 'Reivew Title',
         },
         reg_time: {
             type: String,
@@ -54,30 +53,17 @@ export default {
         },
         content: {
             type: String,
-            default:
-                'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
         },
         score: {
             type: Number,
-            default: 0,
         },
     },
     data() {
         return {
-            maxScore: 5,
-            remainScore: 0,
         }
     },
     filters: {
         dateFilter: dateFilter,
-    },
-    methods: {
-        calRemainScore(score) {
-            return this.maxScore - score
-        },
-    },
-    created() {
-        this.remainScore = this.calRemainScore(this.score)
     },
 }
 </script>

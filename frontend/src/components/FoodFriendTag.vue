@@ -42,7 +42,7 @@ export default {
     },
     mounted() {
         axiosApi.getAllFollowers(
-            950332,
+            68632,
             (res) => {
                 console.log(res)
 

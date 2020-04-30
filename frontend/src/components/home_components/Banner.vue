@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import WordSpinner from '../../components/WordSpinner'
-import TodayWeather from '../../components/TodayWeather'
-import TimeNow from '../../components/TimeNow'
+import WordSpinner from '../../components/WordSpinner.vue'
+import TodayWeather from '../../components/TodayWeather.vue'
+import TimeNow from '../../components/TimeNow.vue'
 export default {
     name: 'Banner',
     components: {

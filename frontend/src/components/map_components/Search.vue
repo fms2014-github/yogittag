@@ -62,9 +62,8 @@
 </template>
 
 <script>
-import filterList from '@/components/FilterList.vue'
 import axiosApi from '@/api/axiosScript.js'
-import { mapMutations, mapState, mapGetters } from 'vuex'
+import { mapMutations } from 'vuex'
 export default {
     props: {
         latitude: {
@@ -88,9 +87,6 @@ export default {
             selectedTags: [],
             useFilter: false,
         }
-    },
-    components: {
-        filterList,
     },
     computed: {
         //...mapGetters('app', ['useFilter']),

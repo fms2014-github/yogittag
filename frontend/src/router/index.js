@@ -8,6 +8,40 @@ import axios from '../api/axiosScript.js'
 import paths from './paths'
 
 function route(path, view, name) {
+    if ((path === '/naver-auth') || (path === '/google-auth')) {
+        return {
+            name: name || view,
+            path,
+            component: (resolve) => import(`@/views/${view}.vue`).then(resolve),
+            beforeEnter: async (to, from, next) => {
+                console.log(to)
+                console.log(from)
+                var fragmentString = location.search.substring(1)
+
+                // Parse query string to see if page request is coming from OAuth 2.0 server.
+                var params = {}
+                var regex = /([^&=]+)=([^&]*)/g,
+                    m
+                while ((m = regex.exec(fragmentString))) {
+                    params[decodeURIComponent(m[1])] = decodeURIComponent(m[2])
+                }
+                if (Object.keys(params).length > 0) {
+                    console.log('asdasd', params)
+                    let data
+                    if(path === '/naver-auth'){
+                        data = (await axios.naverOauthAxios({ oauthCode: params })).data.session
+                    }else if(path === '/google-auth'){
+                        data = (await axiosApi.googleOauthAxios({ oauthCode: params })).data.session
+                    }
+                    sessionStorage.setItem('session', JSON.stringify(data))
+                    if (data.isCompleted) {
+                        next('/')
+                    }
+                    next()
+                }
+            },
+        }
+    }
     if (path === '/profile') {
         return {
             name: name || view,

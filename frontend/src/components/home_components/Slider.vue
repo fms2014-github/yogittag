@@ -20,7 +20,7 @@
 
 <script>
 import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper'
-import sCard from '@/components/cards/SmallCard'
+import sCard from '@/components/cards/SmallCard.vue'
 import 'swiper/css/swiper.css'
 export default {
     props: {

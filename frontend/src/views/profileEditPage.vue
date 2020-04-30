@@ -65,6 +65,7 @@ export default {
                 bornYear: '',
                 profilePicture: '',
                 coverPicture: '',
+                isCompleted: 1,
             }
         }
     },
@@ -116,7 +117,7 @@ $border-color: rgb(133, 133, 133);
     align-items: center;
     width: 100vw;
     height: 100vh;
-    z-index: 20;
+    z-index: 9;
     position: fixed;
     top: 50%;
     transform: translateY(-50%);

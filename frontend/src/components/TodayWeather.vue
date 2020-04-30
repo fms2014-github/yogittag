@@ -66,14 +66,14 @@ export default {
         }
     },
     async mounted() {
-        function getGeolocationData(callback) {
+        function getGeolocationData() {
             return new Promise((resolve, reject) => {
                 navigator.geolocation.getCurrentPosition(
                     (pos) => {
                         resolve(pos)
                     },
                     (err) => {
-                        reject(ree)
+                        reject(err)
                     },
                     { enableHighAccuracy: true },
                 )

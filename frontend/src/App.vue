@@ -16,10 +16,10 @@
 </template>
 
 <script>
-import Drawer from './components/Drawer'
-import Toolbar from './components/Toolbar'
-import RouteView from './components/RouteView'
-import GoTop from './components/GoTop'
+import Drawer from './components/Drawer.vue'
+import Toolbar from './components/Toolbar.vue'
+import RouteView from './components/RouteView.vue'
+import GoTop from './components/GoTop.vue'
 
 import mainView from './components/View.vue'
 import menuButton from './components/sidebar_components/MenuButton'
@@ -28,7 +28,7 @@ import profileButton from './components/ProfileButton.vue'
 import FAQnQNAButton from './components/FAQnQNAButton.vue'
 import loadingSpinner from './components/LoadingSpinner.vue'
 import loginButton from './components/LoginButton.vue'
-import loginPage from './components/UserSignNewForm.vue'
+import loginPage from './components/UserSign.vue'
 import userProfile from './components/UserProfile.vue'
 import weather from './components/TodayWeather.vue'
 import minigame from './components/Minigame.vue'

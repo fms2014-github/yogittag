@@ -5,6 +5,7 @@
         <h1 class="my-4" style="text-align: center; font-family: h1c;">
             {{ title }}
         </h1>
+        <h5>{{subTitle}}</h5>
         <div class="row">
             <SmallCard
                 v-for="item in cardData"
@@ -59,6 +60,7 @@ export default {
             longitude: 0,
             distance: 1000,
             category: null,
+            area: null,
             resData: null,
         }
     },
@@ -92,19 +94,30 @@ export default {
                     latitude: this.latitude,
                     longitude: this.longitude,
                     distance: this.distance,
-                    category: this.category,
+                    category: this.category,    
+                    area: this.area,
+
                 },
                 (res) => {
                     console.log(`success`)
                     this.resData = res.data.result
                     for (let s of res.data.result) {
-                        this.cardData.push({
-                            routing: `/store/${s.id}`,
-                            img: s.pictures.split('|')[0] == '' ? null : s.pictures.split('|')[0],
-                            title: s.store_name,
-                            reg_time: s.area,
-                            content: s.address,
-                        })
+                        if(s.pictures == null || s.pictures == ''){
+                             this.cardData.push({
+                                routing: `/store/${s.id}`,
+                                title: s.store_name,
+                                reg_time: s.area,
+                                content: s.address,
+                            })
+                        }else{
+                            this.cardData.push({
+                                routing: `/store/${s.id}`,
+                                img: s.pictures.split('|')[0],
+                                title: s.store_name,
+                                reg_time: s.area,
+                                content: s.address,
+                            })
+                        }
                     }
                 },
                 (err) => {

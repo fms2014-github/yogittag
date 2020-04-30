@@ -6,16 +6,21 @@
                 <div class="col-lg-3">
                     <h1 class="my-4" style="font-family: h1c;">
                         {{ storeName
-                        }}
-                        <span
-                            v-if="!favorit"
-                            @click="favoritClick"
-                            class="favoritMark"
-                        >🤍</span>
-                        <span v-else @click="favoritClick" class="favoritMark">🧡</span>
+                        }}<span
+                            id="tooltip-target"
+                            v-if="!favorite"
+                            @click="favoriteClick"
+                            class="favoriteMark"
+                            >🤍</span
+                        ><span v-else @click="favoriteClick" class="favoriteMark">🧡</span>
                     </h1>
+                    <favoriteForm v-if="favorite" @cancle="favorite = false" />
+                    <b-tooltip target="tooltip-target" triggers="hover">
+                        You can save <b>favorite💛</b> store! <br>
+                        your custom favor list...🗂
+                    </b-tooltip>
                     <b-breadcrumb style="justify-content: center;">
-                        <b-badge variant="danger" v-show="storeEtcInfo.group_seat">단체석</b-badge>
+                        <b-badge variant="danger" v-show="storeEtcInfo.group_seat">단체</b-badge>
                         <b-badge variant="warning" v-show="storeEtcInfo.reservation">예약</b-badge>
                         <b-badge variant="info" v-show="storeEtcInfo.delivery">배달</b-badge>
                         <b-badge variant="light" v-show="storeEtcInfo.take_away">포장</b-badge>
@@ -25,7 +30,7 @@
                         <router-link
                             :to="{
                                 path: `/listPage/${item}`,
-                                query: { title: item, subTitle: '키워드 검색' },
+                                query: { title: item, subTitle: '카테고리 검색' },
                             }"
                             v-for="item in categorys"
                             :key="item.id"
@@ -119,6 +124,7 @@ import StoreInfoTable from '@/components/tables/StoreInfoTable'
 import dateFilter from '@/components/filters/dateFilter.js'
 import UpFocusButton from '@/components/buttons/UpFocusButton'
 import ReviewForm from '@/components/forms/ReviewForm.vue'
+import favoriteForm from '@/components/forms/FavoriteForm.vue'
 import axios from '../api/axiosScript.js'
 
 export default {
@@ -148,14 +154,14 @@ export default {
                 mint: 'info',
             },
             bhour: {
-                week_type:null,
-                mon:null,
-                tue:null,
-                wed:null,
-                thu:null,
-                fri:null,
-                sat:null,
-                sun:null,
+                week_type: null,
+                mon: null,
+                tue: null,
+                wed: null,
+                thu: null,
+                fri: null,
+                sat: null,
+                sun: null,
             },
             cardData: [],
             MenuKeyData: [
@@ -191,7 +197,7 @@ export default {
             ux: {
                 rBtnFlag: false,
             },
-            favorit: false,
+            favorite: false,
         }
     },
     components: {
@@ -201,6 +207,7 @@ export default {
         StoreInfoTable,
         UpFocusButton,
         ReviewForm,
+        favoriteForm,
     },
     mounted() {
         this.aixos(this.$route.params.id)
@@ -213,8 +220,8 @@ export default {
         window.removeEventListener('scroll', this.handleScroll)
     },
     methods: {
-        favoritClick() {
-            this.favorit = !this.favorit
+        favoriteClick() {
+            this.favorite = !this.favorite
         },
         registerReview() {
             let local = localStorage
@@ -356,13 +363,24 @@ export default {
                 // this.cardData = res.data.result
 
                 for (let r of res.data.result) {
-                    this.cardData.push({
-                        title: `익명 ${r.user_id}`,
-                        routing: `/profile/${r.user_id}/review`,
-                        score: r.score,
-                        content: r.content,
-                        reg_time: r.reg_time,
-                    })
+                    if (r.img == null) {
+                        this.cardData.push({
+                            title: `익명 ${r.user_id}`,
+                            routing: `/profile/${r.user_id}/review`,
+                            score: r.score,
+                            content: r.content,
+                            reg_time: r.reg_time,
+                        })
+                    } else {
+                        this.cardData.push({
+                            img: r.img,
+                            title: `익명 ${r.user_id}`,
+                            routing: `/profile/${r.user_id}/review`,
+                            score: r.score,
+                            content: r.content,
+                            reg_time: r.reg_time,
+                        })
+                    }
                 }
             })
             axios.getStoreMenu(store_id, (res) => {
@@ -434,7 +452,7 @@ export default {
     font-family: h1c;
     src: url('../assets/fonts/DXRMbxB-KSCpc-EUC-H.ttf');
 }
-.favoritMark {
+.favoriteMark {
     cursor: pointer;
 }
 </style>

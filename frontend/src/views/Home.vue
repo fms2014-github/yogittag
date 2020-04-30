@@ -9,10 +9,11 @@
                 large
                 style="font-family: 'Inconsolata';"
                 @click="getLocation"
+                v-if="userid!=0"
             >요기딱!</v-btn>
-            <food-friend :tags.sync="tags" />
-            <slider title="맞춤 추천 맛집" :cardData="cardData" />
-            <slider title="지인 추천 맛집" :cardData="cardData2" />
+            <food-friend v-if="userid!=0" :tags.sync="tags" />
+            <slider v-if="userid!=0" title="맞춤 추천 맛집" :cardData="cardData" />
+            <slider v-if="userid!=0" title="지인 추천 맛집" :cardData="cardData2" />
         </v-card-text>
     </v-container>
 </template>
@@ -36,27 +37,34 @@ export default {
             cardData2 :[],
             tags: [],
             //map: {},
-            position: {}
+            position: {},
+            userid: 0
         }
     },
     mounted() {
+
+        if(sessionStorage.getItem('session') != null){
+            this.userid = JSON.parse(sessionStorage.getItem('session')).userid
+        }
         
         // 지인 추천 로그인되어있는지 확인해야하눈뎅
-        axiosApi.getRecommandationByFollowers(
-            68632,
-            (res)=>{
-                console.log(res.data)
-                this.cardData2 = res.data
-                this.cardData2.forEach( card => {
-                    if (card.pictures) {
-                        card.pictures = card.pictures.split("|");
-                    }
-                })
-            },
-            (err)=>{
-                console.log(err)
-            }
-        )
+        if(this.userid != 0){
+            axiosApi.getRecommandationByFollowers(
+                this.userid,
+                (res)=>{
+                    console.log(res.data)
+                    this.cardData2 = res.data
+                    this.cardData2.forEach( card => {
+                        if (card.pictures) {
+                            card.pictures = card.pictures.split("|");
+                        }
+                    })
+                },
+                (err)=>{
+                    console.log(err)
+                }
+            )
+        }
 
 
 
@@ -72,7 +80,7 @@ export default {
             }
         
             let data = {
-                id : 68632,
+                id : this.userid,
                 latitude : this.position.latitude,
                 longitude : this.position.longitude,
                 area : this.position.area,

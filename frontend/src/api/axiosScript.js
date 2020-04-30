@@ -178,15 +178,15 @@ const getStoreReview = (data, success, error) => {
 // get store/{name}
 const searchStore = async (data, success, error) => {
     http.get('/api/store', {
-        params: {
-            keyword: data.keyword,
-            latitude: data.latitude,
-            longitude: data.longitude,
-            category: data.category,
-            distance: data.distance,
-            area: data.area,
-        },
-    })
+            params: {
+                keyword: data.keyword,
+                latitude: data.latitude,
+                longitude: data.longitude,
+                category: data.category,
+                distance: data.distance,
+                area: data.area
+            },
+        })
         .then((res) => {
             success(res)
         })
@@ -425,6 +425,17 @@ const imageUpload = async (data, success, error) => {
     })
 }
 
+const storeClickScore = (data, success, error) => {
+    http
+        .post('/api/review/' + data.store_id + '/click/' + data.user_id)
+        .then(res => {
+            success(res)
+        })
+        .catch(err => {
+            error(err)
+        })
+}
+
 const axiosFunction = {
     searchStore: (data, success, error) => searchStore(data, success, error),
     loginAxios: (data, success, error) => loginAxios(data, success, error),
@@ -469,6 +480,7 @@ const axiosFunction = {
     getRecommandationByFollowers: (data, success, error) =>
         getRecommandationByFollowers(data, success, error),
     imageUpload: (data, success, error) => imageUpload(data, success, error),
+    storeClickScore: (data, success, error) => storeClickScore(data, success, error)
 }
 
 export default axiosFunction

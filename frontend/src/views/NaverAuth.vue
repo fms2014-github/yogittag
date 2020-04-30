@@ -1,11 +1,17 @@
 <template>
-    <div></div>
+    <div id="profile-edit">
+        <profile-edit :isFullSize="true" />
+    </div>
 </template>
 
 <script>
 import axiosApi from '../api/axiosScript'
-import {  mapMutations } from 'vuex'
+import profileEdit from './profileEditPage.vue'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 export default {
+    components: {
+        profileEdit,
+    },
     async mounted() {
         var fragmentString = location.search.substring(1)
 
@@ -21,11 +27,23 @@ export default {
             let data = (await axiosApi.naverOauthAxios({ oauthCode: params })).data.session
             sessionStorage.setItem('session', JSON.stringify(data))
             this.sessionSave(data)
+            if (data.isCompleted) {
+                this.$router.push('/')
+            }
         }
-        this.$router.push('/')
     },
     methods: {
         ...mapMutations('session', ['sessionSave']),
     },
 }
 </script>
+
+<style lang="scss" scoped>
+#profile-edit {
+    position: absolute;
+    top: 0px;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(128, 128, 128);
+}
+</style>

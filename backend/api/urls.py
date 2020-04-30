@@ -35,5 +35,7 @@ urlpatterns = [
     path('store/<int:id>/review', storeView.review_find_by_store),
     path('auth/google', views.oauth_code_google),
     path('auth/naver', views.oauth_code_naver),
-    path('recomm/<int:id>', recommView.recommand_based_user)
+    path('recomm/<int:id>', recommView.recommand_based_user),
+    path('recomm/<int:id>/followers', recommView.recommand_by_followers)
+
 ]

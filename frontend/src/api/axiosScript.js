@@ -395,6 +395,16 @@ const getRecommandationById = (data, success, error) => {
         })
 }
 
+const getRecommandationByFollowers = (data, success, error) => {
+    http.get('/api/recomm/' + data + '/followers')
+        .then(res => {
+            success(res)
+        })
+        .catch(err => {
+            error(err)
+        })
+}
+
 const axiosFunction = {
     searchStore: (data, success, error) => searchStore(data, success, error),
     loginAxios: (data, success, error) => loginAxios(data, success, error),
@@ -437,6 +447,7 @@ const axiosFunction = {
 
     getRecommandationById: (data, success, error) => getRecommandationById(data, success, error),
     createReview: (data, success, error) => createReview(data, success, error),
+    getRecommandationByFollowers: (data, success, error) => getRecommandationByFollowers(data, success, error)
 }
 
 export default axiosFunction

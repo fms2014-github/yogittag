@@ -11,8 +11,8 @@
                 @click="getLocation"
             >요기딱!</v-btn>
             <food-friend :tags.sync="tags" />
-            <slider title="나의 단골 맛집" :cardData="cardData" />
-            <slider title="지인 추천 맛집" />
+            <slider title="맞춤 추천 맛집" :cardData="cardData" />
+            <slider title="지인 추천 맛집" :cardData="cardData2" />
         </v-card-text>
     </v-container>
 </template>
@@ -32,12 +32,33 @@ export default {
     data() {
         return {
             cardData: [],
+            cardData2 :[],
             tags: [],
             //map: {},
             position: {}
         }
     },
-    mount() {
+    mounted() {
+        
+        // 지인 추천 로그인되어있는지 확인해야하눈뎅
+        axiosApi.getRecommandationByFollowers(
+            68632,
+            (res)=>{
+                console.log(res.data)
+                this.cardData2 = res.data
+                this.cardData2.forEach( card => {
+                    if (card.pictures) {
+                        card.pictures = card.pictures.split("|");
+                    }
+                })
+            },
+            (err)=>{
+                console.log(err)
+            }
+        )
+
+
+
         // this.map = new kakao.maps.Map(container, options) //지도 생성 및 객체 리턴
     },
     methods: {

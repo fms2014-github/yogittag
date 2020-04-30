@@ -177,12 +177,14 @@ const getStoreReview = (data, success, error) => {
 
 // get store/{name}
 const searchStore = async (data, success, error) => {
-    http.get('/api/store/' + data.keyword, {
+    http.get('/api/store', {
             params: {
+                keyword: data.keyword,
                 latitude: data.latitude,
                 longitude: data.longitude,
                 category: data.category,
                 distance: data.distance,
+                area: data.area
             },
         })
         .then((res) => {

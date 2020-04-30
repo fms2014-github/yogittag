@@ -23,9 +23,11 @@
                 active-class="deep-purple--text text--accent-4"
                 v-show="useFilter"
             >
-                <v-chip color="white" v-for="tag in tags" :key="tag" @click="tagClick">{{
+                <v-chip color="white" v-for="tag in tags" :key="tag" @click="tagClick">
+                    {{
                     tag
-                }}</v-chip>
+                    }}
+                </v-chip>
             </v-chip-group>
             <div
                 v-show="useFilter"
@@ -73,6 +75,10 @@ export default {
             type: Number,
             require: true,
         },
+        area: {
+            type : String,
+            require : true
+        }
     },
     data() {
         return {
@@ -117,6 +123,7 @@ export default {
                 longitude: this.longitude,
                 category: category,
                 distance: distance,
+                area: this.area
             }
             console.log(data)
             this.initState()

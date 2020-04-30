@@ -43,20 +43,23 @@ export default {
         },
     },
     mounted() {
-        axiosApi.getAllFollowers(
-            68632,
-            (res) => {
-                console.log(res)
+        let userid = JSON.parse(sessionStorage.getItem('session')).userid
+        if(userid != null){
+            axiosApi.getAllFollowers(
+                userid,
+                (res) => {
+                    console.log(res)
 
-                this.autocompleteItems = []
-                res.data.followers.forEach((element) => {
-                    this.autocompleteItems.push({ text: element.nick_name, key: element.id })
-                })
-            },
-            (err) => {
-                console.log(err)
-            },
-        )
+                    this.autocompleteItems = []
+                    res.data.followers.forEach((element) => {
+                        this.autocompleteItems.push({ text: element.nick_name, key: element.id })
+                    })
+                },
+                (err) => {
+                    console.log(err)
+                },
+            )
+        }
     },
     methods: {
         emittags() {

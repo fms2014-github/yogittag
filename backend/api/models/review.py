@@ -5,13 +5,12 @@ from .user import User
 
 
 class Review(models.Model):
-    # id = models.IntegerField(primary_key=True)
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     score = models.FloatField(null=True)
     content = models.TextField(null=True)
     reg_time = models.DateTimeField(auto_now_add=True, null=True)
-    img = models.TextField(null=True,blank=True)
+    img = models.TextField(null=True, blank=True)
 
     class Meta:
         ordering = ['reg_time']

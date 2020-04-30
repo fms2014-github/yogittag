@@ -1,10 +1,18 @@
 <template>
     <div id="minigame-wrap" class="close-minigame">
         <div class="minigame-nav" @click="minigameButton">
-            <span class="material-icons" v-if="isMinigmae">double_arrow</span>
+            <img
+                v-if="isMinigmae"
+                class="material-icons"
+                src="../assets/img/double_arrow.png"
+                height="50px"
+                alt
+            />
             <span v-if="!isMinigmae">
                 미
-                <br />니 <br />게 <br />임
+                <br />니
+                <br />게
+                <br />임
                 <br />
             </span>
         </div>
@@ -27,10 +35,7 @@
                 :style="'background:' + dataList[index][1].color"
             >{{ dataList[index][1].text }}</button>
             <div id="answer" v-if="index > 4">
-                <h4>
-                    추천해주는
-                    <br />음식 카테고리는??
-                </h4>
+                <h4>추천음식은?</h4>
                 <b>{{ answer }}</b> 입니다.
             </div>
             <button v-show="!ready" id="ready" @click="start">{{ setTime == 30 ? '시작' : '다시 시작' }}</button>

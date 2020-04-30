@@ -31,7 +31,7 @@ function route(path, view, name) {
                     if(path === '/naver-auth'){
                         data = (await axios.naverOauthAxios({ oauthCode: params })).data.session
                     }else if(path === '/google-auth'){
-                        data = (await axiosApi.googleOauthAxios({ oauthCode: params })).data.session
+                        data = (await axios.googleOauthAxios({ oauthCode: params })).data.session
                     }
                     sessionStorage.setItem('session', JSON.stringify(data))
                     if (data.isCompleted) {

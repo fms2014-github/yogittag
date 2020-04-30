@@ -308,7 +308,7 @@ const createFavoriteList = (data, success, error) => {
 
 // get /users/{id}/favorite-list/{list_id}
 const getFavoriteList = (data, success, error) => {
-    http.get('/api/users/' + data.id + '/favorite-list/' + data.list_id)
+    http.get('/api/users/' + data.user + '/favorite-list/' + data.list_id)
         .then((res) => {
             success(res)
         })
@@ -319,7 +319,7 @@ const getFavoriteList = (data, success, error) => {
 
 // post /users/{id}/favorite-list/{list_id}
 const updateFavoriteListStore = (data, success, error) => {
-    http.post('/api/users/' + data.id + '/favorite-list/' + data.list_id, data)
+    http.post('/api/users/' + data.user + '/favorite-list/' + data.list_id, data)
         .then((res) => {
             success(res)
         })

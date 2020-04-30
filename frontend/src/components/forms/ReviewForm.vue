@@ -116,7 +116,7 @@ export default {
             axios.createReview(
                 {
                     store: this.$route.params.id,
-                    user: sessionStorage.getItem("session").userid,
+                    user: JSON.parse(sessionStorage.getItem("session")).userid,
                     score: this.rating,
                     content: this.content,
                     img: this.file == null ? null : this.imageLink,

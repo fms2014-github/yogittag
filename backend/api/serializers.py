@@ -92,7 +92,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
         # 직렬화 시킬 컬럼명, 다른 의미로 주고 받을 데이터 명시
         fields = '__all__'
-        # fields = ('id', 'score', 'content', 'store_id', 'user_id',)
 
 
 class StoreSerializer(serializers.ModelSerializer):

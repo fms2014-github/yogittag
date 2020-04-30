@@ -33,25 +33,25 @@ def review_list(request, score=None, id=None):
 
 @api_view(['POST'])
 def update_default_score_by_click(request, store_id, user_id):
-    reviews = queryset.filter(user_id=user_id, store_id=store_id)
+    reviews = queryset.filter(user=user_id, store=store_id)
     if reviews:
         prev_score = reviews[len(reviews) - 1].score
         if prev_score == 5:
             return Response(status=status.HTTP_202_ACCEPTED)
         if prev_score <= 4.8:
             serializer = ReviewSerializer(
-                data={"content": "auto-generated", "score": prev_score + 0.2})
+                data={"user": user_id, "store": store_id, "content": "auto-generated", "score": prev_score + 0.2})
         elif prev_score < 5:
             serializer = ReviewSerializer(
-                data={"content": "auto-generated", "score": 5})
+                data={"user": user_id, "store": store_id, "content": "auto-generated", "score": 5})
         if serializer.is_valid(raise_exception=True):
-            serializer.save(store_id=store_id, user_id=user_id)
+            serializer.save()
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_202_ACCEPTED)
     else:
         serializer = ReviewSerializer(
-            data={"content": "auto-generated", "score": 3})
+            data={"user": user_id, "store": store_id, "content": "auto-generated", "score": 3})
         if serializer.is_valid(raise_exception=True):
-            serializer.save(store_id=store_id, user_id=user_id)
+            serializer.save()
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)

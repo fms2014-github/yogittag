@@ -1,3 +1,8 @@
+from django.core.exceptions import ObjectDoesNotExist
+import json
+
+from datetime import datetime
+
 # HTTP 상태 코드 객체
 from rest_framework import status
 # REST Method 설정 데코레이션
@@ -298,34 +303,62 @@ def user_login(request):
 
 @api_view(['POST'])
 def session_refresh(request):
-    # JWT 토큰 획득
-    get_jwt = request.data.get("jwt").split('.')
-    print(get_jwt[0])
-    print(get_jwt[1])
-    # JWT 토큰 검증
-    if hashlib.sha256(get_jwt[0].encode() +
-                      get_jwt[1].encode() +
-                      SECRET_KEY.encode()).hexdigest() == base64.b64decode(get_jwt[2]).decode():
-        # 토큰이 정상이면 payload 해석
-        payload = json.loads(base64.b64decode(
-            get_jwt[1]).decode().replace("'", "\""))
-        print(payload['exp'], int(time.time().__int__()))
-        # 토큰 유효기간 검증
-        if int(payload['exp']) >= int(time.time().__int__()):
-            # 토큰 유효기간이 지나지 않았을 경우 유효기간 갱신
-            payload['iat'] = time.time().__int__()
-            payload['exp'] = time.time().__int__() + 50
-            get_jwt[1] = base64.b64encode(
-                repr(payload).encode()).decode("UTF-8")
-            get_jwt[2] = base64.b64encode(hashlib.sha256(
-                get_jwt[0].encode() + get_jwt[1].encode() + SECRET_KEY.encode()).hexdigest().encode()).decode("UTF-8")
+    get_jwt = request.data.get('jwt').split('.')
+    dt = datetime.now().microsecond
+    jwt_iss = json.loads(base64.b64decode(get_jwt[1] + ("=" * ((4 - len(get_jwt[1]) % 4) % 4))).decode("UTF-8").replace('\'','\"')).get('iss')
+    jwt_exp = json.loads(base64.b64decode(get_jwt[1] + ("=" * ((4 - len(get_jwt[1]) % 4) % 4))).decode("UTF-8").replace('\'','\"')).get('exp')
+    if jwt_iss == 'https://accounts.google.com':
+        if dt < jwt_exp:
+            email = request.data.get('email')
+            refresh_token = User.objects.get(email__exact=email).google_refresh_token
+            refresh_token_url = 'https://oauth2.googleapis.com/token'
+            data = {
+                'client_id': '25608544222-lfe7jdkikoef92jgt45mvhe83ts98n80.apps.googleusercontent.com',
+                'client_secret': 'MjwjwsVlExjXdivmhrIq-CiU',
+                'refresh_token': refresh_token,
+                'grant_type': 'refresh_token',
+            }
+            refresh_token = requests.post(refresh_token_url, data=data)
+            # 토큰 정보가 없거나 검증에 실패했을 경우 세션 삭제
+            return Response({'session':{"jwt": refresh_token.json()['id_token']}}, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    elif jwt_iss == 'https://nid.naver.com':
+        if dt < jwt_exp:
+            email = request.data.get('email')
+            refresh_token = User.objects.get(email__exact=email).naver_refresh_token
+            refresh_token_url = 'https://nid.naver.com/oauth2.0/token?grant_type=refresh_token&client_id=ISrEReGthtZMH67maTLZ&client_secret=kCOv4mVaGK&refresh_token=' + refresh_token
+            refresh_token = requests.get(refresh_token_url)
 
-            return Response({"jwt": '.'.join(get_jwt)}, status=status.HTTP_200_OK)
-        else:
-            # 유효기간이 지났을 경우 로그아웃
-            return Response({"error": "logout"}, status=status.HTTP_400_BAD_REQUEST)
-    # 토큰 정보가 없거나 검증에 실패했을 경우 세션 삭제
-    return Response({"jwt": ''}, status=status.HTTP_400_BAD_REQUEST)
+            headers = {'Authorization': refresh_token.json()['token_type'] + ' ' + refresh_token.json()['access_token']}
+            userInfoRequsetURL = 'https://openapi.naver.com/v1/nid/me'
+            userinfo = requests.get(userInfoRequsetURL, headers=headers)
+            jwt_sub = json.loads(
+                base64.b64decode(get_jwt[1] + ("=" * ((4 - len(get_jwt[1]) % 4) % 4))).decode("UTF-8").replace('\'','\"')).get('sub')
+            if jwt_sub != userinfo.json()['response']['id']:
+                print("???")
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            header = {"typ": "jwt", "alg": "HS256"}
+            payload = {"iss": 'https://nid.naver.com',
+                       "email": userinfo.json()['response']['email'],
+                       "sub": userinfo.json()['response']['id'],
+                       "profile_image": userinfo.json()['response']['profile_image'],
+                       "name": userinfo.json()['response']["name"],
+                       "iat": time.time().__int__(),
+                       "exp": (time.time().__int__() + 3600)}
+            signature = hashlib.sha256(base64.b64encode(repr(header).encode()) +
+                                       base64.b64encode(repr(payload).encode()) +
+                                       SECRET_KEY.encode())
+
+            # jwt 토큰 생성
+            jwt = base64.b64encode(repr(header).encode()).decode("UTF-8") + '.' + \
+                  base64.b64encode(repr(payload).encode()).decode("UTF-8") + '.' + \
+                  base64.b64encode(signature.hexdigest().encode()).decode()
+
+            return Response({'session': {
+                'email': userinfo.json()['response']['email'],
+                'jwt': jwt,
+            }}, status=status.HTTP_200_OK)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['DELETE'])
@@ -352,13 +385,14 @@ def user_delete(request):
             # 유효기간이 지났을 경우 로그아웃
             return Response({"success": "delete user"}, status=status.HTTP_400_BAD_REQUEST)
     # 토큰 정보가 없거나 검증에 실패했을 경우 세션 삭제
-    return Response({"jwt": ''}, status=status.HTTP_400_BAD_REQUEST)
+    return Response({"jwt": ''},status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
 def oauth_code_google(request):
     oauthResult = request.data.get("oauthCode")
     tokenRequestURL = 'https://oauth2.googleapis.com/token'
+    print(oauthResult["code"])
     data = {
         'code': oauthResult["code"],
         'client_id': '25608544222-lfe7jdkikoef92jgt45mvhe83ts98n80.apps.googleusercontent.com',
@@ -366,27 +400,25 @@ def oauth_code_google(request):
         'redirect_uri': 'http://localhost:8080/google-auth',
         'grant_type': 'authorization_code',
     }
-    res = requests.post(tokenRequestURL, data=data)
-    print(res.json())
-    print(res.json()['access_token'])
-    access_token = res.json()['access_token']
-    print(res.json()['token_type'])
-    Authorization = res.json()['token_type']
-    headers = {'Authorization': Authorization + ' ' + access_token}
-    userInfoRequsetURL = 'https://people.googleapis.com/v1/people/me?personFields=birthdays&personFields=names&personFields=nicknames&personFields=genders'
-
-    res = requests.get(userInfoRequsetURL, headers=headers)
-    print(res.json())
-    refresh_token_URL = 'https://oauth2.googleapis.com/token'
-    data = {
-        'client_id': '25608544222-lfe7jdkikoef92jgt45mvhe83ts98n80.apps.googleusercontent.com',
-        'client_secret': 'MjwjwsVlExjXdivmhrIq-CiU',
-        'refresh_token': access_token,
-        'grant_type': 'refresh_token',
-    }
-    res = requests.post(refresh_token_URL, data=data)
-    print(res.json())
-    return Response('', status=status.HTTP_200_OK)
+    auth_data = requests.post(tokenRequestURL, data=data)
+    headers = {'Authorization': auth_data.json()['token_type'] + ' ' + auth_data.json()['access_token']}
+    userInfoRequsetURL = 'https://www.googleapis.com/oauth2/v2/userinfo'
+    userinfo = requests.get(userInfoRequsetURL, headers=headers)
+    try:
+        find_user = User.objects.get(email__exact=userinfo.json()['email'])
+        serializer = UserSerializer(find_user, data={'google_refresh_token': auth_data.json()['refresh_token']}, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+    except ObjectDoesNotExist:
+        serializer = UserSerializer(data={
+            'email': userinfo.json()['email'],
+            'google_refresh_token': auth_data.json()['refresh_token'],
+            'profile_picture': userinfo.json()['picture']
+        })
+        if serializer.is_valid():
+            serializer.save()
+    return Response({'session': {'email': userinfo.json()['email'],
+                                 'jwt': auth_data.json()['id_token']}}, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -400,16 +432,46 @@ def oauth_code_naver(request):
         'redirect_uri': 'http://localhost:8080/naver-auth',
         'grant_type': 'authorization_code',
     }
-    res = requests.post(tokenRequestURL, data=data)
-    print(res.json()['access_token'])
-    access_token = res.json()['access_token']
-    print(res.json()['token_type'])
-    Authorization = res.json()['token_type']
-    headers = {'Authorization': Authorization + ' ' + access_token}
+    auth_data = requests.post(tokenRequestURL, data=data)
+    print(auth_data.json())
+    print(auth_data.json()['access_token'])
+    print(auth_data.json()['refresh_token'])
+    headers = {'Authorization': auth_data.json()['token_type'] + ' ' + auth_data.json()['access_token']}
     userInfoRequsetURL = 'https://openapi.naver.com/v1/nid/me'
-    res = requests.get(userInfoRequsetURL, headers=headers)
-    print(res.json())
-    return Response('', status=status.HTTP_200_OK)
+    userinfo = requests.get(userInfoRequsetURL, headers=headers)
+    print(userinfo.json()['response'])
+    try:
+        find_user = User.objects.get(email__exact=userinfo.json()['response']['email'])
+        serializer = UserSerializer(find_user, data={'naver_refresh_token': auth_data.json()['refresh_token']}, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+    except ObjectDoesNotExist:
+        serializer = UserSerializer(data={
+            'email': userinfo.json()['response']['email'],
+            'naver_refresh_token': auth_data.json()['refresh_token'],
+            'profile_picture': userinfo.json()['response']['profile_image']
+        })
+        if serializer.is_valid():
+            serializer.save()
+    # JWT 객체
+    header = {"typ": "jwt", "alg": "HS256"}
+    payload = {"iss": 'https://nid.naver.com',
+               "email": userinfo.json()['response']['email'],
+               "sub": userinfo.json()['response']['id'],
+               "profile_image": userinfo.json()['response']['profile_image'],
+               "name": userinfo.json()['response']["name"],
+               "iat": time.time().__int__(),
+               "exp": (time.time().__int__() + 3600)}
+    signature = hashlib.sha256(base64.b64encode(repr(header).encode()) +
+                               base64.b64encode(repr(payload).encode()) +
+                               SECRET_KEY.encode())
+
+    # jwt 토큰 생성
+    jwt = base64.b64encode(repr(header).encode()).decode("UTF-8") + '.' + \
+          base64.b64encode(repr(payload).encode()).decode("UTF-8") + '.' + \
+          base64.b64encode(signature.hexdigest().encode()).decode()
+
+    return Response({'session': {'email': userinfo.json()['response']['email'],'jwt': jwt.replace('=', '')}}, status=status.HTTP_200_OK)
 
 
 # user end

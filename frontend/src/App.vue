@@ -3,7 +3,7 @@
         <loading-spinner v-if="this.isLoading" />
         <menu-button />
         <menu-list @closeCheckChange="menuOpenClose" />
-        <login-button />
+        <login-button :loginState="!login" />
         <login-page v-if="this.isLogin" />
         <user-registrate v-if="isRegistrate" />
         <profile-button />
@@ -56,10 +56,19 @@ export default {
     },
     computed: {
         ...mapState('app', ['menuOpenCheck', 'isLoading', 'isLogin', 'isProfile', 'isRegistrate']),
+        ...mapState('session', ['login']),
         ...mapGetters('app', ['menuOpenState']),
     },
     methods: {
         ...mapMutations('app', ['menuOpenClose']),
+        ...mapMutations('session', ['sessionSave']),
+    },
+    mounted() {
+        let session = JSON.parse(sessionStorage.getItem('session'))
+        console.log('app.vue', session)
+        if (session != undefined) {
+            this.sessionSave(session)
+        }
     },
 }
 </script>

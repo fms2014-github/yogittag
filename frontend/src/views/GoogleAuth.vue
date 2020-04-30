@@ -4,8 +4,9 @@
 
 <script>
 import axiosApi from '../api/axiosScript'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 export default {
-    beforeMount() {
+    async mounted() {
         var fragmentString = location.search.substring(1)
 
         // Parse query string to see if page request is coming from OAuth 2.0 server.
@@ -17,16 +18,14 @@ export default {
         }
         if (Object.keys(params).length > 0) {
             console.log('asdasd', params)
-            axiosApi.googleOauthAxios(
-                { oauthCode: params },
-                (res) => {
-                    console.log(res)
-                },
-                (err) => {
-                    console.log(err)
-                },
-            )
+            let data = (await axiosApi.googleOauthAxios({ oauthCode: params })).data.session
+            sessionStorage.setItem('session', JSON.stringify(data))
+            this.sessionSave(data)
         }
+        this.$router.push('/')
+    },
+    methods: {
+        ...mapMutations('session', ['sessionSave']),
     },
 }
 </script>

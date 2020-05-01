@@ -33,6 +33,7 @@ export default {
             tag: '',
             tags: [],
             autocompleteItems: [],
+            userid : 0
         }
     },
     computed: {
@@ -43,20 +44,28 @@ export default {
         },
     },
     mounted() {
-        axiosApi.getAllFollowers(
-            68632,
-            (res) => {
-                console.log(res)
+        //let userid = JSON.parse(sessionStorage.getItem('session')).userid
+        
+        if(sessionStorage.getItem('session') != null){
+            this.userid = JSON.parse(sessionStorage.getItem('session')).userid
+        }
 
-                this.autocompleteItems = []
-                res.data.followers.forEach((element) => {
-                    this.autocompleteItems.push({ text: element.nick_name, key: element.id })
-                })
-            },
-            (err) => {
-                console.log(err)
-            },
-        )
+        if(this.userid != 0){
+            axiosApi.getAllFollowers(
+                this.userid,
+                (res) => {
+                    console.log(res)
+
+                    this.autocompleteItems = []
+                    res.data.followers.forEach((element) => {
+                        this.autocompleteItems.push({ text: element.nick_name, key: element.id })
+                    })
+                },
+                (err) => {
+                    console.log(err)
+                },
+            )
+        }
     },
     methods: {
         emittags() {

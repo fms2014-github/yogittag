@@ -1,6 +1,6 @@
 <template>
     <div class="spinner-sentence">
-        <div class="spinner" id="wordSpinner">
+        <div class="spinner" id="wordSpinner" @click="bannerMenuClickEvent">
             <li class="active">{{ banner_menu[0] }}</li>
             <li class="next">{{ banner_menu[1] }}</li>
             <li>{{ banner_menu[2] }}</li>
@@ -12,14 +12,26 @@
 </template>
 
 <script>
+import axios from '@/api/axiosScript.js'
 export default {
+    
     name: 'WordSpinner',
     props: {
         banner_menu: {
             type: Array,
         },
     },
+    data() {
+        return {
+            event: null
+        }
+    },
     methods: {
+        bannerMenuClickEvent(e){
+            let menuName = e.target.innerText
+            console.log(menuName);
+            this.$router.push({path:`/listPage/${menuName}` , query: {title : menuName, subTitle : '메뉴 검색'}})
+        },
         WordSpinner(el, frequency) {
             var spinner = document.getElementById('wordSpinner')
             var words = Array.from(document.getElementById('wordSpinner').children)
@@ -50,6 +62,10 @@ export default {
 $width: 200px;
 $height: 45px;
 $font-size: 1em;
+
+#wordSpinner{
+    cursor: pointer;
+}
 
 .spinner-sentence {
     // display: flex;

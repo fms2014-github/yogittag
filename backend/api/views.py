@@ -327,7 +327,8 @@ def session_refresh(request):
             }
             refresh_token = requests.post(refresh_token_url, data=data)
             # 토큰 정보가 없거나 검증에 실패했을 경우 세션 삭제
-            return Response({'session': {"email": email, "jwt": refresh_token.json()['id_token']}}, status=status.HTTP_200_OK)
+            user = User.objects.get(email__exact=email)
+            return Response({'session': {"userid": user.id, "email": email, "jwt": refresh_token.json()['id_token']}}, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
     elif jwt_iss == 'https://nid.naver.com':
         if dt < jwt_exp:
@@ -362,8 +363,9 @@ def session_refresh(request):
             jwt = base64.b64encode(repr(header).encode()).decode("UTF-8") + '.' + \
                 base64.b64encode(repr(payload).encode()).decode("UTF-8") + '.' + \
                 base64.b64encode(signature.hexdigest().encode()).decode()
-
+            user = User.objects.get(email__exact=email)
             return Response({'session': {
+                'userid': user.id,
                 'email': userinfo.json()['response']['email'],
                 'jwt': jwt,
             }}, status=status.HTTP_200_OK)
@@ -440,12 +442,12 @@ def oauth_code_google(request):
         if serializer.is_valid():
             serializer.save()
 
-    user_id = User.objects.get(email__exact=userinfo.json()[
-                               'email']).id
-    print(user_id)
+    user = User.objects.get(email__exact=userinfo.json()[
+                               'email'])
     return Response({'session': {'email': userinfo.json()['email'],
                                  'jwt': auth_data.json()['id_token'],
-                                 'userid': user_id}}, status=status.HTTP_200_OK)
+                                 'userid': user.id,
+                                 'isCompleted': user.isCompleted}}, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -500,8 +502,11 @@ def oauth_code_naver(request):
     jwt = base64.b64encode(repr(header).encode()).decode("UTF-8") + '.' + \
         base64.b64encode(repr(payload).encode()).decode("UTF-8") + '.' + \
         base64.b64encode(signature.hexdigest().encode()).decode()
-
-    return Response({'session': {'email': userinfo.json()['response']['email'], 'jwt': jwt.replace('=', '')}}, status=status.HTTP_200_OK)
+    user = User.objects.get(email__exact=userinfo.json()['response']['email'])
+    return Response({'session': {'userid': user.id,
+                                 'email': userinfo.json()['response']['email'],
+                                 'jwt': jwt.replace('=', ''),
+                                 'isCompleted': user.isCompleted}}, status=status.HTTP_200_OK)
 
 
 # user end

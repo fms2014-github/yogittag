@@ -19,6 +19,7 @@ export default {
             if (this.loginState) {
                 this.openLoginPage()
             } else {
+                alert('로그아웃 되었습니다.')
                 this.sessionDelte()
                 if (this.$route.path === '/profile') {
                     this.$router.push('/')

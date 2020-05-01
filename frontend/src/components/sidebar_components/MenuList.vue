@@ -9,7 +9,7 @@
                     <router-link class="list-button" :to="{ name: 'Map' }">Map</router-link>
                 </div>
                 <div>
-                    <router-link class="list-button" to="/store/145030">StoreDetail</router-link>
+                    <router-link class="list-button" to="/store/460001">StoreDetail</router-link>
                 </div>
                 <div>
                     <router-link class="list-button" :to="{ name: 'Profile' }">Profile</router-link>

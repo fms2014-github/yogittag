@@ -312,7 +312,7 @@ const createFavoriteList = (data, success, error) => {
 
 // get /users/{id}/favorite-list/{list_id}
 const getFavoriteList = (data, success, error) => {
-    http.get('/api/users/' + data.id + '/favorite-list/' + data.list_id)
+    http.get('/api/users/' + data.user + '/favorite-list/' + data.list_id)
         .then((res) => {
             success(res)
         })
@@ -323,7 +323,7 @@ const getFavoriteList = (data, success, error) => {
 
 // post /users/{id}/favorite-list/{list_id}
 const updateFavoriteListStore = (data, success, error) => {
-    http.post('/api/users/' + data.id + '/favorite-list/' + data.list_id, data)
+    http.post('/api/users/' + data.user + '/favorite-list/' + data.list_id, data)
         .then((res) => {
             success(res)
         })
@@ -335,13 +335,13 @@ const updateFavoriteListStore = (data, success, error) => {
 // delete /users/{id}/favorite-list/{list_id}/favorite-store/{store}
 const deleteFavoriteListStore = (data, success, error) => {
     http.delete(
-            '/api/users/' +
+        '/api/users/' +
             data.id +
             '/favorite-list/' +
             data.list_id +
             '/favorite-store/' +
             data.store,
-        )
+    )
         .then((res) => {
             success(res)
         })
@@ -387,13 +387,13 @@ const createReview = (data, success, error) => {
 // get /recomm/{id}
 const getRecommandationById = (data, success, error) => {
     http.get('/api/recomm/' + data.id, {
-            params: {
-                latitude: data.latitude,
-                longitude: data.longitude,
-                users: data.users,
-                area: data.area,
-            },
-        })
+        params: {
+            latitude: data.latitude,
+            longitude: data.longitude,
+            users: data.users,
+            area: data.area,
+        },
+    })
         .then((res) => {
             success(res)
         })
@@ -404,10 +404,10 @@ const getRecommandationById = (data, success, error) => {
 
 const getRecommandationByFollowers = (data, success, error) => {
     http.get('/api/recomm/' + data + '/followers')
-        .then(res => {
+        .then((res) => {
             success(res)
         })
-        .catch(err => {
+        .catch((err) => {
             error(err)
         })
 }
@@ -417,13 +417,13 @@ const getRecommandationByFollowers = (data, success, error) => {
 const imageUpload = async (data) => {
     return new Promise((resolve, reject) => {
         axios({
-                url: 'https://api.imgur.com/3/image',
-                method: 'post',
-                headers: {
-                    Authorization: 'Client-ID e4b1b507e84fdc3',
-                },
-                data: data,
-            })
+            url: 'https://api.imgur.com/3/image',
+            method: 'post',
+            headers: {
+                Authorization: 'Client-ID e4b1b507e84fdc3',
+            },
+            data: data,
+        })
             .then((res) => {
                 resolve(res.data.data.link)
             })

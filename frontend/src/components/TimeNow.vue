@@ -36,7 +36,6 @@ export default {
             }
 
             let daynum = date.getDay()
-            let dayText = daynum
             if (daynum == 0) {
                 day.textContent = '일요일'
             } else if (daynum == 1) {

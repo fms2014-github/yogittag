@@ -40,4 +40,10 @@ export default [
         view: 'Profile',
         name: 'Profile',
     },
+    {
+        path: '/profile/:id',
+        view: 'Profile',
+        name: 'ProfileById',
+        props: true,
+    },
 ]

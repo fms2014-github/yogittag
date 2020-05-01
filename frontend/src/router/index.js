@@ -34,6 +34,7 @@ function route(path, view, name) {
                         data = (await axios.googleOauthAxios({ oauthCode: params })).data.session
                     }
                     sessionStorage.setItem('session', JSON.stringify(data))
+                    sessionx.mutations.sessionSave(sessionx.state, data)
                     if (data.isCompleted) {
                         next('/')
                     }

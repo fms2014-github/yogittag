@@ -12,17 +12,17 @@
                             <div class="img-user-profile">
                                 <img
                                     class="profile-bgHome"
-                                    src="https://blog.hmgjournal.com/images_n/contents/180404_food01.jpg"
+                                    :src="coverImage"
                                 />
                                 <img
                                     class="avatar"
-                                    src="https://user-images.githubusercontent.com/22102664/79730972-97fd9700-832c-11ea-886f-225cf0c89832.PNG"
+                                    :src="profileImage"
                                     alt="allan"
                                 />
                             </div>
-                            <button>Follow</button>
+                            <button @click="followButton">Follow</button>
                             <div class="user-profile-data">
-                                <h1>Seohyun</h1>
+                                <h1>{{nickName}}</h1>
                                 <button id="profile-edit-button" @click="profileEdit">
                                     <span class="material-icons">
                                         settings
@@ -33,19 +33,13 @@
                             <ul class="data-user">
                                 <li>
                                     <a>
-                                        <strong>61.780</strong>
+                                        <strong>{{testCardDate.length}}</strong>
                                         <span>Posts</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a>
-                                        <strong>33.480</strong>
-                                        <span>Followers</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a>
-                                        <strong>3.546</strong>
+                                        <strong>{{following.length}}</strong>
                                         <span>Following</span>
                                     </a>
                                 </li>
@@ -109,87 +103,19 @@ import UpFocusButton from '@/components/buttons/UpFocusButton'
 import infiniteScroll from 'vue-infinite-scroll'
 import ReviewForm from '@/components/forms/ReviewForm.vue'
 import profileEditPage from './profileEditPage.vue'
+import axiosApi from '../api/axiosScript.js'
 
 import { mapState, mapMutations } from 'vuex'
 export default {
     data() {
         return {
-            email: '',
-            testCardDate: [
-                {
-                    img: 'https://loremflickr.com/700/400',
-                    gender: '남',
-                    title: 'Reivew Title',
-                    reg_time: '2020-04-09 03:48:40.799058',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                    score: 4,
-                },
-                {
-                    img: 'https://picsum.photos/700/400',
-                    gender: '여',
-                    title: 'Reivew Title2',
-                    reg_time: '2020-04-09 03:48',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                    score: 1,
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-                {
-                    title: 'Reivew Title3',
-                    content:
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!',
-                },
-            ],
+            isFollower: false,
+            nickName: '',
+            testCardDate: [],
+            profileImage:'',
+            coverImage: '',
+            following: 0,
+            userid: -1,
         }
     },
     components: {
@@ -208,7 +134,50 @@ export default {
     computed: {
         ...mapState('app', ['isEdit']),
     },
+    async mounted() {
+        let userid
+        if(Object.keys(this.$route.params).length === 0){
+            this.userid = JSON.parse(sessionStorage.getItem('session')).userid
+        }else{
+            this.userid = this.$route.params.id
+        }
+        let userData = (await axiosApi.getUser(this.userid)).data
+        console.log(userData)
+        this.nickName = '익명' + String(this.userid)
+        this.profileImage = userData.profile_picture === null ? 'https://via.placeholder.com/64' : userData.profile_picture
+        this.coverImage = userData.cover_picture === null ? 'https://via.placeholder.com/300' : userData.cover_picture
+        let reviewData = (await axiosApi.getAllReview(this.userid)).data
+        console.log(reviewData)
+        this.testCardDate = reviewData.result
+        this.following = (await axiosApi.getAllFollowers(this.userid)).data.followers
+    },
     methods: {
+        async followButton(){
+            let session = JSON.parse(sessionStorage.getItem('session'))
+            if(session != null && Object.keys(this.$route.params).length !== 0){
+                let followDataObj = (await axiosApi.getAllFollowers(session.userid)).data.followers
+                let followData = followDataObj.map((cValue, idx, arr) => {
+                    console.log(cValue)
+                    console.log(idx)
+                    console.log(arr)
+                    return cValue.id
+                })
+                let check = false
+                for (let i in followData){
+                    console.log(typeof this.userid)
+                    if(followData[i] === Number(this.userid)){
+                        axiosApi.deleteFollow({'fId': session.userid, 'tId': this.$route.params.id})
+                        alert('팔로우 해제 하셨습니다.')
+                        check = true
+                    }
+                }
+                
+                if(!check){
+                    axiosApi.updateFollow({'fId': session.userid, 'tId': this.$route.params.id})
+                    alert('팔로우 하셨습니다.')
+                }
+            }
+        },
         ...mapMutations('app', ['switchIsEdit']),
         profileEdit() {
             this.switchIsEdit()
@@ -247,9 +216,6 @@ export default {
                 })
                 this.ux.rBtnFlag = false
             }
-        },
-        modalCilck(bvModalEvt) {
-            console.log('modal ok click')
         },
     },
 }

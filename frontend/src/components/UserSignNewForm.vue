@@ -7,7 +7,7 @@
                     <div class="social-container">
                         <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
                         <a
-                            href="https://accounts.google.com/o/oauth2/v2/auth?client_id=25608544222-lfe7jdkikoef92jgt45mvhe83ts98n80.apps.googleusercontent.com&redirect_uri=http://localhost:8080/google-auth&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile+openid&access_type=offline&prompt=consent"
+                            href="https://accounts.google.com/o/oauth2/v2/auth?client_id=25608544222-lfe7jdkikoef92jgt45mvhe83ts98n80.apps.googleusercontent.com&redirect_uri=http://i02d105.p.ssafy.io/google-auth&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile+openid&access_type=offline&prompt=consent"
                             class="social"
                             ><i class="fab fa-google-plus-g"></i
                         ></a>
@@ -25,12 +25,12 @@
                     <h1>Sign in</h1>
                     <div class="social-container">
                         <a
-                            href="https://nid.naver.com/oauth2.0/authorize?client_id=ISrEReGthtZMH67maTLZ&response_type=code&redirect_uri=http://localhost:8080/naver-auth"
+                            href="https://nid.naver.com/oauth2.0/authorize?client_id=ISrEReGthtZMH67maTLZ&response_type=code&redirect_uri=http://i02d105.p.ssafy.io/naver-auth"
                             class="social"
                             ><i class="fab fa-facebook-f"></i
                         ></a>
                         <a
-                            href="https://accounts.google.com/o/oauth2/v2/auth?client_id=25608544222-lfe7jdkikoef92jgt45mvhe83ts98n80.apps.googleusercontent.com&redirect_uri=http://localhost:8080/google-auth&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile+openid&access_type=offline&prompt=consent"
+                            href="https://accounts.google.com/o/oauth2/v2/auth?client_id=25608544222-lfe7jdkikoef92jgt45mvhe83ts98n80.apps.googleusercontent.com&redirect_uri=http://i02d105.p.ssafy.io/google-auth&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile+openid&access_type=offline&prompt=consent"
                             class="social"
                             ><i class="fab fa-google-plus-g"></i
                         ></a>

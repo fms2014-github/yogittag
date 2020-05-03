@@ -5,7 +5,7 @@ module.exports = {
     devServer: {
         proxy: {
             '/api': {
-                target: 'http://localhost:8000/',
+                target: 'http://i02d105.p.ssafy.io/',
             },
         },
     },

@@ -94,7 +94,7 @@ def recommand_based_user(request, id=None):
     lat = float(params.get('latitude'))
     lng = float(params.get('longitude'))
     area = params.get('area')
-    users = params.getlist('users')
+    users = params.getlist('users[]')
     # users = params.getlist('users[]')
     users.append(id)
 
@@ -140,14 +140,14 @@ def recommand_based_user(request, id=None):
         other_user = []
         for item in list(user_review):  # 현재 유저가 리뷰한 것들
             # print(item)
-            item_review = queryset.filter(store_id=item.store)
+            item_review = queryset.filter(store_id=item['store_id'])
             for user in list(item_review):
-                other_user.append(user.user_id)  # 같은 음식점을 리뷰한 유저들
+                other_user.append(user['user_id'])  # 같은 음식점을 리뷰한 유저들
 
-        other_user = list(set(other_user))  # 중복제거
+        other_user = list(set(other_user))
         # print(other_user)
 
-        semires = queryset.filter(user_id__in=other_user, score_gte=3).values(
+        semires = queryset.filter(user_id__in=other_user, score__gte=3).values(
             'store_id').annotate(count=Count('store_id')).order_by('-count').values('store_id', 'count')[:20]  # 중복, 상위 20개
 
         result = stores.filter(id__in=[item.get('store_id')
@@ -182,7 +182,7 @@ def recommand_based_user(request, id=None):
         # SVD
         # R = (Nxk)(kxM) MF R.shape-1  SVD = U(sigma)Vt
         k = int(min(R.shape) / 25)
-        U, sigma, Vt = svds(R, k=k)
+        U, sigma, Vt = svds(R, k=10)
         sigma = np.diag(sigma)  # 대각행렬로 바꿈
 
         # 다시 matrix 만들기

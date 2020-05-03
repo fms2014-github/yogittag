@@ -65,7 +65,6 @@ export default {
     },
     mounted() {
         let session = JSON.parse(sessionStorage.getItem('session'))
-        console.log('app.vue', session)
         if (session != undefined) {
             this.sessionSave(session)
         }

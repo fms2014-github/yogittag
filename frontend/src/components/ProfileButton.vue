@@ -1,8 +1,8 @@
 <template>
     <div id="profile-button" class="radius-button">
-        <button title="Profile" @click="openUserProfilePage">
+        <router-link to="/profile" title="Profile">
             <img src="../assets/icons/person-black-24dp.svg" />
-        </button>
+        </router-link>
     </div>
 </template>
 
@@ -11,9 +11,6 @@ import { mapMutations } from 'vuex'
 import '../assets/css/button.scss'
 export default {
     methods: {
-        openUserProfilePage() {
-            this.$router.push('/profile')
-        },
     },
 }
 </script>

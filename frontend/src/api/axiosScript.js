@@ -219,14 +219,16 @@ const createUser = (data, success, error) => {
 }
 
 // get /users/{fId}/followers
-const getAllFollowers = (data, success, error) => {
+const getAllFollowers = (data) => {
+    return new Promise((resolve, reject) => {
     http.get('/api/users/' + data + '/followers')
         .then((res) => {
-            success(res)
+            resolve(res)
         })
         .catch((err) => {
-            error(err)
+            reject(err)
         })
+    })
 }
 
 // post /users/{fId}/followers/{tId}
@@ -252,14 +254,16 @@ const deleteFollow = (data, success, error) => {
 }
 
 // get /users/{id}
-const getUser = (data, success, error) => {
-    http.get('/api/users/' + data.id)
+const getUser = (data) => {
+    return new Promise((resolve, reject) => {
+    http.get('/api/users/' + data)
         .then((res) => {
-            success(res)
+            resolve(res)
         })
         .catch((err) => {
-            error(err)
+            reject(err)
         })
+    })
 }
 
 // put /users/{id}
@@ -358,14 +362,16 @@ const getAllFavoriteStore = (data, success, error) => {
 }
 
 // get /users/{id}/review
-const getAllReview = (data, success, error) => {
-    http.get('/api/users/' + data.id + '/review')
+const getAllReview = (data) => {
+    return new Promise((resolve, reject) => {
+    http.get('/api/users/' + data + '/review')
         .then((res) => {
-            success(res)
+            resolve(res)
         })
         .catch((err) => {
-            error(err)
+            reject(err)
         })
+    })
 }
 // get /users/{id}/review
 const createReview = (data, success, error) => {
@@ -406,7 +412,9 @@ const getRecommandationByFollowers = (data, success, error) => {
         })
 }
 
-const imageUpload = async (data, success, error) => {
+
+
+const imageUpload = async (data) => {
     return new Promise((resolve, reject) => {
         axios({
             url: 'https://api.imgur.com/3/image',
@@ -460,10 +468,10 @@ const axiosFunction = {
 
     getAllUser: (success, error) => getAllUser(success, error),
     createUser: (data, success, error) => createUser(data, success, error),
-    getAllFollowers: (data, success, error) => getAllFollowers(data, success, error),
+    getAllFollowers: (data) => getAllFollowers(data),
     updateFollow: (data, success, error) => updateFollow(data, success, error),
     deleteFollow: (data, success, error) => deleteFollow(data, success, error),
-    getUser: (data, success, error) => getUser(data, success, error),
+    getUser: (data) => getUser(data),
     updateUser: (data, success, error) => updateUser(data, success, error),
     deleteUser: (data, success, error) => deleteUser(data, success, error),
     getAllFavoriteList: (data, success, error) => getAllFavoriteList(data, success, error),
@@ -474,12 +482,11 @@ const axiosFunction = {
     deleteFavoriteListStore: (data, success, error) =>
         deleteFavoriteListStore(data, success, error),
     getAllFavoriteStore: (data, success, error) => getAllFavoriteStore(data, success, error),
-    getAllReview: (data, success, error) => getAllReview(data, success, error),
+    getAllReview: (data) => getAllReview(data),
     getRecommandationById: (data, success, error) => getRecommandationById(data, success, error),
     createReview: (data, success, error) => createReview(data, success, error),
-    getRecommandationByFollowers: (data, success, error) =>
-        getRecommandationByFollowers(data, success, error),
-    imageUpload: (data, success, error) => imageUpload(data, success, error),
+    getRecommandationByFollowers: (data, success, error) => getRecommandationByFollowers(data, success, error),
+    imageUpload: (data) => imageUpload(data),
     storeClickScore: (data, success, error) => storeClickScore(data, success, error)
 }
 

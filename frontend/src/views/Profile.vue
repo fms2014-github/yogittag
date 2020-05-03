@@ -24,28 +24,26 @@
                             <div class="user-profile-data">
                                 <h1>Seohyun</h1>
                                 <button id="profile-edit-button" @click="profileEdit">
-                                    <span class="material-icons">
-                                        settings
-                                    </span>
+                                    <span class="material-icons">settings</span>
                                 </button>
                                 <p style="margin: 10px;">한식 | 중식 | 양식</p>
                             </div>
                             <ul class="data-user">
                                 <li>
                                     <a>
-                                        <strong>61.780</strong>
+                                        <strong>10</strong>
                                         <span>Posts</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a>
-                                        <strong>33.480</strong>
+                                        <strong>4</strong>
                                         <span>Followers</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a>
-                                        <strong>3.546</strong>
+                                        <strong>6</strong>
                                         <span>Following</span>
                                     </a>
                                 </li>

@@ -76,7 +76,7 @@ export default {
         recommand(){
             let user = []
             for (let i=0; i<this.tags.length; i++){
-                user.push(this.tags[i].id)
+                user.push(this.tags[i].key)
             }
         
             let data = {
@@ -97,7 +97,7 @@ export default {
                     this.loadingSpinner()
                     console.log(res.data)
                     
-                    this.cardData = res.data.result
+                    this.cardData = res.data
                     this.cardData.forEach( card => {
                         if (card.pictures) {
                             card.pictures = card.pictures.split("|");

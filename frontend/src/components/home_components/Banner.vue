@@ -63,7 +63,7 @@ export default {
                 if (prec == '0' && temp >= 15) {
                     this.banner_image = 'spring_blossom'
                     this.banner_text = '따뜻한 봄날, 꽃 구경이나 소풍에는'
-                    this.banner_menu = ['김밥', '샌드위치', '도다리쑥국', '비빔밥', '마카롱']
+                    this.banner_menu = ['김밥', '샌드위치', '도다리쑥국', '파스타', '마카롱']
                 } else if (prec == '1' || prec == '4') {
                     this.banner_image = 'spring_rain'
                     this.banner_text = '지금처럼 봄비가 내리는 순간에는'

@@ -1,6 +1,6 @@
 <template>
     <div id="app-view">
-        <router-view />
+        <router-view :key="$route.fullPath"/>
     </div>
 </template>
 
@@ -8,8 +8,6 @@
 #app-view {
     width: 100vw;
     height: 100%;
-    display: flex;
-    justify-content: center;
 }
 </style>
 

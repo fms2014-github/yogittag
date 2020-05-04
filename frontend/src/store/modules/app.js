@@ -1,6 +1,9 @@
-// import { set, toggle } from "@/utils/vuex";
+import { set, toggle } from '@/utils/vuex'
+import axios from '../../api/axiosScript.js'
 
 const state = {
+    drawer: null,
+    isEdit: false,
     menuOpenCheck: false,
     isLoading: false,
     isLogin: false,
@@ -29,6 +32,8 @@ const action = {}
 
 // mutations
 const mutations = {
+    setDrawer: set('drawer'),
+    toggleDrawer: toggle('drawer'),
     initState(state) {
         state.menuOpenCheck = false
         state.isLogin = false
@@ -67,6 +72,9 @@ const mutations = {
     },
     setSelecterFilter(state, value) {
         state.selecterFilter = value
+    },
+    switchIsEdit(state) {
+        state.isEdit = !state.isEdit
     },
 }
 

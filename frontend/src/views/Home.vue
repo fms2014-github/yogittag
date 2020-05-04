@@ -41,8 +41,32 @@ export default {
             userid: 0
         }
     },
-    mounted() {
+    async mounted() {
+        var fragmentString = location.search.substring(1)
 
+        // Parse query string to see if page request is coming from OAuth 2.0 server.
+        var params = {}
+        var regex = /([^&=]+)=([^&]*)/g,
+            m
+        while ((m = regex.exec(fragmentString))) {
+            params[decodeURIComponent(m[1])] = decodeURIComponent(m[2])
+        }
+        if (Object.keys(params).length > 0) {
+            console.log('asdasd', params)
+            let data
+            if(params.prompt === 'consent'){
+                data = (await axiosApi.googleOauthAxios({ oauthCode: params })).data.session
+            }
+            if(params.state === 'naver'){
+                data = (await axiosApi.naverOauthAxios({ oauthCode: params })).data.session
+            }
+            sessionStorage.setItem('session', JSON.stringify(data))
+            this.sessionSave(data)
+            if (data.isCompleted) {
+                this.$router.push('/detail-profile')
+            }
+            this.$router.push(this.$route.path)
+        }
         if(sessionStorage.getItem('session') != null){
             this.userid = JSON.parse(sessionStorage.getItem('session')).userid
         }
@@ -72,7 +96,7 @@ export default {
     },
     methods: {
         ...mapMutations('app', ['loadingSpinner', 'initState']),
-
+        ...mapMutations('session', ['sessionSave']),
         recommand(){
             let user = []
             for (let i=0; i<this.tags.length; i++){

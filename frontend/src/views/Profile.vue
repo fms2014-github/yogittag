@@ -10,23 +10,14 @@
                     <div class="content-profile-page">
                         <div class="profile-user-page profile-card">
                             <div class="img-user-profile">
-                                <img
-                                    class="profile-bgHome"
-                                    :src="coverImage"
-                                />
-                                <img
-                                    class="avatar"
-                                    :src="profileImage"
-                                    alt="allan"
-                                />
+                                <img class="profile-bgHome" :src="coverImage" />
+                                <img class="avatar" :src="profileImage" alt="allan" />
                             </div>
                             <button @click="followButton">Follow</button>
                             <div class="user-profile-data">
                                 <h1>{{nickName}}</h1>
                                 <button id="profile-edit-button" @click="profileEdit">
-                                    <span class="material-icons">
-                                        settings
-                                    </span>
+                                    <span class="material-icons">settings</span>
                                 </button>
                                 <p style="margin: 10px;">한식 | 중식 | 양식</p>
                             </div>
@@ -56,10 +47,9 @@
                         <small-card
                             v-for="item in testCardDate"
                             :key="item.id"
-                            :routing="item.routing"
+                            :routing="'/store/' + item.store_id"
                             :img="item.img"
-                            :gender="item.gender"
-                            :title="item.title"
+                            :title="item.store_name"
                             :reg_time="item.reg_time"
                             :content="item.content"
                             :score="item.score"
@@ -106,6 +96,7 @@ import profileEditPage from './profileEditPage.vue'
 import axiosApi from '../api/axiosScript.js'
 
 import { mapState, mapMutations } from 'vuex'
+import http from '../http-common'
 export default {
     data() {
         return {
@@ -114,7 +105,7 @@ export default {
             testCardDate: [],
             profileImage:'',
             coverImage: '',
-            following: 0,
+            following: [],
             userid: -1,
         }
     },
@@ -146,9 +137,20 @@ export default {
         this.nickName = '익명' + String(this.userid)
         this.profileImage = userData.profile_picture === null ? 'https://via.placeholder.com/64' : userData.profile_picture
         this.coverImage = userData.cover_picture === null ? 'https://via.placeholder.com/300' : userData.cover_picture
-        let reviewData = (await axiosApi.getAllReview(this.userid)).data
-        console.log(reviewData)
-        this.testCardDate = reviewData.result
+        // let reviewData = (await axiosApi.getAllReview(this.userid, (res) => {
+        //     console.log(res.data)
+        // })).data
+        // console.log(reviewData)
+        // this.testCardDate = reviewData.result
+        http.get('/api/users/' + this.userid + '/review').then(async (res) => {
+            for(let i = 0; i < res.data.result.length; ++i) {
+                await http.get('/api/store/' + res.data.result[i].store_id).then((r) => {
+                    res.data.result[i]["store_name"] = r.data.result[0].store_name
+                })
+            }
+            this.testCardDate = res.data.result;
+        })
+
         this.following = (await axiosApi.getAllFollowers(this.userid)).data.followers
     },
     methods: {

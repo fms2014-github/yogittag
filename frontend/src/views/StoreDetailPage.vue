@@ -11,7 +11,7 @@
                             v-if="!favorite"
                             @click="favoriteClick"
                             class="favoriteMark"
-                            >🤍</span
+                            >♡</span
                         ><span v-else @click="favoriteClick" class="favoriteMark">🧡</span>
                     </h1>
                     <favoriteForm v-if="favorite" @cancle="favorite = false" />

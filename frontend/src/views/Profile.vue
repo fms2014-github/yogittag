@@ -22,16 +22,22 @@
                                 <p style="margin: 10px;">한식 | 중식 | 양식</p>
                             </div>
                             <ul class="data-user">
-                                <li>
+                                <li @click="flag = 1">
                                     <a>
                                         <strong>{{testCardDate.length}}</strong>
                                         <span>Posts</span>
                                     </a>
                                 </li>
-                                <li>
+                                <li @click="flag = 2">
                                     <a>
                                         <strong>{{following.length}}</strong>
                                         <span>Following</span>
+                                    </a>
+                                </li>
+                                <li @click="flag = 3">
+                                    <a>
+                                        <strong>{{favoriteList.length}}</strong>
+                                        <span>Lists</span>
                                     </a>
                                 </li>
                             </ul>
@@ -40,7 +46,7 @@
                 </div>
                 <!-- .splash-content -->
             </section>
-            <section class="more">
+            <section class="more" v-if="flag == 1">
                 <div class="more-content">
                     <h2 class="content-title">리뷰 정보 추가하기</h2>
                     <div class="row">
@@ -70,6 +76,23 @@
                     </b-modal>
                 </div>
                 <!-- .more-content -->
+            </section>
+            <section class="more" v-if="flag == 3">
+                <div class="more-content">
+                    <div v-for="item in favoriteList" :key="item.id">
+                        <h2 class="content-title">{{item.title}}</h2>
+                        <div class="row">
+                            <small-card v-for="it in item.stores" :key="it.id" :title="it.store" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="more" v-if="flag ==2">
+                <div class="more-content">
+                    <div v-for="item in following" :key="item.id">
+                        <h2 class="content-title">{{item.nick_name}}</h2>
+                    </div>
+                </div>
             </section>
             <!-- .more -->
         </main>
@@ -107,7 +130,9 @@ export default {
             profileImage:'',
             coverImage: '',
             following: [],
+            favoriteList: [],
             userid: -1,
+            flag: 1,
         }
     },
     components: {
@@ -138,11 +163,7 @@ export default {
         this.nickName = '익명' + String(this.userid)
         this.profileImage = userData.profile_picture === null ? 'https://via.placeholder.com/64' : userData.profile_picture
         this.coverImage = userData.cover_picture === null ? 'https://via.placeholder.com/300' : userData.cover_picture
-        // let reviewData = (await axiosApi.getAllReview(this.userid, (res) => {
-        //     console.log(res.data)
-        // })).data
-        // console.log(reviewData)
-        // this.testCardDate = reviewData.result
+
         http.get('/api/users/' + this.userid + '/review').then(async (res) => {
             for(let i = 0; i < res.data.result.length; ++i) {
                 await http.get('/api/store/' + res.data.result[i].store_id).then((r) => {
@@ -152,7 +173,23 @@ export default {
             this.testCardDate = res.data.result;
         })
 
+        axiosApi.getAllFavoriteList(
+            {id: this.userid},
+            (allList) => {
+                this.favoriteList = allList.data
+                allList.data.forEach( (item, i) => {
+                    axiosApi.getFavoriteList(
+                        {user: this.userid, list_id: item.id},
+                        (listDetail) => {
+                            allList.data[i]["stores"] = listDetail.data
+                        }
+                    )
+                })
+                console.log(this.favoriteList)
+            })
+
         this.following = (await axiosApi.getAllFollowers(this.userid)).data.followers
+        console.log(this.following)
     },
     methods: {
         async followButton(){

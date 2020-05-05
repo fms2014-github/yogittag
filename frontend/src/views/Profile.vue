@@ -82,7 +82,12 @@
                     <div v-for="item in favoriteList" :key="item.id">
                         <h2 class="content-title">{{item.title}}</h2>
                         <div class="row">
-                            <small-card v-for="it in item.stores" :key="it.id" :title="it.store" />
+                            <small-card
+                                v-for="it in item.stores"
+                                :key="it.id"
+                                :title="it.store_name"
+                                :img="it.pictures.split('|')[0]"
+                            />
                         </div>
                     </div>
                 </div>
@@ -183,6 +188,14 @@ export default {
                         {user: this.userid, list_id: item.id},
                         (listDetail) => {
                             allList.data[i]["stores"] = listDetail.data
+                            listDetail.data.forEach( (it, i) => {
+                                axiosApi.getStore(
+                                    it.store,
+                                    (storeDetail) => {
+                                        listDetail.data[i] = storeDetail.data.result[0]
+                                    }
+                                )
+                            })
                         }
                     )
                 })

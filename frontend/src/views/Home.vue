@@ -62,10 +62,11 @@ export default {
             }
             sessionStorage.setItem('session', JSON.stringify(data))
             this.sessionSave(data)
-            if (data.isCompleted) {
+            if (!data.isCompleted) {
                 this.$router.push('/detail-profile')
+            }else{
+                this.$router.push(this.$route.path)
             }
-            this.$router.push(this.$route.path)
         }
         if(sessionStorage.getItem('session') != null){
             this.userid = JSON.parse(sessionStorage.getItem('session')).userid

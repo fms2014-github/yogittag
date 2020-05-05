@@ -29,6 +29,13 @@
                     }}
                 </v-chip>
             </v-chip-group>
+            <v-chip-group active-class="deep-purple--text text--accent-4" v-show="useFilter">
+                <v-chip color="white" v-for="tag in distancetags" :key="tag" @click="tagClick">
+                    {{
+                    tag
+                    }}
+                </v-chip>
+            </v-chip-group>
             <div
                 v-show="useFilter"
                 style="
@@ -83,7 +90,8 @@ export default {
         return {
             keyword: '',
             result: [],
-            tags: ['음식점', '카페', '술집', '500m', '1km', '2km'],
+            tags: ['음식점', '카페', '술집'],
+            distancetags: ['500m', '1km', '2km'],
             selectedTags: [],
             useFilter: false,
         }
@@ -97,48 +105,52 @@ export default {
             document.getElementById('search-bar').classList.toggle('open-filter')
         },
         async findData() {
-            let distance = 500
-            let category = []
-            for (let i = 0; i < this.selectedTags.length; i++) {
-                if (this.selectedTags[i] == '500m' && distance <= 500) {
-                    distance = 500
-                } else if (this.selectedTags[i] == '1km' && distance <= 1000) {
-                    distance = 1000
-                } else if (this.selectedTags[i] == '2km' && distance <= 2000) {
-                    // 2km 선택
-                    distance = 2000
-                } else {
-                    // 카테고리
-                    category.push(this.selectedTags[i])
+            if(this.keyword !== ''){
+                let distance = 500
+                let category = []
+                for (let i = 0; i < this.selectedTags.length; i++) {
+                    if (this.selectedTags[i] == '500m' && distance <= 500) {
+                        distance = 500
+                    } else if (this.selectedTags[i] == '1km' && distance <= 1000) {
+                        distance = 1000
+                    } else if (this.selectedTags[i] == '2km' && distance <= 2000) {
+                        // 2km 선택
+                        distance = 2000
+                    } else {
+                        // 카테고리
+                        category.push(this.selectedTags[i])
+                    }
                 }
-            }
 
-            let data = {
-                keyword: this.keyword,
-                latitude: this.latitude,
-                longitude: this.longitude,
-                category: category,
-                distance: distance,
-                area: this.area
-            }
-            console.log(data)
-            this.initState()
-            this.loadingSpinner()
-            await axiosApi.searchStore(
-                data,
-                (res) => {
-                    this.loadingSpinner()
-                    this.result = res.data.result
+                let data = {
+                    keyword: this.keyword,
+                    latitude: this.latitude,
+                    longitude: this.longitude,
+                    category: category,
+                    distance: distance,
+                    area: this.area
+                }
+                console.log(data)
+                this.initState()
+                this.loadingSpinner()
+                await axiosApi.searchStore(
+                    data,
+                    (res) => {
+                        this.loadingSpinner()
+                        this.result = res.data.result
 
-                    this.$emit('update:result', this.result)
-                    this.useFilter = true
-                    console.log(res.data.result)
-                },
-                (err) => {
-                    this.loadingSpinner()
-                    console.log(err.data)
-                },
-            )
+                        this.$emit('update:result', this.result)
+                        this.useFilter = true
+                        console.log(res.data.result)
+                    },
+                    (err) => {
+                        this.loadingSpinner()
+                        console.log(err.data)
+                    },
+                )
+            }else{
+                alert('검색어 입력은 필수입니다.')
+            }
         },
 
         tagClick(event) {
@@ -149,6 +161,15 @@ export default {
             let idx = this.selectedTags.indexOf(t)
             if (idx > -1) {
                 this.selectedTags.splice(idx, 1)
+                console.log(this.selectedTags)
+            } else if (t=="500m" || t=="1km" || t=="2km"){
+                for(let i=0; i<this.selectedTags.length; i++){
+                    if(this.selectedTags[i]=="500m" || this.selectedTags[i]=="1km" || this.selectedTags[i]=="2km"){
+                        this.selectedTags.splice(i, 1)
+                        
+                    }
+                }
+                this.selectedTags.push(t)
                 console.log(this.selectedTags)
             } else {
                 this.selectedTags.push(t)

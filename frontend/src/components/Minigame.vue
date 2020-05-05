@@ -36,7 +36,7 @@
             >{{ dataList[index][1].text }}</button>
             <div id="answer" v-if="index > 4">
                 <h4>추천음식은?</h4>
-                <b>{{ answer }}</b> 입니다.
+                <b style="cursor: pointer;" id="answer" @click="searchByKeyworkdStore">{{ answer }}</b> 입니다.
             </div>
             <button v-show="!ready" id="ready" @click="start">{{ setTime == 30 ? '시작' : '다시 시작' }}</button>
         </div>
@@ -231,6 +231,9 @@ export default {
         },
     },
     methods: {
+        searchByKeyworkdStore(){
+            this.$router.push({name : 'ListPage' , params : {keyword : this.answer }, query : {title : this.answer, subTitle : '키워드 검색'}});
+        },
         selected(idx) {
             this.dataList[this.index][idx].category.forEach((c) => {
                 if (c in this.selectedList) {

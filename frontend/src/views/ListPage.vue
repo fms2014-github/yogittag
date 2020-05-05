@@ -58,7 +58,7 @@ export default {
             cardData: [],
             latitude: 0,
             longitude: 0,
-            distance: 1000,
+            distance: 2000,
             category: null,
             area: null,
             resData: null,

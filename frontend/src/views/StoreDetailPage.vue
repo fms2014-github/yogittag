@@ -11,12 +11,12 @@
                             v-if="!favorite"
                             @click="favoriteClick"
                             class="favoriteMark"
-                            >🤍</span
+                            >♡</span
                         ><span v-else @click="favoriteClick" class="favoriteMark">🧡</span>
                     </h1>
                     <favoriteForm v-if="favorite" @cancle="favorite = false" />
                     <b-tooltip target="tooltip-target" triggers="hover">
-                        You can save <b>favorite💛</b> store! <br>
+                        You can save <b>favorite💛</b> store! <br />
                         your custom favor list...🗂
                     </b-tooltip>
                     <b-breadcrumb style="justify-content: center;">
@@ -36,7 +36,8 @@
                             :key="item.id"
                             class="list-group-item"
                             replace
-                        >{{ item }}</router-link>
+                            >{{ item }}</router-link
+                        >
                     </div>
                 </div>
 
@@ -59,7 +60,9 @@
                             style="width: 100%; height: 350px;"
                         ></div>
                         <div class="store-detail-component" v-if="bhour">
-                            <b-badge pill variant="secondary">{{ bhour.week_type | weekType }}</b-badge>
+                            <b-badge pill variant="secondary">{{
+                                bhour.week_type | weekType
+                            }}</b-badge>
                             <b-badge pill :variant="bhour.mon ? 'info' : 'light'">월</b-badge>
                             <b-badge pill :variant="bhour.tue ? 'info' : 'light'">화</b-badge>
                             <b-badge pill :variant="bhour.wed ? 'info' : 'light'">수</b-badge>
@@ -225,14 +228,16 @@ export default {
         },
         registerReview() {
             let local = localStorage
-            this.cardData.unshift({
-                title: local.getItem(`card_title`),
-                routing: local.getItem(`card_routing`),
-                score: parseInt(local.getItem(`card_score`)),
-                content: local.getItem(`card_content`),
-                reg_time: local.getItem(`card_reg_time`),
-                img: local.getItem(`card_img`),
-            })
+            if (local.getItem(`card_content`) != 'auto-generated') {
+                this.cardData.unshift({
+                    title: local.getItem(`card_title`),
+                    routing: local.getItem(`card_routing`),
+                    score: parseInt(local.getItem(`card_score`)),
+                    content: local.getItem(`card_content`),
+                    reg_time: local.getItem(`card_reg_time`),
+                    img: local.getItem(`card_img`),
+                })
+            }
             local.clear()
         },
         handleScroll() {
@@ -363,6 +368,7 @@ export default {
                 // this.cardData = res.data.result
 
                 for (let r of res.data.result) {
+                    if (r.content == 'auto-generated') continue
                     if (r.img == null) {
                         this.cardData.push({
                             title: `익명 ${r.user_id}`,
@@ -392,28 +398,27 @@ export default {
                 }
             })
         },
-        storeClickScore(){
-            if(sessionStorage.getItem('session') != null){
+        storeClickScore() {
+            if (sessionStorage.getItem('session') != null) {
                 console.log('session is not null')
                 let userid = JSON.parse(sessionStorage.getItem('session')).userid
                 let data = {
-                    store_id : this.$route.params.id,
-                    user_id : userid
+                    store_id: this.$route.params.id,
+                    user_id: userid,
                 }
 
                 console.log(data)
                 axios.storeClickScore(
                     data,
-                    (res)=>{
+                    (res) => {
                         console.log('success')
                     },
-                    (err)=>{
+                    (err) => {
                         console.log('error')
-                    }
+                    },
                 )
             }
-
-        }
+        },
     },
 }
 </script>

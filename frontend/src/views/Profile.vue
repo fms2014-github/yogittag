@@ -10,37 +10,34 @@
                     <div class="content-profile-page">
                         <div class="profile-user-page profile-card">
                             <div class="img-user-profile">
-                                <img
-                                    class="profile-bgHome"
-                                    :src="coverImage"
-                                />
-                                <img
-                                    class="avatar"
-                                    :src="profileImage"
-                                    alt="allan"
-                                />
+                                <img class="profile-bgHome" :src="coverImage" />
+                                <img class="avatar" :src="profileImage" alt="allan" />
                             </div>
                             <button @click="followButton">Follow</button>
                             <div class="user-profile-data">
-                                <h1>{{nickName}}</h1>
+                                <h1>{{ nickName }}</h1>
                                 <button id="profile-edit-button" @click="profileEdit">
-                                    <span class="material-icons">
-                                        settings
-                                    </span>
+                                    <span class="material-icons">settings</span>
                                 </button>
                                 <p style="margin: 10px;">한식 | 중식 | 양식</p>
                             </div>
                             <ul class="data-user">
-                                <li>
+                                <li @click="flag = 1">
                                     <a>
-                                        <strong>{{testCardDate.length}}</strong>
+                                        <strong>{{ testCardLength }}</strong>
                                         <span>Posts</span>
                                     </a>
                                 </li>
-                                <li>
+                                <li @click="flag = 2">
                                     <a>
-                                        <strong>{{following.length}}</strong>
+                                        <strong>{{ following.length }}</strong>
                                         <span>Following</span>
+                                    </a>
+                                </li>
+                                <li @click="flag = 3">
+                                    <a>
+                                        <strong>{{ favoriteList.length }}</strong>
+                                        <span>Lists</span>
                                     </a>
                                 </li>
                             </ul>
@@ -49,36 +46,65 @@
                 </div>
                 <!-- .splash-content -->
             </section>
-            <section class="more">
+            <section class="more" v-if="flag == 1">
                 <div class="more-content">
-                    <h2 class="content-title">리뷰 정보 추가하기</h2>
+                    <h2 class="content-title">리뷰 정보</h2>
                     <div class="row">
-                        <small-card
-                            v-for="item in testCardDate"
-                            :key="item.id"
-                            :routing="item.routing"
-                            :img="item.img"
-                            :gender="item.gender"
-                            :title="item.title"
-                            :reg_time="item.reg_time"
-                            :content="item.content"
-                            :score="item.score"
-                        />
+                        <template v-for="item in testCardDate">
+                            <small-card
+                                v-if="item.content != 'auto-generated'"
+                                :key="item.id"
+                                :routing="'/store/' + item.store_id"
+                                :img="item.img"
+                                :title="item.store_name"
+                                :reg_time="item.reg_time"
+                                :content="item.content"
+                                :score="item.score"
+                            />
+                        </template>
                     </div>
-                    <button v-b-modal.modal id="registerButton">
-                        <img id="registerButtonImg" :src="registerRiviewImg" />
-                    </button>
-                    <b-modal
-                        :no-close-on-backdrop="true"
-                        @ok="modalCilck()"
-                        id="modal"
-                        size="lg"
-                        title="Review"
-                    >
-                        <ReviewForm />
-                    </b-modal>
                 </div>
                 <!-- .more-content -->
+            </section>
+            <section class="more" v-if="flag == 3">
+                <div class="more-content">
+                    <h2 class="content-title">찜 정보</h2>
+                    <div v-for="item in favoriteList" :key="item.id">
+                        <h5>{{ item.title }}</h5>
+                        <div class="row">
+                            <template v-for="it in item.stores">
+                                <small-card
+                                    v-if="it.pictures.split('|')[0] != ''"
+                                    :key="it.id"
+                                    :title="it.store_name"
+                                    :routing="`/store/${it.id}`"
+                                    :img="it.pictures.split('|')[0]"
+                                />
+                                <small-card
+                                    v-else
+                                    :key="it.id"
+                                    :routing="`/store/${it.id}`"
+                                    :title="it.store_name"
+                                    :img="it.profile_picture"
+                                />
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="more" v-if="flag == 2">
+                <div class="more-content">
+                    <h2 class="content-title">팔로우 정보</h2>
+                    <div class="row">
+                        <template v-for="item in following">
+                            <small-card
+                                :key="item.id"
+                                :title="item.nick_name"
+                                :routing="`/profile/${item.id}`"
+                            />
+                        </template>
+                    </div>
+                </div>
             </section>
             <!-- .more -->
         </main>
@@ -101,28 +127,30 @@
 import SmallCard from '@/components/cards/SmallCard'
 import UpFocusButton from '@/components/buttons/UpFocusButton'
 import infiniteScroll from 'vue-infinite-scroll'
-import ReviewForm from '@/components/forms/ReviewForm.vue'
 import profileEditPage from './profileEditPage.vue'
 import axiosApi from '../api/axiosScript.js'
 
 import { mapState, mapMutations } from 'vuex'
+import http from '../http-common'
 export default {
     data() {
         return {
             isFollower: false,
             nickName: '',
             testCardDate: [],
-            profileImage:'',
+            testCardLength: 0,
+            profileImage: '',
             coverImage: '',
-            following: 0,
+            favoriteList: [],
             userid: -1,
+            flag: 1,
+            following: [],
         }
     },
     components: {
         SmallCard,
         UpFocusButton,
         infiniteScroll,
-        ReviewForm,
         profileEditPage,
     },
     created: function () {
@@ -136,25 +164,60 @@ export default {
     },
     async mounted() {
         let userid
-        if(Object.keys(this.$route.params).length === 0){
+        if (Object.keys(this.$route.params).length === 0) {
             this.userid = JSON.parse(sessionStorage.getItem('session')).userid
-        }else{
+        } else {
             this.userid = this.$route.params.id
         }
         let userData = (await axiosApi.getUser(this.userid)).data
         console.log(userData)
-        this.nickName = '익명' + String(this.userid)
-        this.profileImage = userData.profile_picture === null ? 'https://via.placeholder.com/64' : userData.profile_picture
-        this.coverImage = userData.cover_picture === null ? 'https://via.placeholder.com/300' : userData.cover_picture
-        let reviewData = (await axiosApi.getAllReview(this.userid)).data
-        console.log(reviewData)
-        this.testCardDate = reviewData.result
+
+        if (userData.nick_name == null) {
+            this.nickName = '익명' + String(this.userid)
+        } else {
+            this.nickName = userData.nick_name
+        }
+
+        this.profileImage =
+            userData.profile_picture === null
+                ? 'https://via.placeholder.com/64'
+                : userData.profile_picture
+        this.coverImage =
+            userData.cover_picture === null
+                ? 'https://via.placeholder.com/300'
+                : userData.cover_picture
+
+        http.get('/api/users/' + this.userid + '/review').then(async (res) => {
+            for (let i = 0; i < res.data.result.length; ++i) {
+                await http.get('/api/store/' + res.data.result[i].store_id).then((r) => {
+                    res.data.result[i]['store_name'] = r.data.result[0].store_name
+                })
+            }
+            this.testCardDate = res.data.result
+        })
+
+        axiosApi.getAllFavoriteList({ id: this.userid }, (allList) => {
+            this.favoriteList = allList.data
+            allList.data.forEach((item, i) => {
+                axiosApi.getFavoriteList({ user: this.userid, list_id: item.id }, (listDetail) => {
+                    allList.data[i]['stores'] = listDetail.data
+                    listDetail.data.forEach((it, i) => {
+                        axiosApi.getStore(it.store, (storeDetail) => {
+                            listDetail.data[i] = storeDetail.data.result[0]
+                        })
+                    })
+                })
+            })
+            console.log(this.favoriteList)
+        })
+
         this.following = (await axiosApi.getAllFollowers(this.userid)).data.followers
+        console.log(this.following)
     },
     methods: {
-        async followButton(){
+        async followButton() {
             let session = JSON.parse(sessionStorage.getItem('session'))
-            if(session != null && Object.keys(this.$route.params).length !== 0){
+            if (session != null && Object.keys(this.$route.params).length !== 0) {
                 let followDataObj = (await axiosApi.getAllFollowers(session.userid)).data.followers
                 let followData = followDataObj.map((cValue, idx, arr) => {
                     console.log(cValue)
@@ -163,17 +226,17 @@ export default {
                     return cValue.id
                 })
                 let check = false
-                for (let i in followData){
+                for (let i in followData) {
                     console.log(typeof this.userid)
-                    if(followData[i] === Number(this.userid)){
-                        axiosApi.deleteFollow({'fId': session.userid, 'tId': this.$route.params.id})
+                    if (followData[i] === Number(this.userid)) {
+                        axiosApi.deleteFollow({ fId: session.userid, tId: this.$route.params.id })
                         alert('팔로우 해제 하셨습니다.')
                         check = true
                     }
                 }
-                
-                if(!check){
-                    axiosApi.updateFollow({'fId': session.userid, 'tId': this.$route.params.id})
+
+                if (!check) {
+                    axiosApi.updateFollow({ fId: session.userid, tId: this.$route.params.id })
                     alert('팔로우 하셨습니다.')
                 }
             }
@@ -216,6 +279,16 @@ export default {
                 })
                 this.ux.rBtnFlag = false
             }
+        },
+    },
+    watch: {
+        testCardDate: function (v) {
+            this.testCardLength = 0
+            v.forEach((item) => {
+                if (item.content != 'auto-generated') {
+                    this.testCardLength++
+                }
+            })
         },
     },
 }

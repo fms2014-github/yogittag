@@ -408,7 +408,7 @@ def oauth_code_google(request):
         'code': oauthResult["code"],
         'client_id': '25608544222-lfe7jdkikoef92jgt45mvhe83ts98n80.apps.googleusercontent.com',
         'client_secret': 'MjwjwsVlExjXdivmhrIq-CiU',
-        'redirect_uri': 'http://i02d105.p.ssafy.io/google-auth',
+        'redirect_uri': 'http://i02d105.p.ssafy.io',
         'grant_type': 'authorization_code',
     }
     auth_data = requests.post(tokenRequestURL, data=data)
@@ -460,6 +460,7 @@ def oauth_code_naver(request):
         'client_secret': 'kCOv4mVaGK',
         'redirect_uri': 'http://i02d105.p.ssafy.io/naver-auth',
         'grant_type': 'authorization_code',
+        'state': 'naver'
     }
     auth_data = requests.post(tokenRequestURL, data=data)
     print(auth_data.json())

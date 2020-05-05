@@ -178,15 +178,15 @@ const getStoreReview = (data, success, error) => {
 // get store/{name}
 const searchStore = async (data, success, error) => {
     http.get('/api/store', {
-            params: {
-                keyword: data.keyword,
-                latitude: data.latitude,
-                longitude: data.longitude,
-                category: data.category,
-                distance: data.distance,
-                area: data.area
-            },
-        })
+        params: {
+            keyword: data.keyword,
+            latitude: data.latitude,
+            longitude: data.longitude,
+            category: data.category,
+            distance: data.distance,
+            area: data.area,
+        },
+    })
         .then((res) => {
             success(res)
         })
@@ -219,15 +219,15 @@ const createUser = (data, success, error) => {
 }
 
 // get /users/{fId}/followers
-const getAllFollowers = (data) => {
+const getAllFollowers = (data, success, error) => {
     return new Promise((resolve, reject) => {
-    http.get('/api/users/' + data + '/followers')
-        .then((res) => {
-            resolve(res)
-        })
-        .catch((err) => {
-            reject(err)
-        })
+        http.get('/api/users/' + data + '/followers')
+            .then((res) => {
+                resolve(res)
+            })
+            .catch((err) => {
+                reject(err)
+            })
     })
 }
 
@@ -256,13 +256,13 @@ const deleteFollow = (data, success, error) => {
 // get /users/{id}
 const getUser = (data) => {
     return new Promise((resolve, reject) => {
-    http.get('/api/users/' + data)
-        .then((res) => {
-            resolve(res)
-        })
-        .catch((err) => {
-            reject(err)
-        })
+        http.get('/api/users/' + data)
+            .then((res) => {
+                resolve(res)
+            })
+            .catch((err) => {
+                reject(err)
+            })
     })
 }
 
@@ -364,13 +364,13 @@ const getAllFavoriteStore = (data, success, error) => {
 // get /users/{id}/review
 const getAllReview = (data) => {
     return new Promise((resolve, reject) => {
-    http.get('/api/users/' + data + '/review')
-        .then((res) => {
-            resolve(res)
-        })
-        .catch((err) => {
-            reject(err)
-        })
+        http.get('/api/users/' + data + '/review')
+            .then((res) => {
+                resolve(res)
+            })
+            .catch((err) => {
+                reject(err)
+            })
     })
 }
 // get /users/{id}/review
@@ -412,8 +412,6 @@ const getRecommandationByFollowers = (data, success, error) => {
         })
 }
 
-
-
 const imageUpload = async (data) => {
     return new Promise((resolve, reject) => {
         axios({
@@ -434,12 +432,11 @@ const imageUpload = async (data) => {
 }
 
 const storeClickScore = (data, success, error) => {
-    http
-        .post('/api/review/' + data.store_id + '/click/' + data.user_id)
-        .then(res => {
+    http.post('/api/review/' + data.store_id + '/click/' + data.user_id)
+        .then((res) => {
             success(res)
         })
-        .catch(err => {
+        .catch((err) => {
             error(err)
         })
 }
@@ -468,7 +465,7 @@ const axiosFunction = {
 
     getAllUser: (success, error) => getAllUser(success, error),
     createUser: (data, success, error) => createUser(data, success, error),
-    getAllFollowers: (data) => getAllFollowers(data),
+    getAllFollowers: (data, success, error) => getAllFollowers(data, success, error),
     updateFollow: (data, success, error) => updateFollow(data, success, error),
     deleteFollow: (data, success, error) => deleteFollow(data, success, error),
     getUser: (data) => getUser(data),
@@ -485,9 +482,10 @@ const axiosFunction = {
     getAllReview: (data) => getAllReview(data),
     getRecommandationById: (data, success, error) => getRecommandationById(data, success, error),
     createReview: (data, success, error) => createReview(data, success, error),
-    getRecommandationByFollowers: (data, success, error) => getRecommandationByFollowers(data, success, error),
+    getRecommandationByFollowers: (data, success, error) =>
+        getRecommandationByFollowers(data, success, error),
     imageUpload: (data) => imageUpload(data),
-    storeClickScore: (data, success, error) => storeClickScore(data, success, error)
+    storeClickScore: (data, success, error) => storeClickScore(data, success, error),
 }
 
 export default axiosFunction

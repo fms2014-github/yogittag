@@ -86,16 +86,18 @@ export default {
         searchBar,
     },
     mounted() {
-        var container = document.getElementById('map') //지도를 담을 영역의 DOM 레퍼런스
-        var options = {
-            //지도를 생성할 때 필요한 기본 옵션
-            center: new kakao.maps.LatLng(this.latitude, this.longitude), //지도의 중심좌표. 33.450701, 126.570667
-            level: 3, //지도의 레벨(확대, 축소 정도)
-        }
+        window.onload = () => {
+            var container = document.getElementById('map') //지도를 담을 영역의 DOM 레퍼런스
+            var options = {
+                //지도를 생성할 때 필요한 기본 옵션
+                center: new kakao.maps.LatLng(this.latitude, this.longitude), //지도의 중심좌표. 33.450701, 126.570667
+                level: 3, //지도의 레벨(확대, 축소 정도)
+            }
 
-        // eslint-disable-next-line no-unused-vars
-        this.map = new kakao.maps.Map(container, options) //지도 생성 및 객체 리턴
-        this.gpsFocus()
+            // eslint-disable-next-line no-unused-vars
+            this.map = new kakao.maps.Map(container, options) //지도 생성 및 객체 리턴
+            this.gpsFocus()
+        }
     },
     watch: {
         result: function (v) {
@@ -112,13 +114,12 @@ export default {
                     var geocoder = new kakao.maps.services.Geocoder()
                     console.log(geocoder)
                     // 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
-                    geocoder.coord2RegionCode(this.longitude, this.latitude, (result, status)=>{
-
+                    geocoder.coord2RegionCode(this.longitude, this.latitude, (result, status) => {
                         console.log(result)
                         if (status == kakao.maps.services.Status.OK) {
                             this.area = result[0].region_2depth_name
                         }
-                    });   
+                    })
 
                     var imageSrc = require('@/assets/icons/rec.png'),
                         imageSize = new kakao.maps.Size(25, 25), // 마커이미지의 크기입니다

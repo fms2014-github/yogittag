@@ -24,7 +24,7 @@
                             <ul class="data-user">
                                 <li @click="flag = 1">
                                     <a>
-                                        <strong>{{testCardDate.length}}</strong>
+                                        <strong>{{testCardLength}}</strong>
                                         <span>Posts</span>
                                     </a>
                                 </li>
@@ -127,6 +127,7 @@ export default {
             isFollower: false,
             nickName: '',
             testCardDate: [],
+            testCardLength: 0,
             profileImage:'',
             coverImage: '',
             following: [],
@@ -258,6 +259,16 @@ export default {
             }
         },
     },
+    watch: {
+        testCardDate: function(v) {
+            this.testCardLength = 0
+            v.forEach(item => {
+                if(item.content != 'auto-generated') {
+                    this.testCardLength++
+                }
+            })
+        }
+    }
 }
 </script>
 <style>

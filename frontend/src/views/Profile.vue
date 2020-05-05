@@ -15,7 +15,7 @@
                             </div>
                             <button @click="followButton">Follow</button>
                             <div class="user-profile-data">
-                                <h1>{{nickName}}</h1>
+                                <h1>{{ nickName }}</h1>
                                 <button id="profile-edit-button" @click="profileEdit">
                                     <span class="material-icons">settings</span>
                                 </button>
@@ -24,19 +24,19 @@
                             <ul class="data-user">
                                 <li @click="flag = 1">
                                     <a>
-                                        <strong>{{testCardLength}}</strong>
+                                        <strong>{{ testCardLength }}</strong>
                                         <span>Posts</span>
                                     </a>
                                 </li>
                                 <li @click="flag = 2">
                                     <a>
-                                        <strong>{{following.length}}</strong>
+                                        <strong>{{ following.length }}</strong>
                                         <span>Following</span>
                                     </a>
                                 </li>
                                 <li @click="flag = 3">
                                     <a>
-                                        <strong>{{favoriteList.length}}</strong>
+                                        <strong>{{ favoriteList.length }}</strong>
                                         <span>Lists</span>
                                     </a>
                                 </li>
@@ -80,22 +80,29 @@
             <section class="more" v-if="flag == 3">
                 <div class="more-content">
                     <div v-for="item in favoriteList" :key="item.id">
-                        <h2 class="content-title">{{item.title}}</h2>
+                        <h2 class="content-title">{{ item.title }}</h2>
                         <div class="row">
-                            <small-card
-                                v-for="it in item.stores"
-                                :key="it.id"
-                                :title="it.store_name"
-                                :img="it.pictures.split('|')[0]"
-                            />
+                            <template v-for="it in item.stores">
+                                <small-card
+                                    v-if="it.pictures.split('|')[0] != ''"
+                                    :key="it.id"
+                                    :title="it.store_name"
+                                    :img="it.pictures.split('|')[0]"
+                                />
+                                <small-card
+                                    v-else
+                                    :key="it.id"
+                                    :title="it.store_name"
+                                />
+                            </template>
                         </div>
                     </div>
                 </div>
             </section>
-            <section class="more" v-if="flag ==2">
+            <section class="more" v-if="flag == 2">
                 <div class="more-content">
                     <div v-for="item in following" :key="item.id">
-                        <h2 class="content-title">{{item.nick_name}}</h2>
+                        <h2 class="content-title">{{ item.nick_name }}</h2>
                     </div>
                 </div>
             </section>
@@ -133,7 +140,7 @@ export default {
             nickName: '',
             testCardDate: [],
             testCardLength: 0,
-            profileImage:'',
+            profileImage: '',
             coverImage: '',
             following: [],
             favoriteList: [],
@@ -159,56 +166,60 @@ export default {
     },
     async mounted() {
         let userid
-        if(Object.keys(this.$route.params).length === 0){
+        if (Object.keys(this.$route.params).length === 0) {
             this.userid = JSON.parse(sessionStorage.getItem('session')).userid
-        }else{
+        } else {
             this.userid = this.$route.params.id
         }
         let userData = (await axiosApi.getUser(this.userid)).data
         console.log(userData)
-        this.nickName = '익명' + String(this.userid)
-        this.profileImage = userData.profile_picture === null ? 'https://via.placeholder.com/64' : userData.profile_picture
-        this.coverImage = userData.cover_picture === null ? 'https://via.placeholder.com/300' : userData.cover_picture
+
+        if (userData.nick_name == null) {
+            this.nickName = '익명' + String(this.userid)
+        } else {
+            this.nickName = userData.nick_name
+        }
+
+        this.profileImage =
+            userData.profile_picture === null
+                ? 'https://via.placeholder.com/64'
+                : userData.profile_picture
+        this.coverImage =
+            userData.cover_picture === null
+                ? 'https://via.placeholder.com/300'
+                : userData.cover_picture
 
         http.get('/api/users/' + this.userid + '/review').then(async (res) => {
-            for(let i = 0; i < res.data.result.length; ++i) {
+            for (let i = 0; i < res.data.result.length; ++i) {
                 await http.get('/api/store/' + res.data.result[i].store_id).then((r) => {
-                    res.data.result[i]["store_name"] = r.data.result[0].store_name
+                    res.data.result[i]['store_name'] = r.data.result[0].store_name
                 })
             }
-            this.testCardDate = res.data.result;
+            this.testCardDate = res.data.result
         })
 
-        axiosApi.getAllFavoriteList(
-            {id: this.userid},
-            (allList) => {
-                this.favoriteList = allList.data
-                allList.data.forEach( (item, i) => {
-                    axiosApi.getFavoriteList(
-                        {user: this.userid, list_id: item.id},
-                        (listDetail) => {
-                            allList.data[i]["stores"] = listDetail.data
-                            listDetail.data.forEach( (it, i) => {
-                                axiosApi.getStore(
-                                    it.store,
-                                    (storeDetail) => {
-                                        listDetail.data[i] = storeDetail.data.result[0]
-                                    }
-                                )
-                            })
-                        }
-                    )
+        axiosApi.getAllFavoriteList({ id: this.userid }, (allList) => {
+            this.favoriteList = allList.data
+            allList.data.forEach((item, i) => {
+                axiosApi.getFavoriteList({ user: this.userid, list_id: item.id }, (listDetail) => {
+                    allList.data[i]['stores'] = listDetail.data
+                    listDetail.data.forEach((it, i) => {
+                        axiosApi.getStore(it.store, (storeDetail) => {
+                            listDetail.data[i] = storeDetail.data.result[0]
+                        })
+                    })
                 })
-                console.log(this.favoriteList)
             })
+            console.log(this.favoriteList)
+        })
 
         this.following = (await axiosApi.getAllFollowers(this.userid)).data.followers
         console.log(this.following)
     },
     methods: {
-        async followButton(){
+        async followButton() {
             let session = JSON.parse(sessionStorage.getItem('session'))
-            if(session != null && Object.keys(this.$route.params).length !== 0){
+            if (session != null && Object.keys(this.$route.params).length !== 0) {
                 let followDataObj = (await axiosApi.getAllFollowers(session.userid)).data.followers
                 let followData = followDataObj.map((cValue, idx, arr) => {
                     console.log(cValue)
@@ -217,17 +228,17 @@ export default {
                     return cValue.id
                 })
                 let check = false
-                for (let i in followData){
+                for (let i in followData) {
                     console.log(typeof this.userid)
-                    if(followData[i] === Number(this.userid)){
-                        axiosApi.deleteFollow({'fId': session.userid, 'tId': this.$route.params.id})
+                    if (followData[i] === Number(this.userid)) {
+                        axiosApi.deleteFollow({ fId: session.userid, tId: this.$route.params.id })
                         alert('팔로우 해제 하셨습니다.')
                         check = true
                     }
                 }
-                
-                if(!check){
-                    axiosApi.updateFollow({'fId': session.userid, 'tId': this.$route.params.id})
+
+                if (!check) {
+                    axiosApi.updateFollow({ fId: session.userid, tId: this.$route.params.id })
                     alert('팔로우 하셨습니다.')
                 }
             }
@@ -273,15 +284,15 @@ export default {
         },
     },
     watch: {
-        testCardDate: function(v) {
+        testCardDate: function (v) {
             this.testCardLength = 0
-            v.forEach(item => {
-                if(item.content != 'auto-generated') {
+            v.forEach((item) => {
+                if (item.content != 'auto-generated') {
                     this.testCardLength++
                 }
             })
-        }
-    }
+        },
+    },
 }
 </script>
 <style>

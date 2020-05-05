@@ -56,7 +56,15 @@ export default {
 
                     this.autocompleteItems.slice(0, this.autocompleteItems.length)
                     res.data.followers.forEach((element) => {
-                        this.autocompleteItems.push({ text: element.nick_name, key: element.id })
+                        if(element.nick_name == null){
+                            this.autocompleteItems.push({ text: '익명 '+element.id, key: element.id })
+                        }
+                        else{
+                            this.autocompleteItems.push({ text: element.nick_name, key: element.id })
+                        }
+                        // this.autocompleteItems.push({ text: element.nick_name, key: element.id })
+                        //this.autocompleteItems.push({ text: '익명 '+element.id, key: element.id })
+
                     })
                 },
                 (err) => {

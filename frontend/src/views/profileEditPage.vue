@@ -86,6 +86,7 @@ export default {
                 this.edit,
                 (res) => {
                     console.log(res)
+                    this.switchIsEdit()
                     this.$router.push('/')
                 },
                 (err) => {

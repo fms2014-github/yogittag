@@ -10,23 +10,14 @@
                     <div class="content-profile-page">
                         <div class="profile-user-page profile-card">
                             <div class="img-user-profile">
-                                <img
-                                    class="profile-bgHome"
-                                    :src="coverImage"
-                                />
-                                <img
-                                    class="avatar"
-                                    :src="profileImage"
-                                    alt="allan"
-                                />
+                                <img class="profile-bgHome" :src="coverImage" />
+                                <img class="avatar" :src="profileImage" alt="allan" />
                             </div>
                             <button @click="followButton">Follow</button>
                             <div class="user-profile-data">
                                 <h1>{{nickName}}</h1>
                                 <button id="profile-edit-button" @click="profileEdit">
-                                    <span class="material-icons">
-                                        settings
-                                    </span>
+                                    <span class="material-icons">settings</span>
                                 </button>
                                 <p style="margin: 10px;">한식 | 중식 | 양식</p>
                             </div>
@@ -55,6 +46,7 @@
                     <div class="row">
                         <small-card
                             v-for="item in testCardDate"
+                            v-if="item.content != 'auto-generated'"
                             :key="item.id"
                             :routing="item.routing"
                             :img="item.img"

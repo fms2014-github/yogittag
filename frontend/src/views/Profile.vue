@@ -46,6 +46,7 @@
                     <div class="row">
                         <small-card
                             v-for="item in testCardDate"
+                            v-if="item.content != 'auto-generated'"
                             :key="item.id"
                             :routing="'/store/' + item.store_id"
                             :img="item.img"

@@ -97,48 +97,52 @@ export default {
             document.getElementById('search-bar').classList.toggle('open-filter')
         },
         async findData() {
-            let distance = 500
-            let category = []
-            for (let i = 0; i < this.selectedTags.length; i++) {
-                if (this.selectedTags[i] == '500m' && distance <= 500) {
-                    distance = 500
-                } else if (this.selectedTags[i] == '1km' && distance <= 1000) {
-                    distance = 1000
-                } else if (this.selectedTags[i] == '2km' && distance <= 2000) {
-                    // 2km 선택
-                    distance = 2000
-                } else {
-                    // 카테고리
-                    category.push(this.selectedTags[i])
+            if(this.keyword !== ''){
+                let distance = 500
+                let category = []
+                for (let i = 0; i < this.selectedTags.length; i++) {
+                    if (this.selectedTags[i] == '500m' && distance <= 500) {
+                        distance = 500
+                    } else if (this.selectedTags[i] == '1km' && distance <= 1000) {
+                        distance = 1000
+                    } else if (this.selectedTags[i] == '2km' && distance <= 2000) {
+                        // 2km 선택
+                        distance = 2000
+                    } else {
+                        // 카테고리
+                        category.push(this.selectedTags[i])
+                    }
                 }
-            }
 
-            let data = {
-                keyword: this.keyword,
-                latitude: this.latitude,
-                longitude: this.longitude,
-                category: category,
-                distance: distance,
-                area: this.area
-            }
-            console.log(data)
-            this.initState()
-            this.loadingSpinner()
-            await axiosApi.searchStore(
-                data,
-                (res) => {
-                    this.loadingSpinner()
-                    this.result = res.data.result
+                let data = {
+                    keyword: this.keyword,
+                    latitude: this.latitude,
+                    longitude: this.longitude,
+                    category: category,
+                    distance: distance,
+                    area: this.area
+                }
+                console.log(data)
+                this.initState()
+                this.loadingSpinner()
+                await axiosApi.searchStore(
+                    data,
+                    (res) => {
+                        this.loadingSpinner()
+                        this.result = res.data.result
 
-                    this.$emit('update:result', this.result)
-                    this.useFilter = true
-                    console.log(res.data.result)
-                },
-                (err) => {
-                    this.loadingSpinner()
-                    console.log(err.data)
-                },
-            )
+                        this.$emit('update:result', this.result)
+                        this.useFilter = true
+                        console.log(res.data.result)
+                    },
+                    (err) => {
+                        this.loadingSpinner()
+                        console.log(err.data)
+                    },
+                )
+            }else{
+                alert('검색어 입력은 필수입니다.')
+            }
         },
 
         tagClick(event) {

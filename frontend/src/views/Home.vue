@@ -97,7 +97,7 @@ export default {
                     this.loadingSpinner()
                     console.log(res.data)
                     
-                    this.cardData = res.data
+                    this.cardData = res.data.result
                     this.cardData.forEach( card => {
                         if (card.pictures) {
                             card.pictures = card.pictures.split("|");

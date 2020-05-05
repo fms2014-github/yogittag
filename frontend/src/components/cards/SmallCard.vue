@@ -15,7 +15,7 @@
                 <p style="float: right;" v-if="reg_time">{{ reg_time | dateFilter }}</p>
             </div>
             <div class="card-footer" v-if="score">
-                <small v-for="item in score" :key="item.id">&#9733;</small>
+                <small v-for="item in parseInt(score)" :key="item.id">&#9733;</small>
             </div>
         </div>
     </div>

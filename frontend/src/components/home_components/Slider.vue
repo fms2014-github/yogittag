@@ -1,6 +1,9 @@
 <template>
     <div>
-        <p class="display-2 font-weight-thin text--secondary text-left">&nbsp;{{ title }}</p>
+        <p
+            v-if="cardData.length"
+            class="display-2 font-weight-thin text--secondary text-left"
+        >&nbsp;{{ title }}</p>
         <swiper :options="swiperOption">
             <s-card
                 class="swiper-slide"

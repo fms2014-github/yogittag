@@ -4,7 +4,7 @@ import api from '../../api'
 const state = {
     storeSearchList: [],
     storeSearchPage: '1',
-    userId:950345,
+    jwt:'',
     store: {
         id: '',
         name: '',

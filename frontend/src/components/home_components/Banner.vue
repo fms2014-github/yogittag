@@ -43,14 +43,12 @@ export default {
             let hour = today.getHours() // 시간 정보 (0 ~ 23)
             let day = today.getDay() // 요일 정보 (일요일 0, 월요일 1, 토요일 6)
             let month = today.getMonth() // 월 정보 (0 ~ 11 1월 0)
-            console.log(v.temperature)
             let prec = v.precipitationType // 날씨 정보 맑음(0), 비(1), 비/눈(2), 눈(3), 소나기(4)
             let temp = parseFloat(v.temperature)
             if ((17 <= hour && hour <= 23 && prec == 0) || (0 <= hour && hour <= 4 && prec == 0)) {
                 this.banner_image = 'day_afternoon'
                 this.banner_text = '오늘 하루의 마무리는...'
                 this.banner_menu = ['피자', '족발', '치킨', '곱창', '연탄불고기']
-                console.log(this.banner_text)
             } else if ((day == 0 || day == 6) && prec == 0 && 9 <= hour && hour <= 14) {
                 this.banner_image = 'day_weekend'
                 this.banner_text = '기분 좋은 주말 오전에는'

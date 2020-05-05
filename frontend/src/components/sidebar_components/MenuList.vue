@@ -1,15 +1,18 @@
 <template>
     <div id="menu-list">
         <b-sidebar id="sidebar-1" title="Sidebar" shadow>
-            <div class="px-3 py-2">
+            <br />
+            <div class="px-3 py-2" style="margin-left: 10px;">
                 <div>
-                    <router-link class="list-button" :to="{ name: 'Home' }">Home</router-link>
+                    <router-link class="list-button" :to="{ name: 'Home' }">🏠 &nbsp;Home</router-link>
                 </div>
+                <hr />
                 <div>
-                    <router-link class="list-button" :to="{ name: 'Map' }">Map</router-link>
+                    <router-link class="list-button" :to="{ name: 'Map' }">🗺️ &nbsp;Map</router-link>
                 </div>
+                <hr />
                 <div>
-                    <router-link class="list-button" :to="{ name: 'Profile' }">Profile</router-link>
+                    <router-link class="list-button" :to="{ name: 'Profile' }">👀 &nbsp;Profile</router-link>
                 </div>
             </div>
         </b-sidebar>
@@ -21,6 +24,9 @@ export default {}
 </script>
 
 <style lang="scss" scoped>
+#menu-list {
+    font-size: 20px;
+}
 .menu-open {
     position: absolute;
     width: 15vw;

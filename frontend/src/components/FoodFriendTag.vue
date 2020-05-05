@@ -43,19 +43,16 @@ export default {
             })
         },
     },
-    mounted() {
+    async mounted() {
         //let userid = JSON.parse(sessionStorage.getItem('session')).userid
-        
+
         if(sessionStorage.getItem('session') != null){
             this.userid = JSON.parse(sessionStorage.getItem('session')).userid
 
             if(this.userid != 0){
-                axiosApi.getAllFollowers(
-                    this.userid,
-                    (res) => {
+                let followDataObj = (await axiosApi.getAllFollowers(this.userid)).data.followers
 
-                    this.autocompleteItems.slice(0, this.autocompleteItems.length)
-                    res.data.followers.forEach((element) => {
+               followDataObj.forEach((element) => {
                         if(element.nick_name == null){
                             this.autocompleteItems.push({ text: '익명 '+element.id, key: element.id })
                         }
@@ -64,21 +61,15 @@ export default {
                         }
                         // this.autocompleteItems.push({ text: element.nick_name, key: element.id })
                         //this.autocompleteItems.push({ text: '익명 '+element.id, key: element.id })
-
                     })
-                },
-                (err) => {
-                    console.log(err)
-                },
-            )
+                }
         }
         else{
             console.log('no')
         }
-        }
-
-
     },
+
+
     methods: {
         emittags() {
             console.log('first emit')

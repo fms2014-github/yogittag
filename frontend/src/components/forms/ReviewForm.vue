@@ -125,7 +125,7 @@ export default {
                     alert(`${this.storeName} 음식점에 리뷰를 등록하였습니다.\n감사합니다~`)
                     let local = localStorage
                     local.setItem("card_title",`익명 ${res.data.user}`)
-                    local.setItem("card_routing",`/profile/${res.data.user}/review`)
+                    local.setItem("card_routing",`/profile/${res.data.user}`)
                     local.setItem("card_score",res.data.score)
                     local.setItem("card_content",res.data.content)
                     local.setItem("card_reg_time",res.data.reg_time)

@@ -5,7 +5,7 @@ from datetime import datetime
 
 class User(models.Model):
     # id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=10, null=True)
+    name = models.CharField(max_length=50, null=True)
     nick_name = models.CharField(max_length=16, null=True)
     gender = models.CharField(max_length=5, null=True)
     birthday = models.CharField(max_length=5, null=True)

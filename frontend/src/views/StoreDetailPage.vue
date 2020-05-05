@@ -372,7 +372,7 @@ export default {
                     if (r.img == null) {
                         this.cardData.push({
                             title: `익명 ${r.user_id}`,
-                            routing: `/profile/${r.user_id}/review`,
+                            routing: `/profile/${r.user_id}`,
                             score: r.score,
                             content: r.content,
                             reg_time: r.reg_time,
@@ -381,7 +381,7 @@ export default {
                         this.cardData.push({
                             img: r.img,
                             title: `익명 ${r.user_id}`,
-                            routing: `/profile/${r.user_id}/review`,
+                            routing: `/profile/${r.user_id}`,
                             score: r.score,
                             content: r.content,
                             reg_time: r.reg_time,

@@ -186,7 +186,7 @@ p {
 }
 
 #banner {
-    z-index: -1;
+    z-index: 0;
     position: relative;
     text-align: center;
     margin: 50px 0;

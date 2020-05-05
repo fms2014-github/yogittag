@@ -48,51 +48,44 @@
             </section>
             <section class="more" v-if="flag == 1">
                 <div class="more-content">
-                    <h2 class="content-title">리뷰 정보 추가하기</h2>
+                    <h2 class="content-title">리뷰 정보</h2>
                     <div class="row">
-                        <small-card
-                            v-for="item in testCardDate"
-                            v-if="item.content != 'auto-generated'"
-                            :key="item.id"
-                            :routing="'/store/' + item.store_id"
-                            :img="item.img"
-                            :title="item.store_name"
-                            :reg_time="item.reg_time"
-                            :content="item.content"
-                            :score="item.score"
-                        />
+                        <template v-for="item in testCardDate">
+                            <small-card
+                                v-if="item.content != 'auto-generated'"
+                                :key="item.id"
+                                :routing="'/store/' + item.store_id"
+                                :img="item.img"
+                                :title="item.store_name"
+                                :reg_time="item.reg_time"
+                                :content="item.content"
+                                :score="item.score"
+                            />
+                        </template>
                     </div>
-                    <button v-b-modal.modal id="registerButton">
-                        <img id="registerButtonImg" :src="registerRiviewImg" />
-                    </button>
-                    <b-modal
-                        :no-close-on-backdrop="true"
-                        @ok="modalCilck()"
-                        id="modal"
-                        size="lg"
-                        title="Review"
-                    >
-                        <ReviewForm />
-                    </b-modal>
                 </div>
                 <!-- .more-content -->
             </section>
             <section class="more" v-if="flag == 3">
                 <div class="more-content">
+                    <h2 class="content-title">찜 정보</h2>
                     <div v-for="item in favoriteList" :key="item.id">
-                        <h2 class="content-title">{{ item.title }}</h2>
+                        <h5>{{ item.title }}</h5>
                         <div class="row">
                             <template v-for="it in item.stores">
                                 <small-card
                                     v-if="it.pictures.split('|')[0] != ''"
                                     :key="it.id"
                                     :title="it.store_name"
+                                    :routing="`/store/${it.id}`"
                                     :img="it.pictures.split('|')[0]"
                                 />
                                 <small-card
                                     v-else
                                     :key="it.id"
+                                    :routing="`/store/${it.id}`"
                                     :title="it.store_name"
+                                    :img="it.profile_picture"
                                 />
                             </template>
                         </div>
@@ -101,8 +94,15 @@
             </section>
             <section class="more" v-if="flag == 2">
                 <div class="more-content">
-                    <div v-for="item in following" :key="item.id">
-                        <h2 class="content-title">{{ item.nick_name }}</h2>
+                    <h2 class="content-title">팔로우 정보</h2>
+                    <div class="row">
+                        <template v-for="item in following">
+                            <small-card
+                                :key="item.id"
+                                :title="item.nick_name"
+                                :routing="`/profile/${item.id}`"
+                            />
+                        </template>
                     </div>
                 </div>
             </section>
@@ -127,7 +127,6 @@
 import SmallCard from '@/components/cards/SmallCard'
 import UpFocusButton from '@/components/buttons/UpFocusButton'
 import infiniteScroll from 'vue-infinite-scroll'
-import ReviewForm from '@/components/forms/ReviewForm.vue'
 import profileEditPage from './profileEditPage.vue'
 import axiosApi from '../api/axiosScript.js'
 
@@ -142,17 +141,16 @@ export default {
             testCardLength: 0,
             profileImage: '',
             coverImage: '',
-            following: [],
             favoriteList: [],
             userid: -1,
             flag: 1,
+            following: [],
         }
     },
     components: {
         SmallCard,
         UpFocusButton,
         infiniteScroll,
-        ReviewForm,
         profileEditPage,
     },
     created: function () {

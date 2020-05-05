@@ -10,23 +10,14 @@
                     <div class="content-profile-page">
                         <div class="profile-user-page profile-card">
                             <div class="img-user-profile">
-                                <img
-                                    class="profile-bgHome"
-                                    :src="coverImage"
-                                />
-                                <img
-                                    class="avatar"
-                                    :src="profileImage"
-                                    alt="allan"
-                                />
+                                <img class="profile-bgHome" :src="coverImage" />
+                                <img class="avatar" :src="profileImage" alt="allan" />
                             </div>
                             <button @click="followButton">Follow</button>
                             <div class="user-profile-data">
                                 <h1>{{nickName}}</h1>
                                 <button id="profile-edit-button" @click="profileEdit">
-                                    <span class="material-icons">
-                                        settings
-                                    </span>
+                                    <span class="material-icons">settings</span>
                                 </button>
                                 <p style="margin: 10px;">한식 | 중식 | 양식</p>
                             </div>
@@ -143,7 +134,15 @@ export default {
         }
         let userData = (await axiosApi.getUser(this.userid)).data
         console.log(userData)
-        this.nickName = '익명' + String(this.userid)
+        
+        if(userData.nick_name == null){
+            this.nickName = '익명' + String(this.userid)
+        }
+        else {
+            this.nickName = userData.nick_name
+        }
+
+
         this.profileImage = userData.profile_picture === null ? 'https://via.placeholder.com/64' : userData.profile_picture
         this.coverImage = userData.cover_picture === null ? 'https://via.placeholder.com/300' : userData.cover_picture
         let reviewData = (await axiosApi.getAllReview(this.userid)).data

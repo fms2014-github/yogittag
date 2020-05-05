@@ -16,6 +16,9 @@ function route(path, view, name) {
             beforeEnter: (to, from, next) => {
                 let session = JSON.parse(sessionStorage.getItem('session'))
                 if (session === null) {
+                    if(to.path === '/profile'){
+                        localStorage.setItem('temp', '/profile')
+                    }
                     appx.state.isLogin = true
                     next({
                         path: '/'

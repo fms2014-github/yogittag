@@ -65,7 +65,11 @@ export default {
             if (!data.isCompleted) {
                 this.$router.push('/detail-profile')
             }else{
-                this.$router.push(this.$route.path)
+                if(localStorage.getItem('temp') === '/profile'){
+                    this.$router.push(localStorage.getItem('temp'))
+                }else{
+                    this.$router.push(this.$route.path)
+                }
             }
         }
         if(sessionStorage.getItem('session') != null){

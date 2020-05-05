@@ -21,7 +21,7 @@ export default {
             } else {
                 alert('로그아웃 되었습니다.')
                 this.sessionDelte()
-                if (this.$route.path === '/profile') {
+                if (this.$route.path === '/profile' || this.$route.path ==='/detail-profile') {
                     this.$router.push('/')
                 }
             }

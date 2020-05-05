@@ -84,7 +84,7 @@ export default {
                     this.latitude = pos.coords.latitude
                     this.longitude = pos.coords.longitude
                     this.searchByKeywordStore()
-                })
+                }, { enableHighAccuracy: true })
             }
         },
         searchByKeywordStore() {

@@ -63,7 +63,7 @@ export default {
         ...mapMutations('app', ['menuOpenClose']),
         ...mapMutations('session', ['sessionSave']),
     },
-    mounted() {
+    async mounted() {
         let session = JSON.parse(sessionStorage.getItem('session'))
         if (session != undefined) {
             this.sessionSave(session)

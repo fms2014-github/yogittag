@@ -15,14 +15,9 @@ export default [
         name: 'test',
     },
     {
-        path: '/google-auth',
-        view: 'GoogleAuth',
-        name: 'GoogleAuth',
-    },
-    {
-        path: '/naver-auth',
-        view: 'NaverAuth',
-        name: 'NaverAuth',
+        path: '/detail-profile',
+        view: 'Auth',
+        name: 'Auth',
     },
     {
         path: '/store/:id',

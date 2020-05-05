@@ -118,7 +118,7 @@ export default {
                         if (status == kakao.maps.services.Status.OK) {
                             this.area = result[0].region_2depth_name
                         }
-                    });   
+                    },{ enableHighAccuracy: true });   
 
                     var imageSrc = require('@/assets/icons/rec.png'),
                         imageSize = new kakao.maps.Size(25, 25), // 마커이미지의 크기입니다

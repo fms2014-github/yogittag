@@ -9,11 +9,17 @@
                 large
                 style="font-family: 'Inconsolata';"
                 @click="getLocation"
-                v-if="userid!=0"
-            >요기딱!</v-btn>
-            <food-friend v-if="userid!=0" :tags.sync="tags" />
-            <slider v-if="userid!=0" title="맞춤 추천 맛집" :cardData="cardData" />
-            <slider v-if="userid!=0" title="지인 추천 맛집" :cardData="cardData2" />
+                v-if="userid != 0"
+                >요기딱!</v-btn
+            >
+            <food-friend v-if="userid != 0" :tags.sync="tags" />
+            <slider
+                v-if="userid != 0 && cardDataFlag"
+                :class="{ ux: cardDataFlag }"
+                title="맞춤 추천 맛집"
+                :cardData="cardData"
+            />
+            <slider v-if="userid != 0" title="지인 추천 맛집" :cardData="cardData2" />
         </v-card-text>
     </v-container>
 </template>
@@ -34,11 +40,12 @@ export default {
     data() {
         return {
             cardData: [],
-            cardData2 :[],
+            cardData2: [],
             tags: [],
             //map: {},
             position: {},
-            userid: 0
+            userid: 0,
+            cardDataFlag: false,
         }
     },
     async mounted() {
@@ -54,66 +61,64 @@ export default {
         if (Object.keys(params).length > 0) {
             console.log('asdasd', params)
             let data
-            if(params.prompt === 'consent'){
+            if (params.prompt === 'consent') {
                 data = (await axiosApi.googleOauthAxios({ oauthCode: params })).data.session
             }
-            if(params.state === 'naver'){
+            if (params.state === 'naver') {
                 data = (await axiosApi.naverOauthAxios({ oauthCode: params })).data.session
             }
             sessionStorage.setItem('session', JSON.stringify(data))
             this.sessionSave(data)
             if (!data.isCompleted) {
                 this.$router.push('/detail-profile')
-            }else{
-                if(localStorage.getItem('temp') === '/profile'){
+            } else {
+                if (localStorage.getItem('temp') === '/profile') {
                     this.$router.push(localStorage.getItem('temp'))
-                }else{
+                } else {
                     this.$router.push(this.$route.path)
                 }
             }
         }
-        if(sessionStorage.getItem('session') != null){
+        if (sessionStorage.getItem('session') != null) {
             this.userid = JSON.parse(sessionStorage.getItem('session')).userid
         }
-        
+
         // 지인 추천 로그인되어있는지 확인해야하눈뎅
-        if(this.userid != 0){
+        if (this.userid != 0) {
             axiosApi.getRecommandationByFollowers(
                 this.userid,
-                (res)=>{
+                (res) => {
                     console.log(res.data)
                     this.cardData2 = res.data
-                    this.cardData2.forEach( card => {
+                    this.cardData2.forEach((card) => {
                         if (card.pictures) {
-                            card.pictures = card.pictures.split("|");
+                            card.pictures = card.pictures.split('|')
                         }
                     })
                 },
-                (err)=>{
+                (err) => {
                     console.log(err)
-                }
+                },
             )
         }
-
-
 
         // this.map = new kakao.maps.Map(container, options) //지도 생성 및 객체 리턴
     },
     methods: {
         ...mapMutations('app', ['loadingSpinner', 'initState']),
         ...mapMutations('session', ['sessionSave']),
-        recommand(){
+        recommand() {
             let user = []
-            for (let i=0; i<this.tags.length; i++){
-                user.push(this.tags[i].key)
+            for (let i = 0; i < this.tags.length; i++) {
+                user.push(this.tags[i].id)
             }
-        
+
             let data = {
-                id : this.userid,
-                latitude : this.position.latitude,
-                longitude : this.position.longitude,
-                area : this.position.area,
-                users : user
+                id: this.userid,
+                latitude: this.position.latitude,
+                longitude: this.position.longitude,
+                area: this.position.area,
+                users: user,
             }
 
             console.log(data)
@@ -125,21 +130,23 @@ export default {
                 (res) => {
                     this.loadingSpinner()
                     console.log(res.data)
-                    
-                    this.cardData = res.data
-                    this.cardData.forEach( card => {
+
+                    this.cardData = res.data.result
+                    this.cardData.forEach((card) => {
                         if (card.pictures) {
-                            card.pictures = card.pictures.split("|");
+                            card.pictures = card.pictures.split('|')
                         }
                     })
+
+                    this.cardDataFlag = true
                 },
                 (err) => {
                     this.loadingSpinner()
                     console.log(err)
-                }
+                },
             )
         },
-        getLocation(){
+        getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((pos) => {
                     this.position.latitude = pos.coords.latitude
@@ -148,21 +155,22 @@ export default {
                     var geocoder = new kakao.maps.services.Geocoder()
                     console.log(geocoder)
                     // 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
-                    geocoder.coord2RegionCode(this.position.longitude, this.position.latitude, (result, status)=>{
-
-                        console.log(result)
-                        if (status == kakao.maps.services.Status.OK) {
-                            this.position.area = result[0].region_2depth_name
-                            this.recommand()
-                        }
-                    });        
+                    geocoder.coord2RegionCode(
+                        this.position.longitude,
+                        this.position.latitude,
+                        (result, status) => {
+                            console.log(result)
+                            if (status == kakao.maps.services.Status.OK) {
+                                this.position.area = result[0].region_2depth_name
+                                this.recommand()
+                            }
+                        },
+                    )
                 })
             }
-        }
-    
+        },
     },
 }
-    
 </script>
 
 <style scoped>
@@ -176,6 +184,20 @@ export default {
         format('woff');
     font-weight: normal;
     font-style: normal;
+}
+
+.ux {
+    position: relative;
+    animation: mymove 5s;
+}
+
+@keyframes mymove {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 * {

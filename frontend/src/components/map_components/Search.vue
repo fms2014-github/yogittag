@@ -29,6 +29,13 @@
                     }}
                 </v-chip>
             </v-chip-group>
+            <v-chip-group active-class="deep-purple--text text--accent-4" v-show="useFilter">
+                <v-chip color="white" v-for="tag in distancetags" :key="tag" @click="tagClick">
+                    {{
+                    tag
+                    }}
+                </v-chip>
+            </v-chip-group>
             <div
                 v-show="useFilter"
                 style="
@@ -83,7 +90,8 @@ export default {
         return {
             keyword: '',
             result: [],
-            tags: ['음식점', '카페', '술집', '500m', '1km', '2km'],
+            tags: ['음식점', '카페', '술집'],
+            distancetags: ['500m', '1km', '2km'],
             selectedTags: [],
             useFilter: false,
         }
@@ -149,6 +157,15 @@ export default {
             let idx = this.selectedTags.indexOf(t)
             if (idx > -1) {
                 this.selectedTags.splice(idx, 1)
+                console.log(this.selectedTags)
+            } else if (t=="500m" || t=="1km" || t=="2km"){
+                for(let i=0; i<this.selectedTags.length; i++){
+                    if(this.selectedTags[i]=="500m" || this.selectedTags[i]=="1km" || this.selectedTags[i]=="2km"){
+                        this.selectedTags.splice(i, 1)
+                        
+                    }
+                }
+                this.selectedTags.push(t)
                 console.log(this.selectedTags)
             } else {
                 this.selectedTags.push(t)

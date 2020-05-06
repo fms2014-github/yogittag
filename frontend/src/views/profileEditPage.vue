@@ -78,6 +78,7 @@ export default {
             let birthday = this.edit.birthday.substring(6,8) + this.edit.birthday.substring(9)
             //console.log(year, birthday)
             this.edit.id = JSON.parse(sessionStorage.getItem('session')).userid
+            this.edit.email = JSON.parse(sessionStorage.getItem('session')).email
             this.edit.bornYear = year
             this.edit.birthday = birthday
             console.log(this.edit)

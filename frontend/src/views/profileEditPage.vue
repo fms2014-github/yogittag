@@ -8,7 +8,7 @@
             </div>
             <div class="profile-edit-input">
                 <label for="edit-nickname">닉네임</label>
-                <input v-model="edit.nickName" id="edit-nickname" type="text" />
+                <input v-model="edit.nick_name" id="edit-nickname" type="text" />
             </div>
             <div class="profile-edit-input">
                 <label for="edit-gender">성별</label>
@@ -26,7 +26,7 @@
                 <label for="edit-profile-image">프로필 이미지</label>
                 <input
                     id="edit-profile-image"
-                    name="profilePicture"
+                    name="profile_picture"
                     type="file"
                     accept="image/*"
                     @change="onChange"
@@ -36,7 +36,7 @@
                 <label for="edit-cover-image">커버 이미지</label>
                 <input
                     id="edit-cover-image"
-                    name="coverPicture"
+                    name="cover_picture"
                     type="file"
                     accept="image/*"
                     @change="onChange"
@@ -58,13 +58,14 @@ export default {
     data() {
         return {
             edit: {
+                email:'',
                 name: '',
-                nickName: '',
+                nick_name: '',
                 gender: '',
                 birthday: '',
-                bornYear: '',
-                profilePicture: '',
-                coverPicture: '',
+                born_year: '',
+                profile_picture: '',
+                cover_picture: '',
                 isCompleted: 1,
             }
         }
@@ -78,7 +79,8 @@ export default {
             let birthday = this.edit.birthday.substring(6,8) + this.edit.birthday.substring(9)
             //console.log(year, birthday)
             this.edit.id = JSON.parse(sessionStorage.getItem('session')).userid
-            this.edit.bornYear = year
+            this.edit.email = JSON.parse(sessionStorage.getItem('session')).email
+            this.edit.born_year = year
             this.edit.birthday = birthday
             console.log(this.edit)
 

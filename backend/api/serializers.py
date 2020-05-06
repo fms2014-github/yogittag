@@ -41,6 +41,7 @@ class UserSerializer(serializers.ModelSerializer):
     email = serializers.CharField()
     google_refresh_token = serializers.CharField(required=False)
     naver_refresh_token = serializers.CharField(required=False)
+    isCompleted = serializers.BooleanField(required=False)
 
     class Meta:
         model = User

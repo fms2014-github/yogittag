@@ -28,7 +28,8 @@ export default {
                 'https://accounts.google.com/o/oauth2/v2/auth?client_id=25608544222-lfe7jdkikoef92jgt45mvhe83ts98n80.apps.googleusercontent.com&redirect_uri=http://i02d105.p.ssafy.io&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile+openid&access_type=offline&prompt=consent'
         },
         naverlogin() {
-            alert('서비스 준비 중 입니다.')
+            window.location.href =
+                'https://nid.naver.com/oauth2.0/authorize?client_id=ISrEReGthtZMH67maTLZ&response_type=code&redirect_uri=http://i02d105.p.ssafy.io&state=naver'
         },
     },
 }

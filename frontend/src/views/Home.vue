@@ -72,8 +72,8 @@ export default {
             if (!data.isCompleted) {
                 this.$router.push('/detail-profile')
             } else {
-                if (localStorage.getItem('temp') === '/profile') {
-                    this.$router.push(localStorage.getItem('temp'))
+                if (sessionStorage.getItem('temp') === '/profile') {
+                    this.$router.push(sessionStorage.getItem('temp'))
                 } else {
                     this.$router.push(this.$route.path)
                 }

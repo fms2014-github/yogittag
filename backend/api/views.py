@@ -458,7 +458,7 @@ def oauth_code_naver(request):
         'code': oauthResult["code"],
         'client_id': 'ISrEReGthtZMH67maTLZ',
         'client_secret': 'kCOv4mVaGK',
-        'redirect_uri': 'http://i02d105.p.ssafy.io/naver-auth',
+        'redirect_uri': 'http://i02d105.p.ssafy.io',
         'grant_type': 'authorization_code',
         'state': 'naver'
     }
